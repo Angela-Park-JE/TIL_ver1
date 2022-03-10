@@ -19,3 +19,7 @@ flush privileges;
 SHOW GRANTS FOR angela;
 
 -- Delete the privileges : REVOKE ALL ON DBname.* FROM USERid;
+
+commit;
+
+-- After the commit, I could see the new scheme named by 'glory' :)
