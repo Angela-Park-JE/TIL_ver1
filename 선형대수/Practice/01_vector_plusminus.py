@@ -22,3 +22,29 @@ def v_add(u, v):
     w.append(val)
   
   return w
+
+
+
+# 벡터의 뺄셈
+
+u = [5, 7, 9]
+v = [3, 5, 8]
+
+n = len(u)
+w = []
+
+for i in range(0, n):
+  val = u[i] - v[i]
+  w.append(val)
+
+# 이를 함수로 만든다면
+
+def v_add(u, v):
+  n = len(u)
+  w = []
+
+  for i in range(0, n):
+    val = u[i] - v[i]
+    w.append(val)
+  
+  return w
