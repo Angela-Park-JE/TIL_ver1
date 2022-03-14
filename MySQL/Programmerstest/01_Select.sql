@@ -11,4 +11,7 @@ ORDER BY ANIMAL_ID DESC;
 
 
 
--- 
+-- 아픈 동물 찾기
+SELECT animal_id, name
+FROM ANIMAL_INS
+WHERE INTAKE_CONDITION = 'Sick';
