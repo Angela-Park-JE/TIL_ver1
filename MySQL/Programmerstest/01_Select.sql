@@ -11,7 +11,17 @@ ORDER BY ANIMAL_ID DESC;
 
 
 
--- 아픈 동물 찾기
+-- 아픈 동물 찾기 : 아이디와 이름
 SELECT animal_id, name
 FROM ANIMAL_INS
 WHERE INTAKE_CONDITION = 'Sick';
+
+
+
+-- 젊은 동물 찾기 : 아이디와 이름, 아이디 순으로 정렬
+SELECT animal_id, name
+FROM ANIMAL_INS
+WHERE intake_condition != 'Aged'
+ORDER BY 1;
+
+
