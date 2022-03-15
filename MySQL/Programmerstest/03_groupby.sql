@@ -59,12 +59,12 @@ ORDER BY 1;
 
 
 
--- ** 오답 ** --
+-- ** 오답 ** -- 주목!!!
 -- 입양 시각 구하기(2) : 보호소에서는 몇 시에 입양이 가장 활발하게 일어나는지 알아보려 합니다. 
 -- 0시부터 23시까지, 각 시간대별로 입양이 몇 건이나 발생했는지 조회하는 SQL문을 작성해주세요. 이때 결과는 시간대 순으로 정렬해야 합니다.
 
 -- 처음 생각한 것
--- 시퀀스를 생성하는 함수를 찾아서 그것과 조인을 하려고 했으나 DDL은 아예 듣지 않는다. 
+-- 시퀀스를 생성하는 함수를 찾아서 그것과 조인을 하려고 했으나 아예 듣지를 않는다. 
 CREATE SEQUENCE EX_SEQ -- 시퀀스이름 EX_SEQ
 INCREMENT BY 1 -- 증감숫자 1
 START WITH 0 -- 시작숫자 1
@@ -81,4 +81,56 @@ FROM ANIMAL_OUTS
 GROUP BY HOUR
 ORDER BY HOUR;
 
--- 다시 찾아본 것
+-- 다시 하다가 도저히 안돼서 찾아본 것 1: https://loy124.tistory.com/274
+-- 프머스에서는 이렇게 짜지 말라고 자신의 답을 올려둔 분도 있다: https://programmers.co.kr/questions/27148
+set @hour_count:=-1;
+SELECT @hour_count:=@hour_count+1 as hour, IFNULL(
+      (select count(DATETIME) 
+      from ANIMAL_OUTS
+      where @hour_count = HOUR(DATETIME)
+      GROUP BY HOUR(DATETIME)), 0) as count
+FROM ANIMAL_OUTS
+where @hour_count < 23
+
+-- 더 나은 답이 있는지 찾아본 것 2(이 해답을 많이 사용함): https://programmers.co.kr/questions/27290
+WITH RECURSIVE TEMP AS (
+    SELECT 0 AS HOUR
+    UNION ALL
+    SELECT HOUR+1 FROM TEMP
+    WHERE HOUR<23
+    )
+
+SELECT HOUR, COUNT(ANIMAL_OUTS.DATETIME) AS COUNT 
+FROM TEMP 
+LEFT JOIN ANIMAL_OUTS
+            ON TEMP.HOUR = HOUR(ANIMAL_OUTS.DATETIME)
+GROUP BY HOUR;
+
+-- 2번과 비슷하게 다른 답(재귀 테이블 사용): https://programmers.co.kr/questions/26199
+WITH RECURSIVE ALL_HR AS(
+    SELECT 0 AS HOUR
+    UNION ALL
+    SELECT HOUR + 1 FROM ALL_HR WHERE HOUR < 23
+    )
+
+SELECT HOUR, IFNULL(AO.COUNT, 0) AS COUNT
+FROM ALL_HR
+LEFT OUTER JOIN (
+    SELECT HOUR(DATETIME) AS HOUR, COUNT(*) AS COUNT 
+    FROM ANIMAL_OUTS
+    GROUP BY HOUR
+) AO
+USING (HOUR);
+
+-- 2번과 비슷한 답 간단한 쿼리: https://programmers.co.kr/questions/25328
+with recursive time as
+(select 0 as hour union all select hour + 1 from time where hour < 23)
+
+select hour, count(animal_id) count
+from time
+left join animal_outs on (hour = date_format(datetime, '%H'))
+group by hour;
+
+-- 사람마다 쓰는 방식이 너무 달라서 보기가 어렵다
+
+-- 내가 해보기
