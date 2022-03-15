@@ -54,7 +54,10 @@ SELECT MAX(datetime) as datetime
 FROM ANIMAL_INS
 GROUP BY datetime
 LIMIT 1;
+-- 더 나은 답
+SELECT max(datetime) as '시간' from animal_ins;
 
 
 
+--  
 
