@@ -49,3 +49,12 @@ LIMIT 1;
 
 
 
+-- 최댓값 구하기 : 
+SELECT MAX(datetime) as datetime
+FROM ANIMAL_INS
+GROUP BY datetime
+LIMIT 1;
+
+
+
+
