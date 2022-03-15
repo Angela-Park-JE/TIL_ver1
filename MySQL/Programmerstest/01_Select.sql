@@ -46,18 +46,3 @@ SELECT name
 FROM ANIMAL_INS
 ORDER BY datetime
 LIMIT 1;
-
-
-
--- 최댓값 구하기 : 
-SELECT MAX(datetime) as datetime
-FROM ANIMAL_INS
-GROUP BY datetime
-LIMIT 1;
--- 더 나은 답
-SELECT max(datetime) as '시간' from animal_ins;
-
-
-
---  
-
