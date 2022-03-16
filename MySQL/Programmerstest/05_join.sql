@@ -31,8 +31,8 @@ WHERE 1 = 1
   AND o.datetime IS NULL
 ORDER BY i.datetime
 LIMIT 3; 
---> 어떤 분이 올리신 질문을 직접 풀어드렸다. 답변 드리는 재미도 생긴 것 같다.
---> 오라클로 굉장히 깔끔하게 쓰신 코드도 보았다. : https://programmers.co.kr/questions/26820
+--> 다른 분들 질문에 답변 드리는 재미도 생긴 것 같다.
+--> 찾아보다가 오라클로 굉장히 깔끔하게 쓰신 코드도 보았다. : https://programmers.co.kr/questions/26820
 SELECT NAME,
        DATETIME
 FROM ANIMAL_INS
@@ -42,4 +42,8 @@ FETCH FIRST 3 ROWS ONLY;
 
 
 
--- 
+-- 보호소에서 중성화한 동물 : 보호소에서 중성화 수술을 거친 동물 정보를 알아보려 합니다. 
+-- 보호소에 들어올 당시에는 중성화1되지 않았지만, 보호소를 나갈 당시에는 중성화된 동물의 아이디와 생물 종, 이름을 조회하는 아이디 순으로 조회하는 SQL 문을 작성해주세요.
+
+
+
