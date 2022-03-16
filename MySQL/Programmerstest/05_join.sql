@@ -9,4 +9,37 @@ ORDER BY 1;
 
 
 
+-- 있었는데요 없었습니다 : 관리자의 실수로 일부 동물의 입양일이 잘못 입력되었습니다. 
+-- 보호 시작일보다 입양일이 더 빠른 동물의 아이디와 이름을 조회하는 SQL문을 작성해주세요. 이때 결과는 보호 시작일이 빠른 순으로 조회해야합니다.
+--> 사실 LEFT 안하고 FULL OUTER JOIN 이라고 썼다가 에러떠서 LEFT로 바꿔줬다.
+SELECT o.animal_id, o.name
+FROM ANIMAL_OUTS as o
+LEFT OUTER JOIN ANIMAL_INS as i
+           ON (o.animal_id = i.animal_id)
+WHERE o.datetime < i.datetime             -- 입양일이 입소일보다 작은 경우 = 입양일이 더 빠른 경우
+ORDER BY i.datetime;
+
+
+
+-- 오랜 기간 보호한 동물(1) : 아직 입양을 못 간 동물 중, 가장 오래 보호소에 있었던 동물 3마리의 이름과 보호 시작일을 조회하는 SQL문을 작성해주세요. 
+-- 이때 결과는 보호 시작일 순으로 조회해야 합니다.
+SELECT i.name, i.datetime
+FROM ANIMAL_INS AS i
+LEFT OUTER JOIN ANIMAL_OUTS AS o
+             ON i.animal_id = o.animal_id
+WHERE 1 = 1
+  AND o.datetime IS NULL
+ORDER BY i.datetime
+LIMIT 3; 
+--> 어떤 분이 올리신 질문을 직접 풀어드렸다. 답변 드리는 재미도 생긴 것 같다.
+--> 오라클로 굉장히 깔끔하게 쓰신 코드도 보았다. : https://programmers.co.kr/questions/26820
+SELECT NAME,
+       DATETIME
+FROM ANIMAL_INS
+WHERE ANIMAL_ID NOT IN (SELECT ANIMAL_ID FROM ANIMAL_OUTS)
+ORDER BY DATETIME
+FETCH FIRST 3 ROWS ONLY;
+
+
+
 -- 
