@@ -30,4 +30,5 @@ GROUP BY HOUR;
 
 
 -- https://www.mysqltutorial.org/mysql-recursive-cte/
--- 참조 블로그 : https://hyunmin1906.tistory.com/149
+-- 참조 블로그1 : https://hyunmin1906.tistory.com/149
+-- 참조 블로그2 : https://alreadythehomeofmyheart.tistory.com/5
