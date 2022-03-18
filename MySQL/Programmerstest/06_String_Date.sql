@@ -39,3 +39,30 @@ SELECT animal_id, name,
 FROM ANIMAL_INS
 ORDER BY animal_id;
 
+
+-- 더 정확히 돌아갈 수 있는 쿼리(MySQL): https://programmers.co.kr/questions/27172
+-- 사람이 적어서 들어가는 컬럼이라고 생각하면 대소문자에 오류가 있을 수 있으므로 그부분을 해결할 수 있다.
+SELECT ANIMAL_ID, NAME,
+       CASE WHEN (LOWER(SEX_UPON_INTAKE) LIKE LOWER('%Neutered%') OR LOWER(SEX_UPON_INTAKE) LIKE LOWER('%Spayed%')) THEN 'O'
+       ELSE 'X'
+       END AS 중성화
+FROM ANIMAL_INS ORDER BY ANIMAL_ID;
+
+-- REGEXP 와 CASE WHEN을 동시 사용: https://programmers.co.kr/questions/26108
+SELECT ANIMAL_ID, NAME,
+    (CASE 
+    WHEN SEX_UPON_INTAKE REGEXP 'Neutered|Spayed' THEN 'O' ELSE 'X' 
+    END) AS 중성화
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID;
+
+-- REGEXP_LIKE 를 사용: https://programmers.co.kr/questions/27317
+SELECT animal_id
+     , name
+     , case when regexp_like(sex_upon_intake, 'Neutered|Spayed') then 'O'
+            else 'X'
+         end as 중성화
+FROM animal_ins
+ORDER BY animal_id;
+
+
