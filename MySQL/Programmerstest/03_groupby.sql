@@ -134,3 +134,15 @@ group by hour;
 -- 사람마다 쓰는 방식이 너무 달라서 보기가 어렵다
 
 -- 내가 해보기
+WITH RECURSIVE TEMP_TABLE AS 
+    (SELECT 0 AS hour_number
+     UNION ALL
+     SELECT hour_number +1 
+     FROM TEMP_TABLE
+     WHERE hour_number < 23) -- 23시까지이기 때문에 22여야 +1 했을 때 23 까지 적힌다 
+     
+SELECT t.hour_number AS hour, COUNT(o.datetime) AS count
+FROM TEMP_TABLE AS t
+LEFT JOIN ANIMAL_OUTS AS o
+      ON t.hour_number = HOUR(o.datetime)
+GROUP BY hour;
