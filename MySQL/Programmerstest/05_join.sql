@@ -31,6 +31,7 @@ WHERE 1 = 1
   AND o.datetime IS NULL
 ORDER BY i.datetime
 LIMIT 3; 
+
 --> 다른 분들 질문에 답변 드리는 재미도 생긴 것 같다.
 --> 찾아보다가 오라클로 굉장히 깔끔하게 쓰신 코드도 보았다. : https://programmers.co.kr/questions/26820
 SELECT NAME,
