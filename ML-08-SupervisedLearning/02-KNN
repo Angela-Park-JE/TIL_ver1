@@ -138,11 +138,13 @@
    "id": "b601f993",
    "metadata": {},
    "source": [
-    "# knn 분류 모델\n",
+    "# k=2 k-nn 분류 모델\n",
     "\n",
     "2개의 근접한 데이터를 보고 분류를 하는 모델을 만들어본다.\n",
     "\n",
-    "## 데이터 학습"
+    "\n",
+    "## 모델링\n",
+    "### 데이터 학습"
    ]
   },
   {
@@ -173,7 +175,7 @@
    "id": "4bedd1bd",
    "metadata": {},
    "source": [
-    "## 데이터 예측"
+    "### 데이터 예측"
    ]
   },
   {
@@ -198,7 +200,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "66fc7c96",
+   "id": "bafa56f2",
    "metadata": {},
    "source": [
     "0, 1, 2 각각 붓꽃의 종류가 정해져있을 것이다. 그에 따라 test데이터가 라벨링 된 것을 볼 수 있다."
@@ -209,7 +211,7 @@
    "id": "5cbf2998",
    "metadata": {},
    "source": [
-    "# 정확도 평가\n",
+    "## 정확도 평가\n",
     "\n",
     "앞서 만든 모형의 정확도를 평가해보기로 한다. 평가하는 것은 sklearn.metrics의 accuracy_score를 활용한다."
    ]
@@ -245,7 +247,7 @@
    "source": [
     "어.... 어 왜째서 \n",
     "\n",
-    "## confusion matrix 확인\n",
+    "### confusion matrix 확인\n",
     "\n",
     "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
    ]
@@ -283,13 +285,13 @@
    "source": [
     "잘못 분류된게 없...다. \n",
     "\n",
-    "## 분류 리포트 확인\n"
+    "### 분류 리포트 확인\n"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 13,
-   "id": "fc03cd8f",
+   "id": "8b525072",
    "metadata": {},
    "outputs": [
     {
@@ -318,19 +320,391 @@
   },
   {
    "cell_type": "markdown",
-   "id": "11cd37c0",
+   "id": "8dbd466c",
    "metadata": {},
    "source": [
     "무언가도 아무것도 말할게 없어져버리는 결과가 나왔다."
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "9230ea77",
+   "cell_type": "markdown",
+   "id": "6a9cc799",
    "metadata": {},
-   "outputs": [],
-   "source": []
+   "source": [
+    "# 실험1: 데이터 표준화 없이 진행하기\n",
+    "---\n",
+    "\n",
+    "## 모델링\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "c6ebc7d1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "KNeighborsClassifier(n_neighbors=2)"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.neighbors import KNeighborsClassifier       # KN분류기를 import\n",
+    "clf_knn_nstd = KNeighborsClassifier(n_neighbors = 2)     # 2개의 이웃을 기준으로 판별\n",
+    "clf_knn_nstd.fit(X_tn, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5a8ca6d7",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "230b9ee8",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0 1 1 0 2 1 2 0 0 2 1 0 2 1 1 0 1 1 0 0 1 1 1 0 2 1 0 0 1 2 1 2 1 2 2 0 1\n",
+      " 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "knn_nstd_pred = clf_knn_nstd.predict(X_te)\n",
+    "print(knn_nstd_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a5d274ea",
+   "metadata": {},
+   "source": [
+    "0, 1, 2 각각 붓꽃의 종류가 정해져있을 것이다. 그에 따라 test데이터가 라벨링 된 것을 볼 수 있다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8a02b96c",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "앞서 만든 모형의 정확도를 평가해보기로 한다. 평가하는 것은 sklearn.metrics의 accuracy_score를 활용한다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "e8e00773",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.0"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy_nstd = accuracy_score(y_te, knn_nstd_pred)\n",
+    "accuracy_nstd"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fafd1dbf",
+   "metadata": {},
+   "source": [
+    "(이러면 안되는데 틀려줘 제발)\n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "7826cd55",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[13,  0,  0],\n",
+       "       [ 0, 16,  0],\n",
+       "       [ 0,  0,  9]])"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, knn_nstd_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "88d1e0ba",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "fba40b71",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           0       1.00      1.00      1.00        13\n",
+      "           1       1.00      1.00      1.00        16\n",
+      "           2       1.00      1.00      1.00         9\n",
+      "\n",
+      "    accuracy                           1.00        38\n",
+      "   macro avg       1.00      1.00      1.00        38\n",
+      "weighted avg       1.00      1.00      1.00        38\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, knn_nstd_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "59e2ba5c",
+   "metadata": {},
+   "source": [
+    "### Commentary\n",
+    "\n",
+    "데이터셋이 워낙 작은 것도 있고, 데이터 자체가 잘 되어있는 것인지 분류가 확실하게 잘 되었다. 그래서 표준화같은 과정을 거치지 않고도 좋은 결과를 보여주었다.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f8a7bc27",
+   "metadata": {},
+   "source": [
+    "# 실험2: k = 3 k-nn 모델\n",
+    "---\n",
+    "\n",
+    "이번에는 k가 2가 아니라 3인 모델로 확인해보려고 한다.\n",
+    "\n",
+    "## 모델링\n",
+    "\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "be0499fd",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "KNeighborsClassifier(n_neighbors=3)"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.neighbors import KNeighborsClassifier   # KN분류기를 import\n",
+    "clf_k3nn = KNeighborsClassifier(n_neighbors = 3)     # 2개의 이웃을 기준으로 판별\n",
+    "clf_k3nn.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1beff057",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "6c48a477",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0 1 1 0 2 1 2 0 0 2 1 0 2 1 1 0 1 1 0 0 1 1 1 0 2 1 0 0 1 2 1 2 1 2 2 0 1\n",
+      " 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "k3nn_pred = clf_k3nn.predict(X_te_std)\n",
+    "print(k3nn_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3487191a",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "정확도와 confusion matrix로 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "c37cf18f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.0"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, k3nn_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0b8fd920",
+   "metadata": {},
+   "source": [
+    "어.... 어 왜째서 또? 앙상블 할 때는 오히려 정확도가 이렇지 않았는데 아무래도 앙상블 모델에서는 과적합의 문제가 있었던 지도 모르겠다.\n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "2484cbb5",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[13,  0,  0],\n",
+       "       [ 0, 16,  0],\n",
+       "       [ 0,  0,  9]])"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, k3nn_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8d6b3da1",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "cdcc4205",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           0       1.00      1.00      1.00        13\n",
+      "           1       1.00      1.00      1.00        16\n",
+      "           2       1.00      1.00      1.00         9\n",
+      "\n",
+      "    accuracy                           1.00        38\n",
+      "   macro avg       1.00      1.00      1.00        38\n",
+      "weighted avg       1.00      1.00      1.00        38\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, k3nn_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a0f76810",
+   "metadata": {},
+   "source": [
+    "### Commentary\n",
+    "\n",
+    "k 를 2에서 3으로 바꾼 것은 데이터셋이 작기 때문에 결과를 크게 바뀔 수 있겠다 예상했지만 한 개도 틀리지 않았다. \n",
+    "\n",
+    "틀리게 하고싶지만 그것이야 말로 과대 적합을 만들어내는 것이라고 생각하기 떄문에 초심자는 이상한 객기를 버리기로 했다."
+   ]
   }
  ],
  "metadata": {
@@ -364,7 +738,7 @@
     "height": "calc(100% - 180px)",
     "left": "10px",
     "top": "150px",
-    "width": "383.994px"
+    "width": "383.984px"
    },
    "toc_section_display": true,
    "toc_window_display": true
