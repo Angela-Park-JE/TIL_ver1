@@ -200,7 +200,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "bafa56f2",
+   "id": "bfed0178",
    "metadata": {},
    "source": [
     "0, 1, 2 각각 붓꽃의 종류가 정해져있을 것이다. 그에 따라 test데이터가 라벨링 된 것을 볼 수 있다."
@@ -291,7 +291,7 @@
   {
    "cell_type": "code",
    "execution_count": 13,
-   "id": "8b525072",
+   "id": "913af67d",
    "metadata": {},
    "outputs": [
     {
@@ -320,7 +320,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "8dbd466c",
+   "id": "4d1e4c8f",
    "metadata": {},
    "source": [
     "무언가도 아무것도 말할게 없어져버리는 결과가 나왔다."
@@ -328,7 +328,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "6a9cc799",
+   "id": "79cb8d07",
    "metadata": {},
    "source": [
     "# 실험1: 데이터 표준화 없이 진행하기\n",
@@ -341,7 +341,7 @@
   {
    "cell_type": "code",
    "execution_count": 14,
-   "id": "c6ebc7d1",
+   "id": "94ae838c",
    "metadata": {},
    "outputs": [
     {
@@ -363,7 +363,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5a8ca6d7",
+   "id": "81f62f8f",
    "metadata": {},
    "source": [
     "### 데이터 예측"
@@ -372,7 +372,7 @@
   {
    "cell_type": "code",
    "execution_count": 17,
-   "id": "230b9ee8",
+   "id": "1add8343",
    "metadata": {},
    "outputs": [
     {
@@ -391,7 +391,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "a5d274ea",
+   "id": "16627082",
    "metadata": {},
    "source": [
     "0, 1, 2 각각 붓꽃의 종류가 정해져있을 것이다. 그에 따라 test데이터가 라벨링 된 것을 볼 수 있다."
@@ -399,7 +399,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "8a02b96c",
+   "id": "0b2e1eac",
    "metadata": {},
    "source": [
     "## 정확도 평가\n",
@@ -410,7 +410,7 @@
   {
    "cell_type": "code",
    "execution_count": 18,
-   "id": "e8e00773",
+   "id": "2e73833c",
    "metadata": {},
    "outputs": [
     {
@@ -433,7 +433,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fafd1dbf",
+   "id": "deed20c7",
    "metadata": {},
    "source": [
     "(이러면 안되는데 틀려줘 제발)\n",
@@ -446,7 +446,7 @@
   {
    "cell_type": "code",
    "execution_count": 20,
-   "id": "7826cd55",
+   "id": "96f7568c",
    "metadata": {},
    "outputs": [
     {
@@ -471,7 +471,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "88d1e0ba",
+   "id": "b1b9a4db",
    "metadata": {},
    "source": [
     "### 분류 리포트 확인\n"
@@ -480,7 +480,7 @@
   {
    "cell_type": "code",
    "execution_count": 21,
-   "id": "fba40b71",
+   "id": "e9f4862a",
    "metadata": {},
    "outputs": [
     {
@@ -509,7 +509,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "59e2ba5c",
+   "id": "b6b66a36",
    "metadata": {},
    "source": [
     "### Commentary\n",
@@ -520,7 +520,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "f8a7bc27",
+   "id": "bc8f400f",
    "metadata": {},
    "source": [
     "# 실험2: k = 3 k-nn 모델\n",
@@ -536,7 +536,7 @@
   {
    "cell_type": "code",
    "execution_count": 22,
-   "id": "be0499fd",
+   "id": "bd0f1c54",
    "metadata": {},
    "outputs": [
     {
@@ -558,7 +558,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "1beff057",
+   "id": "8414a980",
    "metadata": {},
    "source": [
     "### 데이터 예측"
@@ -567,7 +567,7 @@
   {
    "cell_type": "code",
    "execution_count": 25,
-   "id": "6c48a477",
+   "id": "35abe0a0",
    "metadata": {},
    "outputs": [
     {
@@ -586,7 +586,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "3487191a",
+   "id": "290ee167",
    "metadata": {},
    "source": [
     "## 정확도 평가\n",
@@ -597,7 +597,7 @@
   {
    "cell_type": "code",
    "execution_count": 26,
-   "id": "c37cf18f",
+   "id": "0d4fe1bc",
    "metadata": {},
    "outputs": [
     {
@@ -620,7 +620,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0b8fd920",
+   "id": "bed6b149",
    "metadata": {},
    "source": [
     "어.... 어 왜째서 또? 앙상블 할 때는 오히려 정확도가 이렇지 않았는데 아무래도 앙상블 모델에서는 과적합의 문제가 있었던 지도 모르겠다.\n",
@@ -633,7 +633,7 @@
   {
    "cell_type": "code",
    "execution_count": 27,
-   "id": "2484cbb5",
+   "id": "2cf1c945",
    "metadata": {},
    "outputs": [
     {
@@ -658,7 +658,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "8d6b3da1",
+   "id": "43f9759f",
    "metadata": {},
    "source": [
     "### 분류 리포트 확인"
@@ -667,7 +667,7 @@
   {
    "cell_type": "code",
    "execution_count": 28,
-   "id": "cdcc4205",
+   "id": "d1f5de23",
    "metadata": {},
    "outputs": [
     {
@@ -696,7 +696,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "a0f76810",
+   "id": "c0d04876",
    "metadata": {},
    "source": [
     "### Commentary\n",
