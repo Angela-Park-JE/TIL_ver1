@@ -1,0 +1,2528 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "dee0e18b",
+   "metadata": {},
+   "source": [
+    "# 의사결정나무 연습\n",
+    "\n",
+    "##### criterion 파라미터 값을 변경하는데에 있어 조금 더 이해도를 높이기 위해 다른 파일로 연습을 해보았습니다.\n",
+    "---\n",
+    "\n",
+    "#####  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "29cf1d3d",
+   "metadata": {},
+   "source": [
+    "# Dataset import\n",
+    "## 데이터 불러오기"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "393ce3e9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import libraries\n",
+    "\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "from sklearn import datasets\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "from sklearn import tree\n",
+    "\n",
+    "from sklearn.metrics import f1_score\n",
+    "from sklearn.metrics import recall_score\n",
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "# raw_wine = datasets.load_wine()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "1fee972a",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(13580, 21)"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# 데이터 셋 내 피처 살펴보기\n",
+    "raw_melb = pd.read_csv(\"/Users/Angela/Desktop/Personal/AI_data/melb_data.csv\")\n",
+    "raw_melb.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "e46e82ab",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Suburb</th>\n",
+       "      <th>Address</th>\n",
+       "      <th>Rooms</th>\n",
+       "      <th>Type</th>\n",
+       "      <th>Price</th>\n",
+       "      <th>Method</th>\n",
+       "      <th>SellerG</th>\n",
+       "      <th>Date</th>\n",
+       "      <th>Distance</th>\n",
+       "      <th>Postcode</th>\n",
+       "      <th>...</th>\n",
+       "      <th>Bathroom</th>\n",
+       "      <th>Car</th>\n",
+       "      <th>Landsize</th>\n",
+       "      <th>BuildingArea</th>\n",
+       "      <th>YearBuilt</th>\n",
+       "      <th>CouncilArea</th>\n",
+       "      <th>Lattitude</th>\n",
+       "      <th>Longtitude</th>\n",
+       "      <th>Regionname</th>\n",
+       "      <th>Propertycount</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Abbotsford</td>\n",
+       "      <td>85 Turner St</td>\n",
+       "      <td>2</td>\n",
+       "      <td>h</td>\n",
+       "      <td>1480000.0</td>\n",
+       "      <td>S</td>\n",
+       "      <td>Biggin</td>\n",
+       "      <td>3/12/2016</td>\n",
+       "      <td>2.5</td>\n",
+       "      <td>3067.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>202.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Yarra</td>\n",
+       "      <td>-37.7996</td>\n",
+       "      <td>144.9984</td>\n",
+       "      <td>Northern Metropolitan</td>\n",
+       "      <td>4019.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Abbotsford</td>\n",
+       "      <td>25 Bloomburg St</td>\n",
+       "      <td>2</td>\n",
+       "      <td>h</td>\n",
+       "      <td>1035000.0</td>\n",
+       "      <td>S</td>\n",
+       "      <td>Biggin</td>\n",
+       "      <td>4/02/2016</td>\n",
+       "      <td>2.5</td>\n",
+       "      <td>3067.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>156.0</td>\n",
+       "      <td>79.0</td>\n",
+       "      <td>1900.0</td>\n",
+       "      <td>Yarra</td>\n",
+       "      <td>-37.8079</td>\n",
+       "      <td>144.9934</td>\n",
+       "      <td>Northern Metropolitan</td>\n",
+       "      <td>4019.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Abbotsford</td>\n",
+       "      <td>5 Charles St</td>\n",
+       "      <td>3</td>\n",
+       "      <td>h</td>\n",
+       "      <td>1465000.0</td>\n",
+       "      <td>SP</td>\n",
+       "      <td>Biggin</td>\n",
+       "      <td>4/03/2017</td>\n",
+       "      <td>2.5</td>\n",
+       "      <td>3067.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>134.0</td>\n",
+       "      <td>150.0</td>\n",
+       "      <td>1900.0</td>\n",
+       "      <td>Yarra</td>\n",
+       "      <td>-37.8093</td>\n",
+       "      <td>144.9944</td>\n",
+       "      <td>Northern Metropolitan</td>\n",
+       "      <td>4019.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Abbotsford</td>\n",
+       "      <td>40 Federation La</td>\n",
+       "      <td>3</td>\n",
+       "      <td>h</td>\n",
+       "      <td>850000.0</td>\n",
+       "      <td>PI</td>\n",
+       "      <td>Biggin</td>\n",
+       "      <td>4/03/2017</td>\n",
+       "      <td>2.5</td>\n",
+       "      <td>3067.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>94.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Yarra</td>\n",
+       "      <td>-37.7969</td>\n",
+       "      <td>144.9969</td>\n",
+       "      <td>Northern Metropolitan</td>\n",
+       "      <td>4019.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Abbotsford</td>\n",
+       "      <td>55a Park St</td>\n",
+       "      <td>4</td>\n",
+       "      <td>h</td>\n",
+       "      <td>1600000.0</td>\n",
+       "      <td>VB</td>\n",
+       "      <td>Nelson</td>\n",
+       "      <td>4/06/2016</td>\n",
+       "      <td>2.5</td>\n",
+       "      <td>3067.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>120.0</td>\n",
+       "      <td>142.0</td>\n",
+       "      <td>2014.0</td>\n",
+       "      <td>Yarra</td>\n",
+       "      <td>-37.8072</td>\n",
+       "      <td>144.9941</td>\n",
+       "      <td>Northern Metropolitan</td>\n",
+       "      <td>4019.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 21 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       Suburb           Address  Rooms Type      Price Method SellerG  \\\n",
+       "0  Abbotsford      85 Turner St      2    h  1480000.0      S  Biggin   \n",
+       "1  Abbotsford   25 Bloomburg St      2    h  1035000.0      S  Biggin   \n",
+       "2  Abbotsford      5 Charles St      3    h  1465000.0     SP  Biggin   \n",
+       "3  Abbotsford  40 Federation La      3    h   850000.0     PI  Biggin   \n",
+       "4  Abbotsford       55a Park St      4    h  1600000.0     VB  Nelson   \n",
+       "\n",
+       "        Date  Distance  Postcode  ...  Bathroom  Car  Landsize  BuildingArea  \\\n",
+       "0  3/12/2016       2.5    3067.0  ...       1.0  1.0     202.0           NaN   \n",
+       "1  4/02/2016       2.5    3067.0  ...       1.0  0.0     156.0          79.0   \n",
+       "2  4/03/2017       2.5    3067.0  ...       2.0  0.0     134.0         150.0   \n",
+       "3  4/03/2017       2.5    3067.0  ...       2.0  1.0      94.0           NaN   \n",
+       "4  4/06/2016       2.5    3067.0  ...       1.0  2.0     120.0         142.0   \n",
+       "\n",
+       "   YearBuilt  CouncilArea Lattitude  Longtitude             Regionname  \\\n",
+       "0        NaN        Yarra  -37.7996    144.9984  Northern Metropolitan   \n",
+       "1     1900.0        Yarra  -37.8079    144.9934  Northern Metropolitan   \n",
+       "2     1900.0        Yarra  -37.8093    144.9944  Northern Metropolitan   \n",
+       "3        NaN        Yarra  -37.7969    144.9969  Northern Metropolitan   \n",
+       "4     2014.0        Yarra  -37.8072    144.9941  Northern Metropolitan   \n",
+       "\n",
+       "  Propertycount  \n",
+       "0        4019.0  \n",
+       "1        4019.0  \n",
+       "2        4019.0  \n",
+       "3        4019.0  \n",
+       "4        4019.0  \n",
+       "\n",
+       "[5 rows x 21 columns]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "raw_melb.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "84948ac1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Rooms</th>\n",
+       "      <th>Price</th>\n",
+       "      <th>Distance</th>\n",
+       "      <th>Postcode</th>\n",
+       "      <th>Bedroom2</th>\n",
+       "      <th>Bathroom</th>\n",
+       "      <th>Car</th>\n",
+       "      <th>Landsize</th>\n",
+       "      <th>BuildingArea</th>\n",
+       "      <th>YearBuilt</th>\n",
+       "      <th>Lattitude</th>\n",
+       "      <th>Longtitude</th>\n",
+       "      <th>Propertycount</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>1.358000e+04</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13518.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>7130.000000</td>\n",
+       "      <td>8205.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "      <td>13580.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>mean</th>\n",
+       "      <td>2.937997</td>\n",
+       "      <td>1.075684e+06</td>\n",
+       "      <td>10.137776</td>\n",
+       "      <td>3105.301915</td>\n",
+       "      <td>2.914728</td>\n",
+       "      <td>1.534242</td>\n",
+       "      <td>1.610075</td>\n",
+       "      <td>558.416127</td>\n",
+       "      <td>151.967650</td>\n",
+       "      <td>1964.684217</td>\n",
+       "      <td>-37.809203</td>\n",
+       "      <td>144.995216</td>\n",
+       "      <td>7454.417378</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>std</th>\n",
+       "      <td>0.955748</td>\n",
+       "      <td>6.393107e+05</td>\n",
+       "      <td>5.868725</td>\n",
+       "      <td>90.676964</td>\n",
+       "      <td>0.965921</td>\n",
+       "      <td>0.691712</td>\n",
+       "      <td>0.962634</td>\n",
+       "      <td>3990.669241</td>\n",
+       "      <td>541.014538</td>\n",
+       "      <td>37.273762</td>\n",
+       "      <td>0.079260</td>\n",
+       "      <td>0.103916</td>\n",
+       "      <td>4378.581772</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>min</th>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>8.500000e+04</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>3000.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>1196.000000</td>\n",
+       "      <td>-38.182550</td>\n",
+       "      <td>144.431810</td>\n",
+       "      <td>249.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25%</th>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>6.500000e+05</td>\n",
+       "      <td>6.100000</td>\n",
+       "      <td>3044.000000</td>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>177.000000</td>\n",
+       "      <td>93.000000</td>\n",
+       "      <td>1940.000000</td>\n",
+       "      <td>-37.856822</td>\n",
+       "      <td>144.929600</td>\n",
+       "      <td>4380.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>50%</th>\n",
+       "      <td>3.000000</td>\n",
+       "      <td>9.030000e+05</td>\n",
+       "      <td>9.200000</td>\n",
+       "      <td>3084.000000</td>\n",
+       "      <td>3.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>440.000000</td>\n",
+       "      <td>126.000000</td>\n",
+       "      <td>1970.000000</td>\n",
+       "      <td>-37.802355</td>\n",
+       "      <td>145.000100</td>\n",
+       "      <td>6555.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75%</th>\n",
+       "      <td>3.000000</td>\n",
+       "      <td>1.330000e+06</td>\n",
+       "      <td>13.000000</td>\n",
+       "      <td>3148.000000</td>\n",
+       "      <td>3.000000</td>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>651.000000</td>\n",
+       "      <td>174.000000</td>\n",
+       "      <td>1999.000000</td>\n",
+       "      <td>-37.756400</td>\n",
+       "      <td>145.058305</td>\n",
+       "      <td>10331.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>max</th>\n",
+       "      <td>10.000000</td>\n",
+       "      <td>9.000000e+06</td>\n",
+       "      <td>48.100000</td>\n",
+       "      <td>3977.000000</td>\n",
+       "      <td>20.000000</td>\n",
+       "      <td>8.000000</td>\n",
+       "      <td>10.000000</td>\n",
+       "      <td>433014.000000</td>\n",
+       "      <td>44515.000000</td>\n",
+       "      <td>2018.000000</td>\n",
+       "      <td>-37.408530</td>\n",
+       "      <td>145.526350</td>\n",
+       "      <td>21650.000000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "              Rooms         Price      Distance      Postcode      Bedroom2  \\\n",
+       "count  13580.000000  1.358000e+04  13580.000000  13580.000000  13580.000000   \n",
+       "mean       2.937997  1.075684e+06     10.137776   3105.301915      2.914728   \n",
+       "std        0.955748  6.393107e+05      5.868725     90.676964      0.965921   \n",
+       "min        1.000000  8.500000e+04      0.000000   3000.000000      0.000000   \n",
+       "25%        2.000000  6.500000e+05      6.100000   3044.000000      2.000000   \n",
+       "50%        3.000000  9.030000e+05      9.200000   3084.000000      3.000000   \n",
+       "75%        3.000000  1.330000e+06     13.000000   3148.000000      3.000000   \n",
+       "max       10.000000  9.000000e+06     48.100000   3977.000000     20.000000   \n",
+       "\n",
+       "           Bathroom           Car       Landsize  BuildingArea    YearBuilt  \\\n",
+       "count  13580.000000  13518.000000   13580.000000   7130.000000  8205.000000   \n",
+       "mean       1.534242      1.610075     558.416127    151.967650  1964.684217   \n",
+       "std        0.691712      0.962634    3990.669241    541.014538    37.273762   \n",
+       "min        0.000000      0.000000       0.000000      0.000000  1196.000000   \n",
+       "25%        1.000000      1.000000     177.000000     93.000000  1940.000000   \n",
+       "50%        1.000000      2.000000     440.000000    126.000000  1970.000000   \n",
+       "75%        2.000000      2.000000     651.000000    174.000000  1999.000000   \n",
+       "max        8.000000     10.000000  433014.000000  44515.000000  2018.000000   \n",
+       "\n",
+       "          Lattitude    Longtitude  Propertycount  \n",
+       "count  13580.000000  13580.000000   13580.000000  \n",
+       "mean     -37.809203    144.995216    7454.417378  \n",
+       "std        0.079260      0.103916    4378.581772  \n",
+       "min      -38.182550    144.431810     249.000000  \n",
+       "25%      -37.856822    144.929600    4380.000000  \n",
+       "50%      -37.802355    145.000100    6555.000000  \n",
+       "75%      -37.756400    145.058305   10331.000000  \n",
+       "max      -37.408530    145.526350   21650.000000  "
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = raw_melb.copy()\n",
+    "df.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "15cabe5c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Suburb</th>\n",
+       "      <th>Address</th>\n",
+       "      <th>Type</th>\n",
+       "      <th>Method</th>\n",
+       "      <th>SellerG</th>\n",
+       "      <th>Date</th>\n",
+       "      <th>CouncilArea</th>\n",
+       "      <th>Regionname</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>13580</td>\n",
+       "      <td>13580</td>\n",
+       "      <td>13580</td>\n",
+       "      <td>13580</td>\n",
+       "      <td>13580</td>\n",
+       "      <td>13580</td>\n",
+       "      <td>12211</td>\n",
+       "      <td>13580</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>unique</th>\n",
+       "      <td>314</td>\n",
+       "      <td>13378</td>\n",
+       "      <td>3</td>\n",
+       "      <td>5</td>\n",
+       "      <td>268</td>\n",
+       "      <td>58</td>\n",
+       "      <td>33</td>\n",
+       "      <td>8</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>top</th>\n",
+       "      <td>Reservoir</td>\n",
+       "      <td>36 Aberfeldie St</td>\n",
+       "      <td>h</td>\n",
+       "      <td>S</td>\n",
+       "      <td>Nelson</td>\n",
+       "      <td>27/05/2017</td>\n",
+       "      <td>Moreland</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>freq</th>\n",
+       "      <td>359</td>\n",
+       "      <td>3</td>\n",
+       "      <td>9449</td>\n",
+       "      <td>9022</td>\n",
+       "      <td>1565</td>\n",
+       "      <td>473</td>\n",
+       "      <td>1163</td>\n",
+       "      <td>4695</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "           Suburb           Address   Type Method SellerG        Date  \\\n",
+       "count       13580             13580  13580  13580   13580       13580   \n",
+       "unique        314             13378      3      5     268          58   \n",
+       "top     Reservoir  36 Aberfeldie St      h      S  Nelson  27/05/2017   \n",
+       "freq          359                 3   9449   9022    1565         473   \n",
+       "\n",
+       "       CouncilArea             Regionname  \n",
+       "count        12211                  13580  \n",
+       "unique          33                      8  \n",
+       "top       Moreland  Southern Metropolitan  \n",
+       "freq          1163                   4695  "
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.describe(include = 'object')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "53e0dae9",
+   "metadata": {},
+   "source": [
+    "# 피처, 타깃 데이터 지정\n",
+    "\n",
+    "정황상 보고 집의 type을 맞출 수 있을까? 몇가지 컬럼만 가져오도록 합니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "2aabf270",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = df[['Rooms', 'Bedroom2', 'Bathroom', 'Landsize', 'Propertycount', 'Regionname', 'Suburb', 'Type', 'Price']]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "e76b530f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = df[['Rooms', 'Price', 'Landsize', 'Propertycount']]\n",
+    "y = df.Type"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "65d631e3",
+   "metadata": {},
+   "source": [
+    "## 트레이닝, 테스트 데이터 분할"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "d674bf94",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "X_tn, X_te, y_tn, y_te = train_test_split(X, y, random_state = 1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d080bc7a",
+   "metadata": {},
+   "source": [
+    "## 데이터 표준화"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "f9edad99",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "std_scale = StandardScaler()\n",
+    "std_scale.fit(X_tn)\n",
+    "X_tn_std = std_scale.transform(X_tn)\n",
+    "X_te_std = std_scale.transform(X_te)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b601f993",
+   "metadata": {},
+   "source": [
+    "# 의사결정나무 분류모델\n",
+    "\n",
+    "\n",
+    "## 모델링\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "5ab13de7",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(random_state=0)"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree = tree.DecisionTreeClassifier(random_state = 0)\n",
+    "clf_tree.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4bedd1bd",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "c7439541",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 'h' 'h' ... 'h' 'h' 't']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_pred = clf_tree.predict(X_te_std)\n",
+    "print(tree_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5cbf2998",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "9d0f6673",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6441165694662292"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "607ce5c8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6458451226573642"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "f78e1443",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.8144329896907216"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "434cdf30",
+   "metadata": {},
+   "source": [
+    "정확도 확낮아진걸보니 오기생기고 재미있네요. 애초에 의사결정나무로 집 가격과 소유물 가격들과 해서 집 타입을 맞춘다는게 말도 안되는 것이긴 하지만 저만큼 맞춘게 신기할 정도.\n",
+    "\n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "0a2c187f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[2104,  149,  103],\n",
+       "       [ 124,   77,   71],\n",
+       "       [ 111,   72,  584]])"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4404734d",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "f71ee00a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           h       0.90      0.89      0.90      2356\n",
+      "           t       0.26      0.28      0.27       272\n",
+      "           u       0.77      0.76      0.77       767\n",
+      "\n",
+      "    accuracy                           0.81      3395\n",
+      "   macro avg       0.64      0.65      0.64      3395\n",
+      "weighted avg       0.82      0.81      0.82      3395\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, tree_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a1d14705",
+   "metadata": {},
+   "source": [
+    "## 현재 모형 뜯어보기\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7608ec6a",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "07a03516",
+   "metadata": {},
+   "source": [
+    "### 시각화"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "50b9c4af",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import pydotplus\n",
+    "# from sklearn.tree import export_graphviz\n",
+    "# from IPython.core.display import Image"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "1c0714af",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# dot_data = export_graphviz(clf_tree, out_file=None,\n",
+    "#                            feature_names = X.columns,\n",
+    "#                            class_names = clf_tree.classes_,\n",
+    "#                            filled=True, rounded=True,\n",
+    "#                            special_characters=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "6c3f80c3",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "# dot_data\n",
+    "# graph = pydotplus.graph_from_dot_data(dot_data)\n",
+    "# Image(graph.create_png())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fbb31b40",
+   "metadata": {},
+   "source": [
+    "tree 그리는데 문제가 있어서 찾아본 결과:https://moondol-ai.tistory.com/149\n",
+    "\n",
+    "에러 내용은 \"Graphviz's executables not found\" 라고 나오는데요, 이는 환경변수를 등록하지 않아서 발생하는 문제입니다. \n",
+    "\n",
+    "따라서 환경변수에 Graphviz를 추가해주셔야 하는데, 아래의 명령어로 간단하게 수행할 수 있습니다. \n",
+    "\n",
+    "```\n",
+    "import os \n",
+    "os.environ[\"PATH\"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'\n",
+    "```\n",
+    "\n",
+    "라고 했지만 맥은 복잡해서 해결을 못하는 중. ㅎ... 일단 다음 실험을 해보자."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "49716574",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dd5e47cc",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e6eb76fa",
+   "metadata": {},
+   "source": [
+    "# 실험1: 맥스뎁스(10)를 정해주고 만든 모형\n",
+    "\n",
+    "이번엔 임의로 트리의 맥스 깊이를 정해주고 만들어본다. \n",
+    "\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "2146ba3b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(max_depth=10, random_state=0)"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree_d10 = tree.DecisionTreeClassifier(random_state = 0, max_depth = 10)\n",
+    "clf_tree_d10.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cf1104b3",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "1cbc2a49",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 'u' 'h' ... 'h' 'h' 'u']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_d10_pred = clf_tree_d10.predict(X_te_std)\n",
+    "print(tree_d10_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2605ab30",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "f5ccde35",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.64857839066938"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_d10_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "90cb6dcc",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6405346235465386"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_d10_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "e9081210",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.8391752577319588"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_d10_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "32b102e2",
+   "metadata": {},
+   "source": [
+    "정확도 자체는 조금 더 올라간 것으로 확인되었다.\n",
+    "\n",
+    "### confusion matrix 확인"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "d49cc902",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[2190,   69,   97],\n",
+       "       [ 135,   56,   81],\n",
+       "       [ 121,   43,  603]])"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_d10_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0a41dbc6",
+   "metadata": {},
+   "source": [
+    "# 실험2: criterion = 'gini' 가 아닌 'entropy'로 했을 때"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "67237a3b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(criterion='entropy', random_state=0)"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree_ent = tree.DecisionTreeClassifier(random_state = 0, criterion = 'entropy')\n",
+    "clf_tree_ent.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d1a6f5aa",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "d3e6fe3d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 'u' 'h' ... 'h' 'h' 'h']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_ent_pred = clf_tree_ent.predict(X_te_std)\n",
+    "print(tree_ent_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b6c441de",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "3f588ba4",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6411064327841002"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_ent_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "def3677d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6390807226572427"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_ent_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "1f0ed530",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.8159057437407953"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_ent_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "488041a7",
+   "metadata": {},
+   "source": [
+    "생각보다 정확도가 많이 올라가지 않음을 확인할 수 있었다.\n",
+    "\n",
+    "### confusion matrix 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "b417f7ea",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[2121,  127,  108],\n",
+       "       [ 130,   72,   70],\n",
+       "       [ 125,   65,  577]])"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_ent_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3261b740",
+   "metadata": {},
+   "source": [
+    "```\n",
+    "array([[2104,  149,  103],\n",
+    "       [ 124,   77,   71],\n",
+    "       [ 111,   72,  584]])\n",
+    "```\n",
+    "처음과 비교했을 때 거의 나아진 것이 없다. \n",
+    "\n",
+    "# 실험3: data를 다르게 (Southern Metropolitan 한정)\n",
+    "\n",
+    "이번에는 데이터를 수정해보고자 한다. 지역에 따라 타입의 스타일이 다를 수 있기 때문에 한 지역만 한정지어서 해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "7de026a9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# df = df[['Rooms', 'Bedroom2', 'Bathroom', 'Landsize', 'Propertycount', 'Regionname', 'Suburb', 'Type', 'Price']]\n",
+    "df1 = df[df['Regionname'] == 'Southern Metropolitan'][['Rooms', 'Bedroom2', 'Bathroom', 'Landsize', 'Propertycount', 'Regionname', 'Suburb', 'Type', 'Price']]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "9265ee23",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = df1[['Rooms', 'Price', 'Landsize', 'Propertycount']]\n",
+    "y = df1.Type"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5fa7bca6",
+   "metadata": {},
+   "source": [
+    "## 트레이닝, 테스트 데이터 분할"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "d6408ce7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "X_tn, X_te, y_tn, y_te = train_test_split(X, y, random_state = 1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8b2bdb1a",
+   "metadata": {},
+   "source": [
+    "## 데이터 표준화"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "9c2b1ab9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "std_scale = StandardScaler()\n",
+    "std_scale.fit(X_tn)\n",
+    "X_tn_std = std_scale.transform(X_tn)\n",
+    "X_te_std = std_scale.transform(X_te)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c5a5bbbb",
+   "metadata": {},
+   "source": [
+    "## 모델링\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "a9a5a902",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(random_state=0)"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree = tree.DecisionTreeClassifier(random_state = 0)\n",
+    "clf_tree.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ddead057",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "a018016d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 't' 'h' ... 'h' 'h' 't']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_pred = clf_tree.predict(X_te_std)\n",
+    "print(tree_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "05893919",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "d330721f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6828771026111623"
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "412ffdad",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.6847726282277651"
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "5c4460c3",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.823679727427598"
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e3e8abcf",
+   "metadata": {},
+   "source": [
+    "아주 약간 정확도가 올라간 것을 볼 수 있다. 하지만 만족스러운 정도는 아니다.\n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "c52925f6",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[610,  47,  38],\n",
+       "       [ 48,  32,  21],\n",
+       "       [ 28,  25, 325]])"
+      ]
+     },
+     "execution_count": 42,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "695bd205",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "3d1e3fbc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           h       0.89      0.88      0.88       695\n",
+      "           t       0.31      0.32      0.31       101\n",
+      "           u       0.85      0.86      0.85       378\n",
+      "\n",
+      "    accuracy                           0.82      1174\n",
+      "   macro avg       0.68      0.68      0.68      1174\n",
+      "weighted avg       0.83      0.82      0.82      1174\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, tree_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4fdd9fa7",
+   "metadata": {},
+   "source": [
+    "아주 약간 나아진 것은 볼 수 있지만, 여전히 좋은 결과는 아닌 것으로 보인다.\n",
+    "\n",
+    "그렇다면 피처로 넣은 것들은 집의 타입을 결정하는데 중요한 요소가 아니라는 점일 수 있다.\n",
+    "\n",
+    "# 실험4: data를 다르게 (Southern Metropolitan 한정, Bedroom2와 Bathroom 추가)\n",
+    "\n",
+    "이번에는 피처를 수정해보고자 한다. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "id": "6299adc1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# df = df[['Rooms', 'Bedroom2', 'Bathroom', 'Landsize', 'Propertycount', 'Regionname', 'Suburb', 'Type', 'Price']]\n",
+    "df2 = df[(df['Regionname'] == 'Southern Metropolitan')][['Rooms', 'Bedroom2', 'Bathroom', 'Landsize', 'Propertycount', 'Regionname', 'Suburb', 'Type', 'Price']]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "47523ec7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = df2[['Rooms', 'Price', 'Landsize', 'Propertycount', 'Bedroom2', 'Bathroom']]\n",
+    "y = df2.Type"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8e894b2a",
+   "metadata": {},
+   "source": [
+    "## 트레이닝, 테스트 데이터 분할"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "3ca24fe6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "X_tn, X_te, y_tn, y_te = train_test_split(X, y, random_state = 1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "68960cef",
+   "metadata": {},
+   "source": [
+    "## 데이터 표준화"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "f10ecff5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "std_scale = StandardScaler()\n",
+    "std_scale.fit(X_tn)\n",
+    "X_tn_std = std_scale.transform(X_tn)\n",
+    "X_te_std = std_scale.transform(X_te)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8a25ecc1",
+   "metadata": {},
+   "source": [
+    "## 모델링\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "fcd1d4f8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(random_state=0)"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree = tree.DecisionTreeClassifier(random_state = 0)\n",
+    "clf_tree.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ac0e7511",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "id": "b1c07ce0",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 'h' 'h' ... 'h' 'h' 'h']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_pred = clf_tree.predict(X_te_std)\n",
+    "print(tree_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8b2b10bf",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "id": "ef0e4ce9",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.7034416404181951"
+      ]
+     },
+     "execution_count": 50,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "id": "89fc451c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.7043841714307323"
+      ]
+     },
+     "execution_count": 51,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "f28bb52a",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.8356047700170358"
+      ]
+     },
+     "execution_count": 52,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ec7f2a5f",
+   "metadata": {},
+   "source": [
+    "f1스코어는 상당히 올라간 것을 볼 수 있으며, 정확도 자체는 아주 약간 올라간 것을 볼 수 있다. \n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "d76c522b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[622,  34,  39],\n",
+       "       [ 41,  37,  23],\n",
+       "       [ 26,  30, 322]])"
+      ]
+     },
+     "execution_count": 53,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8946c220",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "id": "95cc6d8c",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           h       0.90      0.89      0.90       695\n",
+      "           t       0.37      0.37      0.37       101\n",
+      "           u       0.84      0.85      0.85       378\n",
+      "\n",
+      "    accuracy                           0.84      1174\n",
+      "   macro avg       0.70      0.70      0.70      1174\n",
+      "weighted avg       0.84      0.84      0.84      1174\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, tree_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "752ecd93",
+   "metadata": {},
+   "source": [
+    "여전히 클래스 t를 분류하는데는 어려움을 겪는 것을 볼 수 있다. \n",
+    "\n",
+    "t값은 어떤 값들로 이루어져 있나?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "e97badb1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Rooms</th>\n",
+       "      <th>Bedroom2</th>\n",
+       "      <th>Bathroom</th>\n",
+       "      <th>Landsize</th>\n",
+       "      <th>Propertycount</th>\n",
+       "      <th>Regionname</th>\n",
+       "      <th>Suburb</th>\n",
+       "      <th>Type</th>\n",
+       "      <th>Price</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>86</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>718.0</td>\n",
+       "      <td>3280.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Albert Park</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1550000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>224</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>101.0</td>\n",
+       "      <td>4836.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Armadale</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1205000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>229</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>4836.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Armadale</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1918000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>238</th>\n",
+       "      <td>3</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>246.0</td>\n",
+       "      <td>4836.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Armadale</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1586000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>274</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>103.0</td>\n",
+       "      <td>4836.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Armadale</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1101000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13290</th>\n",
+       "      <td>2</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>336.0</td>\n",
+       "      <td>5943.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>South Melbourne</td>\n",
+       "      <td>t</td>\n",
+       "      <td>817000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13343</th>\n",
+       "      <td>4</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>338.0</td>\n",
+       "      <td>3052.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Ashburton</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1650000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13355</th>\n",
+       "      <td>4</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>270.0</td>\n",
+       "      <td>10969.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Bentleigh East</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1130000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13485</th>\n",
+       "      <td>4</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>361.0</td>\n",
+       "      <td>2397.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>McKinnon</td>\n",
+       "      <td>t</td>\n",
+       "      <td>1655000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13521</th>\n",
+       "      <td>4</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>123.0</td>\n",
+       "      <td>8648.0</td>\n",
+       "      <td>Southern Metropolitan</td>\n",
+       "      <td>Port Melbourne</td>\n",
+       "      <td>t</td>\n",
+       "      <td>2455000.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>425 rows × 9 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       Rooms  Bedroom2  Bathroom  Landsize  Propertycount  \\\n",
+       "86         3       3.0       2.0     718.0         3280.0   \n",
+       "224        3       3.0       2.0     101.0         4836.0   \n",
+       "229        3       3.0       2.0       0.0         4836.0   \n",
+       "238        3       2.0       2.0     246.0         4836.0   \n",
+       "274        3       3.0       1.0     103.0         4836.0   \n",
+       "...      ...       ...       ...       ...            ...   \n",
+       "13290      2       2.0       2.0     336.0         5943.0   \n",
+       "13343      4       4.0       2.0     338.0         3052.0   \n",
+       "13355      4       4.0       2.0     270.0        10969.0   \n",
+       "13485      4       4.0       2.0     361.0         2397.0   \n",
+       "13521      4       4.0       3.0     123.0         8648.0   \n",
+       "\n",
+       "                  Regionname           Suburb Type      Price  \n",
+       "86     Southern Metropolitan      Albert Park    t  1550000.0  \n",
+       "224    Southern Metropolitan         Armadale    t  1205000.0  \n",
+       "229    Southern Metropolitan         Armadale    t  1918000.0  \n",
+       "238    Southern Metropolitan         Armadale    t  1586000.0  \n",
+       "274    Southern Metropolitan         Armadale    t  1101000.0  \n",
+       "...                      ...              ...  ...        ...  \n",
+       "13290  Southern Metropolitan  South Melbourne    t   817000.0  \n",
+       "13343  Southern Metropolitan        Ashburton    t  1650000.0  \n",
+       "13355  Southern Metropolitan   Bentleigh East    t  1130000.0  \n",
+       "13485  Southern Metropolitan         McKinnon    t  1655000.0  \n",
+       "13521  Southern Metropolitan   Port Melbourne    t  2455000.0  \n",
+       "\n",
+       "[425 rows x 9 columns]"
+      ]
+     },
+     "execution_count": 55,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df2[df2['Type'] == 't']"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "76069b90",
+   "metadata": {},
+   "source": [
+    "그만 알아보자... 이걸로 상상할 수 있는 부분이 많이 한정적이라니 조금 아쉽다.\n",
+    "\n",
+    "# 실험5: 실험4 데이터로 criterion = 'entropy'\n",
+    "\n",
+    "혹시나 하는 마음에 계수 결정법을 entropy로 설정해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "id": "b4c002ae",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = df2[['Rooms', 'Price', 'Landsize', 'Propertycount', 'Bedroom2', 'Bathroom']]\n",
+    "y = df2.Type"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d6bbdd27",
+   "metadata": {},
+   "source": [
+    "## 트레이닝, 테스트 데이터 분할"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "47ac8923",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "X_tn, X_te, y_tn, y_te = train_test_split(X, y, random_state = 1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "13e3278e",
+   "metadata": {},
+   "source": [
+    "## 데이터 표준화"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "id": "8cfce417",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "std_scale = StandardScaler()\n",
+    "std_scale.fit(X_tn)\n",
+    "X_tn_std = std_scale.transform(X_tn)\n",
+    "X_te_std = std_scale.transform(X_te)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "74603f7e",
+   "metadata": {},
+   "source": [
+    "## 모델링\n",
+    "### 데이터 학습"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "e9e37063",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "DecisionTreeClassifier(criterion='entropy', random_state=0)"
+      ]
+     },
+     "execution_count": 59,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn import tree\n",
+    "clf_tree_ent = tree.DecisionTreeClassifier(random_state = 0, criterion = 'entropy')\n",
+    "clf_tree_ent.fit(X_tn_std, y_tn)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d643ed49",
+   "metadata": {},
+   "source": [
+    "### 데이터 예측"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "95735d59",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['h' 'h' 't' ... 'h' 'h' 'h']\n"
+     ]
+    }
+   ],
+   "source": [
+    "tree_ent_pred = clf_tree_ent.predict(X_te_std)\n",
+    "print(tree_ent_pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "54bcae0c",
+   "metadata": {},
+   "source": [
+    "## 정확도 평가\n",
+    "\n",
+    "f1 스코어를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "fe24557d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.712525866026667"
+      ]
+     },
+     "execution_count": 61,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "f1 = f1_score(y_te, tree_ent_pred, average = 'macro')\n",
+    "f1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "cfff6523",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.7175437333615742"
+      ]
+     },
+     "execution_count": 62,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "recall = recall_score(y_te, tree_ent_pred, average = 'macro')\n",
+    "recall"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "id": "50fc8d2f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.8296422487223168"
+      ]
+     },
+     "execution_count": 63,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "accuracy = accuracy_score(y_te, tree_ent_pred)\n",
+    "accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "564d0267",
+   "metadata": {},
+   "source": [
+    "f1스코어는 약간 상승했으나 정확도 자체는 0.01 하락했다.\n",
+    "\n",
+    "### confusion matrix 확인\n",
+    "\n",
+    "confusion matrix를 통해 예측값과 실제값의 일치 정도를 확인해본다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "cf99a05e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[604,  53,  38],\n",
+       "       [ 46,  42,  13],\n",
+       "       [ 33,  17, 328]])"
+      ]
+     },
+     "execution_count": 64,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "conf_matrix = confusion_matrix(y_te, tree_ent_pred)\n",
+    "conf_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9395e70b",
+   "metadata": {},
+   "source": [
+    "```\n",
+    "array([[622,  34,  39],\n",
+    "       [ 41,  37,  23],\n",
+    "       [ 26,  30, 322]])\n",
+    "```       \n",
+    "실험4의 결과와 비교해보면 전체적인 정확도가 더 떨어졌음을 한눈에 확인할 수 있다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a6ded1fc",
+   "metadata": {},
+   "source": [
+    "### 분류 리포트 확인\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "8ab645bd",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           h       0.88      0.87      0.88       695\n",
+      "           t       0.38      0.42      0.39       101\n",
+      "           u       0.87      0.87      0.87       378\n",
+      "\n",
+      "    accuracy                           0.83      1174\n",
+      "   macro avg       0.71      0.72      0.71      1174\n",
+      "weighted avg       0.83      0.83      0.83      1174\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "\n",
+    "class_rep = classification_report(y_te, tree_ent_pred)\n",
+    "print(class_rep)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "15fd40fe",
+   "metadata": {},
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  },
+  "toc": {
+   "base_numbering": 1,
+   "nav_menu": {},
+   "number_sections": true,
+   "sideBar": true,
+   "skip_h1_title": false,
+   "title_cell": "Table of Contents",
+   "title_sidebar": "Contents",
+   "toc_cell": false,
+   "toc_position": {
+    "height": "calc(100% - 180px)",
+    "left": "10px",
+    "top": "150px",
+    "width": "383.984px"
+   },
+   "toc_section_display": true,
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
