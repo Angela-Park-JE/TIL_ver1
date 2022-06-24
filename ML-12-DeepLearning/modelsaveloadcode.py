@@ -3,7 +3,9 @@
 h5 라는 형식으로 저장하고 불러온다.
 '''
 
+# Save
 # model.save('cnn_model01.h5')
 
+# Load
 # from tensorflow.keras.models import load_model
 # cnn_model01 = load_model('cnn_model01.h5')
