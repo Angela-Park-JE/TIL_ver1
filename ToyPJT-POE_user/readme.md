@@ -11,7 +11,13 @@
 
 ### files info
 
-Pre-processing: EDA_poe_stats_1_presetting.ipynb, EDA_poe_stats_2_revising_rank.ipynb
+Pre-processing: 
+  - poe_stats_1_revising_stats.ipynb -> poe_stats_1preprocessing.csv
+  - poe_stats_2_revising_rank.ipynb -> poe_stats_2revisedrank.csv
+  - poe_stats_3_EDA_1.ipynb -> poe_stats_3preclass.csv
 
-Analyzing: poe_stats_3preclass.csv, EDA_poe_stats_4_classes.ipynb, 
-
+Analyzing: 
+  - poe_stats_3_EDA_ver2_1.ipynb
+  - poe_stats_3_EDA_ver2_2.ipynb
+  - poe_stats_4_EDA_byclass.ipynb
+  - poe_stats_5_EDA_user.ipynb
