@@ -6,8 +6,12 @@
 > ### data reference
 > poe_stats.csv : https://www.kaggle.com/datasets/gagazet/path-of-exile-league-statistic
 
+> ### kaggle questions
+> 본 캐글 프로젝트에서 제시하는 문항을 해결하는 파일: POE_rankers_analysis.ipynb
+
 ### files info
 
-Pre-processing:
+Pre-processing: EDA_poe_stats_1_presetting.ipynb, EDA_poe_stats_2_revising_rank.ipynb
 
-Analyzing: 
+Analyzing: poe_stats_3preclass.csv, EDA_poe_stats_4_classes.ipynb, 
+
