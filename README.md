@@ -7,8 +7,8 @@ pandas, numpy, statsmodel, SQL etc... what I learned(practiced) today....!
 | `FinanceData_Analysis` | 금융데이터로 실습한 폴더입니다. | `jupyter notebook` |
 | `ML-00` | 기계학습과 관련한 공부폴더입니다. | `jupyter notebook` |
 | `MySQL` |   SQL 공부로 이루어져있습니다. | `SQL` |
-| `ToyPJT-Ecommerce` | 위치 상 부모(조상)요소를 기준으로 배치 | `jupyter notebook` |
-| `ToyPJT-POE_user` | 브라우저 창을 기준으로 배치 | `jupyter notebook` |
+| `ToyPJT-Ecommerce` | (내용...😎) | `jupyter notebook` |
+| `ToyPJT-POE_user` | Path Of Exile 게임 데이터 분석 폴더입니다. | `jupyter notebook` |
 | `pandas` | 판다스 팁이나 함수 등을 메모장처럼 사용하는 곳입니다. | `jupyter notebook` |
 | `Preprocessing` | 전처리 공부 관련 폴더입니다. | `jupyter notebook` |
 | `python3` | 파이썬3 팁이나 자주 쓰이는 코드 등을 메모장처럼 사용하는 곳입니다. | `python3` |
