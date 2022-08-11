@@ -28,7 +28,8 @@ LIMIT 1;
 거의 30분 이상 걸렸던 문제... 그럼에도 더 나은 방법이 있다. 
 MIN MAX가 따로 필요할게 아니었고, ORDER의 문제였다. 
 근데 출제문제 자체의 문제가, 같은 길이값이면 텍스트 순서대로 가져오라고 했다. 
-다들 너무 간단하게 order by를 해두었다. 만약 max length가 같은 텍스트였으면 오류났을텐데...
+꽤 많은 사람들이 너무 간단하게 order by를 해두었다. 만약 max length가 같은 텍스트였으면 오류났을텐데...
+UNION이 있었음을 까먹었다!!!!!!
 """
 
 --보완
@@ -46,6 +47,11 @@ LIMIT 1;
 """
 FROM DISCUSSION
 """
-by: niromy98, 1years ago
+-- by: niromy98, 1years ago
 SELECT CITY, LENGTH(CITY) FROM STATION ORDER BY LENGTH(CITY), CITY ASC LIMIT 1; 
 SELECT CITY, LENGTH(CITY) FROM STATION ORDER BY LENGTH(CITY) DESC LIMIT 1;
+
+-- by: shashankseth38, 3days ago
+(select city, length(city) from station order by length(city), city limit 1)
+union
+(select city, length(city) from station order by length(city) desc, city limit 1)
