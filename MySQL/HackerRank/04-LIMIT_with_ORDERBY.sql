@@ -1,7 +1,4 @@
 """
-(Oracle)ROWNUM -> (MySQL)LIMIT | (MSSQL) SELECT TOP 1, 
-거의 30분 이상 걸렸던 문제... 그럼에도 더 나은 방법이 있다. 
-
 Prepare > SQL > Basic Select > Weather Observation Station 5
 https://www.hackerrank.com/challenges/weather-observation-station-5/
 Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths 
@@ -13,6 +10,7 @@ The STATION table is described as follows:
 You can write two separate queries to get the desired output. It need not be a single query.
 """
 
+--제출
 SELECT DISTINCT city, MIN(LENGTH(city))
 FROM STATION
 GROUP BY 1
@@ -25,6 +23,24 @@ GROUP BY 1
 ORDER BY 2 DESC, 1 ASC
 LIMIT 1;
 
+"""
+(Oracle)ROWNUM -> (MySQL)LIMIT | (MSSQL) SELECT TOP 1, 
+거의 30분 이상 걸렸던 문제... 그럼에도 더 나은 방법이 있다. 
+MIN MAX가 따로 필요할게 아니었고, ORDER의 문제였다. 
+근데 출제문제 자체의 문제가, 같은 길이값이면 텍스트 순서대로 가져오라고 했다. 
+다들 너무 간단하게 order by를 해두었다. 만약 max length가 같은 텍스트였으면 오류났을텐데...
+"""
+
+--보완
+SELECT DISTINCT city, LENGTH(city)
+FROM STATION
+ORDER BY 2, 1 
+LIMIT 1;
+
+SELECT DISTINCT city, LENGTH(city)
+FROM STATION
+ORDER BY 2 DESC, 1 ASC
+LIMIT 1;
 
 
 """
