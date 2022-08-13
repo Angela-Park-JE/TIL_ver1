@@ -74,3 +74,26 @@ SELECT DISTINCT city
 FROM STATION
 WHERE city NOT RLIKE '[aeiou]$';
 
+
+"""
+Prepare > SQL > Basic Select > Weather Observation Station 11
+https://www.hackerrank.com/challenges/weather-observation-station-11/
+Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.
+"""
+
+SELECT DISTINCT city
+FROM STATION
+WHERE city NOT RLIKE '^[aeiou]'
+   or city NOT RLIKE '[aeiou]$';
+
+
+"""
+Prepare > SQL > Basic Select > Weather Observation Station 12
+https://www.hackerrank.com/challenges/weather-observation-station-12/
+Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.
+"""
+
+SELECT DISTINCT city
+FROM STATION
+WHERE city NOT RLIKE '^[aeiou]'
+  and city NOT RLIKE '[aeiou]$';
