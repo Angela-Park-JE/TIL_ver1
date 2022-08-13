@@ -39,3 +39,13 @@ Query the average population for all cities in CITY, rounded down to the nearest
 
 SELECT ROUND(AVG(population), 0)
 FROM CITY;
+
+
+"""
+Prepare> SQL > Aggregation > Population Density Difference
+https://www.hackerrank.com/challenges/population-density-difference/
+Query the difference between the maximum and minimum populations in CITY.
+"""
+
+SELECT MAX(population)-MIN(population) as diff_population
+FROM CITY;
