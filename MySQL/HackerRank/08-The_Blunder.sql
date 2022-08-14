@@ -29,6 +29,17 @@ FROM (
     FROM EMPLOYEES
     WHERE 1000 < salary < 10^5
     ) as e;
+--다시
+SELECT CEIL( AVG(salary) - AVG(CAST(REPLACE(CAST(salary AS CHAR), '0', '')) AS UNSIGNED) )
+FROM EMPLOYEES
+WHERE 1000 < salary 
+  AND salary < 100000;
+--이게 된다
+--숫자형을 문자형으로 바꿀 필요가 없었던 것이다.
+SELECT CEIL( AVG(salary) - AVG(REPLACE(salary, '0', '')) )
+FROM EMPLOYEES
+WHERE 1000 < salary 
+  AND salary < 100000;
 
 --안돌아가서 답답해서 Oracle 로 시도
 --올림을 맨 나중에 CEIL 함수를 이용함.
