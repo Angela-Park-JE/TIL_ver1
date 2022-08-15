@@ -6,7 +6,24 @@ She wants your help finding the difference between her miscalculation (using sal
 Write a query calculating the amount of error (i.e.:  average monthly salaries), and round it up to the next integer.
 """
 
---처음 접근
+--MySQL
+--숫자형을 문자형으로 바꿀 필요가 없었던 것이다.
+SELECT CEIL(AVG(salary) - AVG(REPLACE(salary, 0, '')))
+FROM EMPLOYEES
+WHERE 1000< salary AND salary < POWER(10, 5)
+
+--안돌아가서 답답해서 Oracle 로 시도
+--올림을 맨 나중에 CEIL 함수를 이용함.
+SELECT CEIL(AVG(salary) - AVG(TO_NUMBER(REPLACE(TO_CHAR(salary), '0', ''))))
+FROM EMPLOYEES
+WHERE 1000 < salary 
+  AND salary < 100000;
+
+
+"""
+오답
+"""
+--처음 접근: 문제를 잘못 생각함
 SELECT ROUND(AVG(e.real_salary), 0), ROUND(AVG(e.salary), 0)
 FROM (
     SELECT salary, 
@@ -31,19 +48,6 @@ FROM (
     ) as e;
 --다시
 SELECT CEIL( AVG(salary) - AVG(CAST(REPLACE(CAST(salary AS CHAR), '0', '')) AS UNSIGNED) )
-FROM EMPLOYEES
-WHERE 1000 < salary 
-  AND salary < 100000;
---이게 된다
---숫자형을 문자형으로 바꿀 필요가 없었던 것이다.
-SELECT CEIL( AVG(salary) - AVG(REPLACE(salary, '0', '')) )
-FROM EMPLOYEES
-WHERE 1000 < salary 
-  AND salary < 100000;
-
---안돌아가서 답답해서 Oracle 로 시도
---올림을 맨 나중에 CEIL 함수를 이용함.
-SELECT CEIL(AVG(salary) - AVG(TO_NUMBER(REPLACE(TO_CHAR(salary), '0', ''))))
 FROM EMPLOYEES
 WHERE 1000 < salary 
   AND salary < 100000;
