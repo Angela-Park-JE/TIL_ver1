@@ -62,7 +62,7 @@ Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) i
 Round your answer to 4 decimal places.
 """
 
---Oracle
+--Oracle (방법1, 조인 - 물론 인라인 뷰로 넣어도 된다)
 SELECT ROUND(long_w, 4)
 FROM STATION 
     INNER JOIN
@@ -70,14 +70,12 @@ FROM STATION
         FROM STATION
         WHERE lat_n < 137.2345) s ON STATION.lat_n = s.maximum;
     
---MySQL(ORDER BY와 LIMIT을 사용해 보았다.)
+--MySQL (방법2, ORDER BY와 LIMIT을 사용해 보았다.)
 SELECT ROUND(long_w, 4)
 FROM STATION
 WHERE lat_n < 137.2345
 ORDER BY lat_n DESC
 LIMIT 1;
-
-Select round(long_w,4) from Station where lat_n < 137.2345 order by lat_n desc limit 1;
 
 """
 더 좋은 답이 있지 않을까 찾아본 결과... 서브쿼리를 피하기위해 다른 방법을 쓰기도 했지만, 서브쿼리를 쓰는 것이 더 효율적이라는 의견이 조금더 많았다. 
@@ -128,3 +126,19 @@ FROM
 --MySQL (바로 연산하는 방식)
 SELECT ROUND(MAX(long_w)-MIN(long_w) + MAX(lat_n)-MIN(lat_n), 4)
 FROM STATION;
+
+
+
+"""
+Prepare> SQL> Aggregation> Weather Observation Station 19
+https://www.hackerrank.com/challenges/weather-observation-station-19/
+Consider P_1(a,b) and P_2(c,d) to be two points on a 2D plane 
+where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) 
+and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+Query the Euclidean Distance between points P_1 and P_2 and format your answer to display 4 decimal digits.
+"""
+
+--Oracle, MySQL (위와 같은 방식, 둘다 같음, 레이텍스를 자주 사용하길 잘했다 sqrt 찾을뻔)
+SELECT ROUND(SQRT(POWER(MAX(long_w)-MIN(long_w), 2) + POWER(MAX(lat_n)-MIN(lat_n), 2)), 4)
+FROM STATION;
+
