@@ -7,6 +7,7 @@ Query the median of the Northern Latitudes (LAT_N) from STATION and round your a
 
 --MySQL (개수에 따른 순번을 하나 혹은 둘을 구하고, 구하고자 하는 데이터에 순번을 매겨주고, 두 테이블을 함께 조회하여 답을 도출하도록.)
 --CASE WHEN에서 오래걸렸다. 하나하나 쿼리결과 넣기보다 딱 구해놓기로 하도록 WITH를 사용. 그리고 no를 매기는 것에서 오래걸렸다.
+--MEDIAN 함수를 사용해도 되는데 굳이 이렇게 하려고 했던 이유는 뭘까... 객기였다...
 WITH 
     numbers AS (
                 SELECT CASE WHEN COUNT(lat_n) % 2 = 0
