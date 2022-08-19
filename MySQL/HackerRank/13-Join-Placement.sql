@@ -9,7 +9,7 @@ Names must be ordered by the salary amount offered to the best friends.
 It is guaranteed that no two students got same salary offer.
 """
 
-/*- MySQL : 나와 친구와 내 급여를 연결한 후, 친구 급여를 친구로 찾아서 연결, 조건을 얹어서 내 이름을 캐낸다. -*/
+/*- MySQL, Oracle : 나와 친구와 내 급여를 연결한 후, 친구 급여를 친구로 찾아서 연결, 조건을 얹어서 내 이름을 캐낸다. -*/
 SELECT t1.name
 FROM (
     SELECT s.name name, s.id my_id, f.friend_id, p.salary my_salary 
@@ -19,3 +19,11 @@ FROM (
 LEFT JOIN (SELECT * FROM PACKAGES) t2 ON t1.friend_id = t2.id 
 WHERE t2.salary > t1.my_salary
 ORDER BY t2.salary;
+
+/*- Oracle (by santanunandi01) : 매우깔끔... 배울만 하다.-*/
+select s.name from students s
+join friends f on s.id=f.id
+join packages p1 on s.id=p1.id
+join packages p2 on p2.id=f.friend_id
+where p1.salary<p2.salary
+order by p2.salary;
