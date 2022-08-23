@@ -27,7 +27,7 @@ select repeat(
 ) 
 from information_schema.tables limit 20;
 
-/-* Oracle by.hengyiyhy -*/
+/*- Oracle by.hengyiyhy -*/
 select
     rpad('* ', level, '* ')
 from
@@ -65,7 +65,7 @@ end
 `recursive`를 사용했어야 했다.
 """
 
-/*- 함수를 만드는 것을 활용해서 20까지 정수를 찍는 테이블을 만들려고 했던것 -*/
+/*- 실패: 함수를 만드는 것을 활용해서 20까지 정수를 찍는 테이블을 만들려고 했던것 -*/
 DROP TABLE IF EXISTS bin_TBL;
 CREATE TABLE bin_TBL (txt VARCHAR(10));
 
