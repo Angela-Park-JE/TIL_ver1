@@ -1,6 +1,5 @@
 """
 일명 '별찍기'. 임의로 무언가를 만드는 일이 거의 없다보니, 변수선언부터 찾아봤지만... SQL로 도저히 어떻게 풀 수가 없어서 방법을 찾아보았다. 
-
 Prepare> SQL> Alternative Queries> Draw The Triangle 1
 https://www.hackerrank.com/challenges/draw-the-triangle-1/
 P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
