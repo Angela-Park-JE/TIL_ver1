@@ -52,3 +52,13 @@ SELECT N,
         IF((SELECT COUNT(*) FROM BST WHERE P=B.N)>0,'Inner','Leaf')) 
 FROM BST AS B 
 ORDER BY N
+
+/*- Oracle by.marinskiy : 저도ㅠ CASE WHEN 을 정말 쓰고 싶었어요 근데 넘 멋지네요 답이 위에 다 우겨넣고 아래로 간결해지는게 아름다워요-*/
+SELECT N,
+    CASE
+        WHEN P IS NULL THEN 'Root'
+        WHEN N IN (SELECT P FROM BST) THEN 'Inner'
+        ELSE 'Leaf'
+    END
+FROM BST
+ORDER BY N;
