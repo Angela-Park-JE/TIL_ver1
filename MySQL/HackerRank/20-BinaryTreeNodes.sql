@@ -8,7 +8,12 @@ Write a query to find the node type of Binary Tree ordered by the value of the n
   Inner: If node is neither root nor leaf node.
 """
 
-/*- MySQL -*/
+/*- MySQL 
+조건과 반복문을 잘 만들 수 있었다면 더 쉽게 결과물을 냈을 수도 있다는 답답함을 느꼈다.
+1. 차례대로 N을 P로 엮으면서, N이 Null이 되면 멈추고, 
+2. 순서대로 그룹을 묶어서 차례대로 컬럼 unique값이 2진(1, 2, 4, 8 ...)인 것을 확인하여 
+3. 각 컬럼의 DISTINCT 값을, 첫번째는 Root로, 마지막은 'Leaf'로, 그 나머지는 'Inner'가 붙도록 하는 것이다...는 꿈이었다. -*/
+
 WITH TBL as 
     (SELECT b4.P AS c1, b3.P AS c2, b2.P AS c3, b1.P AS c4, b1.N as C5 
      FROM BST b1 
@@ -25,9 +30,25 @@ UNION
 (SELECT DISTINCT c2, 'Root' FROM TBL)
 ORDER BY 1;
 
-"""
-조건과 반복문을 잘 만들 수 있었다면 더 쉽게 결과물을 냈을 수도 있다는 답답함을 느꼈다.
-1. 차례대로 N을 P로 엮으면서, N이 Null이 되면 멈추고, 
-2. 순서대로 그룹을 묶어서 차례대로 컬럼 unique값이 2진(1, 2, 4, 8 ...)인 것을 확인하여 
-3. 각 컬럼의 DISTINCT 값을, 첫번째는 Root로, 마지막은 'Leaf'로, 그 나머지는 'Inner'가 붙도록 하는 것이다...는 꿈이었다.
-"""
+
+""" ANOTER ANSWERS """
+/*- SQLServer by.firatkuas : 와 iif라는 것을 사용해서 테이블을 계속 이은 효과를 냈다. 충격적. -*/
+SELECT
+    DISTINCT
+    (
+        IIF(s.P is null,
+            str(b.N)+' Leaf',
+                IIF(b.P is null,
+                    str(b.N)+' Root',
+                        str(b.N)+' Inner'))
+    )
+FROM
+    BST b 
+    left join BST s on b.N = s.P
+    
+/*- MySQL by.tubededentifrice : 위와 같이 If를 사용하는 방식인데, 조금더 간단하게 Inner와 Leaf를 구별한다. 내가 보고 이해하기 좋은 방향을 약간의 수정을 거쳤다. -*/
+SELECT N, 
+    IF(P IS NULL,'Root',
+        IF((SELECT COUNT(*) FROM BST WHERE P=B.N)>0,'Inner','Leaf')) 
+FROM BST AS B 
+ORDER BY N
