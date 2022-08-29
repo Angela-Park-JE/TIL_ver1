@@ -28,3 +28,9 @@ WHERE c1.cart_id = c2.cart_id
 ORDER BY 1;
 
 /*- Oracle : 처음 풀이가 너무 길기 때문에 줄여본 것 -*/
+SELECT c1.cart_id
+FROM CART_PRODUCTS c1, CART_PRODUCTS c2
+WHERE c1.cart_id = c2.cart_id 
+    AND c1.name = 'Milk'
+    AND c2.name = 'Yogurt'
+ORDER BY 1;
