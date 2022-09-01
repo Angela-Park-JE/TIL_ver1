@@ -4,6 +4,7 @@ pandas, numpy, statsmodel, SQL etc... what I learned(practiced) today....!
 ### List table
 | folder | contents | languages |
 |---|:---|---|
+| `DL1` | 딥러닝 관련 공부 폴더입니다. | `jupyter notebook` |
 | `FinanceData_Analysis` | 금융데이터로 실습한 폴더입니다. | `jupyter notebook` |
 | `ML-00` | 기계학습과 관련한 공부폴더입니다. | `jupyter notebook` |
 | `MySQL` |  SQL 공부로 이루어져있습니다. <\n> HackersRank의 문제 도전도 함께 있습니다. | `SQL` |
@@ -22,7 +23,7 @@ pandas, numpy, statsmodel, SQL etc... what I learned(practiced) today....!
 | 시계열 |  [실전 시계열 분석](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791162244081&orderClick=LEA&Kc=) (Aileen Nielsen 저, 박찬성 역, 한빛미디어, 2021) | `python3` |
 | 통계학 |  [데이터 과학을 위한 통계 2판](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9791162244180&orderClick=JAj) (Peter Bruce, Andrew Bruce, Peter Gedeck 저, 이준용 역, 한빛미디어, 2021) | `python3` |
 | 선형대수 |  [알고리즘 구현으로 배우는 선형대수 with 파이썬](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791165921125&orderClick=LOA&Kc=) (장철원, 비제이퍼블릭, 2021) | `python3` |
-
+| 딥러닝 | [밑바닥부터 시작하는 딥러닝]([http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9791165920395&orderClick=SPY](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788968484636&orderClick=LEA&Kc=)) (사이토 고키 저, 개앞맵시 역, 한빛미디어, 2017) | `python3` |
 
   
 
