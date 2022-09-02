@@ -4,9 +4,9 @@ pandas, numpy, statsmodel, SQL etc... what I learned(practiced) today....!
 ### List table
 | folder | contents | languages |
 |---|:---|---|
-| `DL1` | 딥러닝 관련 공부 폴더입니다. | `jupyter notebook` |
+| `DL00` | 딥러닝 관련 공부 폴더입니다. 숫자는 책  숫자입니다. | `jupyter notebook` |
 | `FinanceData_Analysis` | 금융데이터로 실습한 폴더입니다. | `jupyter notebook` |
-| `ML-00` | 기계학습과 관련한 공부폴더입니다. | `jupyter notebook` |
+| `ML-00` | 기계학습과 관련한 공부폴더입니다. 숫자는 도서 내 단원입니다. | `jupyter notebook` |
 | `MySQL` |  SQL 공부로 이루어져있습니다. <\n> HackersRank의 문제 도전도 함께 있습니다. | `SQL` |
 | `ToyPJT-Ecommerce` | (내용...😎) | `jupyter notebook` |
 | `ToyPJT-POE_user` | Path Of Exile 게임 데이터 분석 폴더입니다. | `jupyter notebook` |
