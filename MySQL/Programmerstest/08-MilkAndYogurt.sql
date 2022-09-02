@@ -10,7 +10,8 @@ CART_PRODUCTS 테이블의 구조는 다음과 같으며, ID, CART_ID, NAME, PRI
 우유와 요거트를 동시에 구입한 장바구니의 아이디를 조회하는 SQL 문을 작성해주세요. 이때 결과는 장바구니의 아이디 순으로 나와야 합니다.
 """
 
-/*- MySQL : 한 한시간 끌 줄 알았는데 충격적이게도 5분만에 끝나버린문제... 해커랭크는 대체 어떤 곳이었던 것이야... -*/
+/*- MySQL : with로 각각 조건에 맞는 결과만 가져와서 카트아이디로 묶는다. 그럼 카트아이디가 겹치는 것끼리 있게 된다.
+    한 한시간 끌 줄 알았는데 충격적이게도 5분만에 끝나버린문제... 해커랭크는 대체 어떤 곳이었던 것이야... -*/
 WITH c1 AS
         (SELECT cart_id
         FROM CART_PRODUCTS
@@ -27,7 +28,7 @@ FROM c1, c2
 WHERE c1.cart_id = c2.cart_id
 ORDER BY 1;
 
-/*- Oracle : 처음 풀이가 너무 길기 때문에 줄여본 것 -*/
+/*- Oracle : 처음 풀이가 너무 길기 때문에 줄여본 것 이 조차도 슥슥 쳐서 바로 완성해버리고... 뿌듯해졌어-*/
 SELECT c1.cart_id
 FROM CART_PRODUCTS c1, CART_PRODUCTS c2
 WHERE c1.cart_id = c2.cart_id 
