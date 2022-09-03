@@ -19,9 +19,10 @@ Write a query to help Eve.
 -- same grade: order by those mark asc
 
 
+/*- MySQL : 결과는 내가 문제를 이해한 바에 맞게 분명 출력이 되는데, 답이 아니라고 한다. 보니 8등급이상의 학생들이 알파벳순이 안됨. -*/
 -- student list with grade
 SELECT
-    CASE WHEN s.marks < 70 THEN "NULL" 
+    CASE WHEN s.marks < 70 THEN NULL
          ELSE s.name 
          END AS names,
          g.grade,
@@ -29,7 +30,10 @@ SELECT
 FROM STUDENTS s, GRADES g
 WHERE 1=1 
     AND (s.marks > g.min_mark) AND (s.marks < g.max_mark)
-ORDER BY 2 DESC, 1 ASC, 3 ASC;
+ORDER BY 
+    g.grade DESC, 
+    (CASE WHEN names != NULL THEN s.name END) ASC,
+    (CASE WHEN names = NULL THEN s.marks END) ASC;
     
 
 
