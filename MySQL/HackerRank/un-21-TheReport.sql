@@ -37,7 +37,26 @@ ORDER BY
     
 
 
--- SELECT s.id, s.name, s.marks, g.grade
+-- (SELECT  s.name,
+--          g.grade,
+--          s.marks
 -- FROM STUDENTS s, GRADES g
 -- WHERE 1=1 
+--     AND s.marks >=70
 --     AND (s.marks > g.min_mark) AND (s.marks < g.max_mark)
+-- ORDER BY 2 DESC, 1 ASC
+-- )
+-- UNION ALL
+
+-- (SELECT 
+--     CASE WHEN s.marks < 70 THEN "NULL"
+--          ELSE s.name
+--          END AS names,
+--          g.grade,
+--          s.marks
+-- FROM STUDENTS s, GRADES g
+-- WHERE 1=1 
+--     AND s.marks < 70
+--     AND (s.marks > g.min_mark) AND (s.marks < g.max_mark)
+-- ORDER BY 2 DESC, 3 ASC
+-- );
