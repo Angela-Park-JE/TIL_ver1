@@ -30,12 +30,33 @@ SELECT
 FROM OCCUPATIONS o1
 ORDER BY 1,2,3,4;
 
-/*- 시도 MySQL : 컬럼별로 조건을 WHERE에 넣었더니, 각 사람들의 이름이 합집합으로 모든 조합의 로우가 출력...된다. -*/
+/*- 시도2 MySQL : 컬럼별로 조건을 WHERE에 넣었더니, 각 사람들의 이름이 합집합으로 모든 조합의 로우가 출력...된다. -*/
 SELECT od.name, op.name, os.name, oa.name 
 FROM OCCUPATIONS od, OCCUPATIONS op, OCCUPATIONS os, OCCUPATIONS oa
 WHERE 1=1
     AND od.occupation = 'Doctor'
     AND op.occupation = 'Professor'
     AND os.occupation = 'Singer'
-    AND oa.occupation = 'Actor'
+    AND oa.occupation = 'Actor';
 
+/*- 시도3 MySQL : 이런식으로 주는 것도 듣지 않는다. -*/
+SELECT 
+    CASE WHEN occupation = 'Doctor'
+         THEN name ELSE NULL END a,
+    CASE WHEN occupation = 'Professor'
+         THEN name ELSE NULL END b,
+    CASE WHEN occupation = 'Singer'
+         THEN name ELSE NULL END c,
+    CASE WHEN occupation = 'Actor'
+         THEN name ELSE NULL END d
+FROM OCCUPATIONS
+ORDER BY name ASC;
+
+/*- 시도4 MySQL : 내가 아는 지식 선에서 해결하려다 안되서, 각 테이블로 고유 번호를 부여하고 붙이는 방법을 생각했는데, pivoting관련해서 찾아보다 나와 똑같은 풀이를 생각한 사람이 있었다. -*/
+-- reference : https://walkingfox.tistory.com/103
+select  name
+        , case when @grp = occupation then @rownum:=@rownum + 1 
+               else @rownum :=1 end as rownum
+        , (@grp := occupation) as dum
+from OCCUPATIONS, (select @rownum:=0, @grp:='') r 
+order by dum, name asc 
