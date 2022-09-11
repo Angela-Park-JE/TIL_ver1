@@ -9,10 +9,8 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 1. admin : administrative query folder
 
-2. HackerRank : SQL practice file  
+2. HackerRank : SQL practice .sql files in HackerRank
   
 3. Traffic Data : 
 
 4. Programmerstest : SQL coding test practice in programmers 
-
-5. 
