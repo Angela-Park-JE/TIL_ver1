@@ -18,11 +18,21 @@ Write a query to help Eve.
 -- lower than 8: use NULL in name  and grade desc order
 -- same grade: order by those mark asc
 
+/*- MySQL : 머리를 리프레시 하고 다시 와서 풀으니 어렵지 않게 되었다. 
+    NULL은 어차피 NULL이고 서로 다 동등하기 때문에 굳이 grade에 따라 나누어서 정렬을 하려고 UNION 같은 것을 생각할 필요가 없었다. -*/
+SELECT 
+    CASE WHEN tb1.grade>=8 THEN tb1.name ELSE NULL END AS names,
+    tb1.grade, tb1.marks
+FROM 
+    (
+    SELECT s.name, s.marks, g.grade FROM STUDENTS s, GRADES g
+    WHERE (g.min_mark <= s.marks AND g.max_mark >= s.marks)
+    ) tb1
+ORDER BY tb1.grade DESC, names ASC, tb1.marks;
 
 
-"""
-아래는 오답노트
-"""
+
+"""오답노트"""
 /*- MySQL : 결과는 내가 문제를 이해한 바에 맞게 분명 출력이 되는데, 답이 아니라고 한다. 보니 8등급이상의 학생들이 알파벳순이 안됨. -*/
 -- student list with grade
 SELECT
@@ -38,8 +48,6 @@ ORDER BY
     g.grade DESC, 
     (CASE WHEN names != NULL THEN s.name END) ASC,
     (CASE WHEN names = NULL THEN s.marks END) ASC;
-    
-
 
 /*- MySQL : 이렇게 하는 것은... 안된다. DESC가 먹지 않는다.-*/
 (SELECT  s.name,
@@ -99,7 +107,6 @@ SELECT * FROM (
         -- ORDER BY 2 DESC, 3 ASC
     ) b
 ORDER BY b.grade DESC, .name ASC) bb;
-
 
 /*- MySQL : 임의의 컬럼을 만들어서 오더를 주는 것도 말을 듣지 않는다. grade desc가 아예 먹지를 않고 grade 오름차순, 이름 오름차순, 아래는 grade 오름차순, mark 오름차순이 된다.-*/
 SELECT a.name, a.grade, a.marks
