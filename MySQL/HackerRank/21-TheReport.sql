@@ -33,6 +33,7 @@ ORDER BY tb1.grade DESC, names ASC, tb1.marks;
 
 
 """오답노트"""
+
 /*- MySQL : 결과는 내가 문제를 이해한 바에 맞게 분명 출력이 되는데, 답이 아니라고 한다. 보니 8등급이상의 학생들이 알파벳순이 안됨. -*/
 -- student list with grade
 SELECT
@@ -48,6 +49,7 @@ ORDER BY
     g.grade DESC, 
     (CASE WHEN names != NULL THEN s.name END) ASC,
     (CASE WHEN names = NULL THEN s.marks END) ASC;
+
 
 /*- MySQL : 이렇게 하는 것은... 안된다. DESC가 먹지 않는다.-*/
 (SELECT  s.name,
@@ -137,6 +139,7 @@ FROM (SELECT
         AND (s.marks > g.min_mark) AND (s.marks < g.max_mark)
     ORDER BY src, g.grade DESC, s.marks ASC
     ) b;
+
 
 /*- MySQL : 이것도 마찬가지 결과이다. 일부러 alias를 따로 주었는데 이조차 말을 듣지 않는다. -*/
 SELECT a.name, a.grade, a.marks
