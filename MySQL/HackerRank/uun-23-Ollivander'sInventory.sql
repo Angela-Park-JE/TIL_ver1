@@ -13,7 +13,7 @@ If more than one wand has same power, sort the result in order of descending age
 
 """오답노트"""
 
-/*- MySQL: 왜 정답이 아닐까 고민중이다. -*/
+/*- MySQL: 왜 정답이 아닐까 고민중이다. 파워와 에이지가 같은 경우 가장 적은 코인을 내야하는 지팡이 한개만 출력해야 하는걸까. 딱히 그런 점은 적힌게 없는데.-*/
 SELECT w.id, p.age, w.coins_needed, w.power
 FROM WANDS w, WANDS_PROPERTY p
 WHERE w.code = p.code
