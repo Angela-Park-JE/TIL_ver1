@@ -11,6 +11,14 @@ If more than one wand has same power, sort the result in order of descending age
 -- WANDS_PROPERTY : code, age, is_evil
 
 /*- MySQL: 파워와 에이지가 같다면 적은 코인을 내는 것을 찾아 넣어야했던 것이다. 헤르미온느... 돈도 돈이지만 시야를 좀 넓히는 건 어때 -*/
+SELECT w1.id, p1.age, w1.coins_needed, w1.power
+FROM WANDS w1, WANDS_PROPERTY p1
+WHERE w1.code = p1.code
+    AND p1.is_evil = 0
+    AND w1.coins_needed = 
+    (SELECT MIN(w2.coins_needed) FROM WANDS w2, WANDS_PROPERTY p2 
+     WHERE w2.code = p2.code AND w1.power = w2.power AND p1.age = p2.age)
+ORDER BY 4 desc, 2 desc;
 
 
 """오답노트"""
