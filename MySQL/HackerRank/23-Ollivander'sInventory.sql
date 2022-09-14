@@ -30,7 +30,7 @@ WHERE w.code = p.code
     AND p.is_evil = 0
 ORDER BY 4 DESC, 2 DESC;
 
-/*- 답 by.dun_zhang2012 -*/
+/*- 참고 MySQL by.dun_zhang2012 -*/
 select w.id, p.age, w.coins_needed, w.power 
 from Wands as w 
   join Wands_Property as p on (w.code = p.code) 
@@ -42,3 +42,17 @@ where p.is_evil = 0
     where w1.power = w.power and p1.age = p.age
     ) 
 order by w.power desc, p.age desc
+
+/*- 참고 ORACLE by.Sardor_Bayramov : PPARTITION을 사용하고 조인을 최소화했다. 너무 믓지다-*/
+select id, age, minimum_cost, power
+  from (select w.id,
+               p.age,
+               w.coins_needed,
+               min(w.coins_needed) over(partition by w.power, p.age) minimum_cost,
+               w.power
+          from wands w
+          join wands_property p
+            on p.code = w.code
+           and p.is_evil = 0)
+ where coins_needed = minimum_cost
+ order by power desc, age desc;
