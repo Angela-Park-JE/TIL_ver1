@@ -8,7 +8,7 @@ If more than one student created the same number of challenges, then sort the re
 If more than one student created the same number of challenges and the count is less than the maximum number of challenges created, then exclude those students from the result.
 """
 
-/*- MySQL : 손코딩 해가면서... WITH 사용하지 않고(MSSQLServer를 제외한 MySQL, Oracle 모두 WITH를 사용하면 오류가 났음) 서브쿼리를 여러개 써가면서 진행했다. -*/
+/*- MySQL, Oracle : 손코딩 해가면서... WITH 사용하지 않고(MSSQLServer를 제외한 MySQL, Oracle 모두 WITH를 사용하면 오류가 났음) 서브쿼리를 여러개 써가면서 진행했다. -*/
 SELECT tb1.hacker_id, h1.name, tb1.counts
 FROM
     (
