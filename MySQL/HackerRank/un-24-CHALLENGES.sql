@@ -30,6 +30,20 @@ JOIN
     GROUP BY h1.hacker_id
     ) tb1 ON h2.hacker_id = tb1.hacker_id;
 
+/*- MySQL : group function이 잘못되었다고  -*/
+SELECT h3.hacker_id, h3.name, TB1.counts 
+FROM HACKERS h3 
+    JOIN (
+        SELECT h1.hacker_id, COUNT(c1.challenge_id) counts
+        FROM HACKERS h1 JOIN CHALLENGES c1 ON h1.hacker_id = c1.hacker_id
+        GROUP BY h1.hacker_id
+         ) TB1 ON h3.hacker_id = TB1.hacker_id
+WHERE TB1.counts = (SELECT MAX(COUNT(challenge_id)) FROM CHALLENGES GROUP BY hacker_id)
+   OR TB1.counts = 
+                    (SELECT COUNT(c2.challenge_id) counts
+                     FROM HACKERS h2 JOIN CHALLENGES c2 ON h2.hacker_id = c2.hacker_id
+                     GROUP BY h2.hacker_id
+                     HAVING COUNT(COUNT(c2.challenge_id)) = 1);
 
 
 /*- MySQL by.simple_guitar99 : 내가 하려던 방법과 가장 같아서 읽고 공부중-*/
