@@ -20,6 +20,9 @@ LEFT JOIN (SELECT * FROM PACKAGES) t2 ON t1.friend_id = t2.id
 WHERE t2.salary > t1.my_salary
 ORDER BY t2.salary;
 
+
+"""좋은 풀이"""
+
 /*- Oracle (by santanunandi01) : 매우깔끔... 배울만 하다.-*/
 select s.name from students s
 join friends f on s.id=f.id
@@ -27,3 +30,19 @@ join packages p1 on s.id=p1.id
 join packages p2 on p2.id=f.friend_id
 where p1.salary<p2.salary
 order by p2.salary;
+
+/*- MySQL by.Sardor_Bayramov : +220917 해커랭크 팔로워분이 알려주셨다. 보기 좋게 임의로 AS를 추가함.
+    Try this out too)) Single row subqueries are much faster than joins.-*/
+select name
+  from (select s.name,
+               (select p.salary
+                  from packages p
+                 where p.id = s.id) AS my_salary,
+               (select (select p.salary
+                          from packages p
+                         where p.id = f.friend_id)
+                  from friends f
+                 where f.id = s.id) AS friend_salary
+          from students s)
+ where my_salary < friend_salary
+ order by friend_salary;
