@@ -26,7 +26,7 @@ WHERE TB2.total_score != 0
 ORDER BY 3 DESC, 1 ASC; 
 
 
-/*- MySQL by.m_alkhudairy : 조금 더 짧은 풀이가 있다. 내가 쓴 가장 바깥 쿼리를 생략한 -*/
+/*- MySQL by.m_alkhudairy : 조금 더 짧은 풀이가 있다. 처음부터 HACKERS 테이블을 조인하고 시작하면서 내가 쓴 가장 바깥 쿼리를 생략한 형식. -*/
 SELECT hacker_id, name, sum(max) as score
 FROM (SELECT h.hacker_id as hacker_id, h.name as name, max(s.score) as max
       FROM hackers h JOIN submissions s ON h.hacker_id = s.hacker_id
