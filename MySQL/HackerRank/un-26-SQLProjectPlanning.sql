@@ -39,3 +39,16 @@ WHERE 1=1
     AND p1.task_id + 1 = p2.task_id
     AND DATE_ADD(p1.end_date, INTERVAL 1 DAY)!= p2.start_date
 ORDER BY 2 desc, 1 asc;
+
+/*- MySQL : 꼬다가 내가 꼬인 상태. 시작날짜(1)가 다음 날의 시작날짜(2)와 같다면 (1)을 넣고, 다르다면 다음 날의 시작날짜(2)를 넣도록 하였는데.
+    뭔가 안맞고있다...-*/
+SELECT 
+    CASE WHEN DATE_ADD(p1.start_date, INTERVAL 1 DAY) = p2.start_date
+        THEN p1.start_date
+        WHEN DATE_ADD(p1.start_date, INTERVAL 1 DAY) != p2.start_date
+        THEN p2.start_date
+        END starts,
+    p2.end_date
+FROM PROJECTS p1, PROJECTS p2
+WHERE 1=1
+    AND p1.task_id + 1 = p2.task_id;
