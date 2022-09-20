@@ -65,3 +65,45 @@ WHERE 1=1
     AND p1.task_id + 1 = p2.task_id
 ORDER BY starts;
 
+/*- MySQL : (1) 의 결과를 토대로 다시 만들어가기 시작했다. -*/
+--(1) task_id와 start_date의 차순은 같지 않음을 판단, task_id 자체로 결과로 원하는 것을 내놓을 수 없는 것으로 생각됨.
+-- 그리고 WITH 를 사용할 수 있음을...알았다
+WITH TB1 AS 
+    (SELECT p1.start_date keysd, p2.start_date p2sd, p2.end_date p2ed
+    FROM PROJECTS p1, PROJECTS p2
+    WHERE 1=1 
+        AND p1.start_date + 1 = p2.start_date
+    ORDER BY p1.start_date
+    ) 
+
+--(2) 다음 행을 조회하는 쿼리 
+WITH TB1 AS
+    (SELECT 
+        p.task_id,
+        p.start_date,
+        p.end_date,
+        LEAD(p.end_date, 1) OVER (ORDER BY p.start_date) nexttask_enddate
+    FROM 
+        PROJECTS p)
+
+-- 시도: 또 첫날빼고 데려오고있음
+WITH TB1 AS
+    (SELECT 
+        p.task_id,
+        p.start_date,
+        p.end_date,
+        LEAD(p.end_date, 1) OVER (ORDER BY p.start_date) nexttask_enddate
+    FROM 
+        PROJECTS p)
+
+SELECT TB1.start_date, TB1.end_date
+FROM TB1 AS TB1, TB1 AS TB2
+WHERE TB1.end_date = TB2.nexttask_enddate;
+
+/*- MySQL : 새로 지어서 했음. 세번쨰 컬럼에 NULL이 뜨면 해당 로우의 두번째 컬럼으로 조회한 end_date가 프로젝트의 end임. -*/
+SELECT p.task_id, p.start_date, 
+    CASE WHEN LEAD(p.start_date, 1) OVER (ORDER BY p.start_date) = p.end_date
+        THEN LEAD(p.end_date, 1) OVER (ORDER BY p.start_date) 
+        END next_end_date
+FROM PROJECTS p;
+
