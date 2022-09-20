@@ -52,3 +52,16 @@ SELECT
 FROM PROJECTS p1, PROJECTS p2
 WHERE 1=1
     AND p1.task_id + 1 = p2.task_id;
+
+/*- MySQL : 이어진 날짜의 첫번쨰 날이 안나오고 있는 상태라고 볼 수 있다.
+    ELSE p2.start_date를 주석처리 했더니 NULL이 나온다. 전부 두번째 날로 나오고 있는 상태인 것이다. */
+SELECT 
+    CASE WHEN DATE_ADD(p1.start_date, INTERVAL 1 DAY) = p2.start_date
+        THEN p1.start_date
+        ELSE p2.start_date
+        END starts
+FROM PROJECTS p1, PROJECTS p2
+WHERE 1=1 
+    AND p1.task_id + 1 = p2.task_id
+ORDER BY starts;
+
