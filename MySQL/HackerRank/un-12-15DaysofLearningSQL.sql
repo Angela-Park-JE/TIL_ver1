@@ -8,7 +8,7 @@ If more than one such hacker has a maximum number of submissions, print the lowe
 The query should print this information for each day of the contest, sorted by the date.
 """
 
-
+"""오답노트"""
 
 --최대 점수나 해당 날짜 제출 인원은 가능한데, 해당 최당 점수의 사람을 데려오는게 문제였다. 
 --시도(이 쿼리는 돌아가지만 날짜별로 모든 점수와 사람을 가져오게 된다)
@@ -20,3 +20,41 @@ INNER JOIN (
     GROUP BY submission_date 
     ) b ON a.submission_date = b.submission_date AND a.score = b.score
 ORDER BY 1;
+
+
+/*- 다시시도: 220921 -*/
+SELECT TB1.day, TB1.idnumbers, 
+    CASE WHEN (TB2.day = TB3.day AND TB2.maxsubs = TB3.subs)
+        THEN (SELECT hacker_id FROM TB2, TB3 WHERE (TB2.day = TB3.day AND TB2.maxsubs = TB3.subs) ORDER BY hacker_id LIMIT 1) 
+FROM
+    (
+    SELECT day, COUNT(TB1.id) idnumbers
+    FROM    
+        (
+            SELECT s1.submission_date day, s1.hacker_id id, COUNT(s1.submission_id) subs
+            FROM SUBMISSIONS s1
+            GROUP BY day, id
+        ) tmptb1 
+    GROUP BY day
+    ) TB1, /* COUNT hackers */
+    (
+    SELECT day, MAX(subs) maxsubs
+    FROM
+        (
+            SELECT s2.submission_date day, s2.hacker_id id, COUNT(s2.submission_id) subs
+            FROM SUBMISSIONS s2
+            GROUP BY day, id
+        ) tmptb2
+    GROUP BY day
+    ) TB2, /* COUNT MAX */
+    (
+    SELECT s3.submission_date day, s3.hacker_id id, COUNT(s3.submission_id) subs
+    FROM SUBMISSIONS s3
+    GROUP BY day, id
+    ) TB3, /* main table ; same as tmptb1, tmptb2 */
+    HACKERS h
+WHERE 1=1
+    AND TB1.day = TB2.day
+    AND TB2.maxsubs = TB3.subs
+    AND TB3.id = h.hacker_id
+;
