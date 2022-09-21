@@ -1,4 +1,5 @@
 """
+Prepare> SQL> Aggregation> The Blunder
 https://www.hackerrank.com/challenges/the-blunder/problem?isFullScreen=true
 Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, 
 but did not realize her keyboard's 0 key was broken until after completing the calculation. 
@@ -6,13 +7,7 @@ She wants your help finding the difference between her miscalculation (using sal
 Write a query calculating the amount of error (i.e.:  average monthly salaries), and round it up to the next integer.
 """
 
---MySQL
---숫자형을 문자형으로 바꿀 필요가 없었던 것이다.
-SELECT CEIL(AVG(salary) - AVG(REPLACE(salary, 0, '')))
-FROM EMPLOYEES
-WHERE 1000< salary AND salary < POWER(10, 5)
-
---안돌아가서 답답해서 Oracle 로 시도
+--마지막 오답에서 안돌아가서 답답해서 Oracle 로 시도
 --올림을 맨 나중에 CEIL 함수를 이용함.
 SELECT CEIL(AVG(salary) - AVG(TO_NUMBER(REPLACE(TO_CHAR(salary), '0', ''))))
 FROM EMPLOYEES
@@ -51,3 +46,9 @@ SELECT CEIL( AVG(salary) - AVG(CAST(REPLACE(CAST(salary AS CHAR), '0', '')) AS U
 FROM EMPLOYEES
 WHERE 1000 < salary 
   AND salary < 100000;
+
+--MySQL(오답)
+--숫자형을 문자형으로 바꿀 필요가 없었던 것이다.
+SELECT CEIL(AVG(salary) - AVG(REPLACE(salary, 0, '')))
+FROM EMPLOYEES
+WHERE 1000< salary AND salary < POWER(10, 5)
