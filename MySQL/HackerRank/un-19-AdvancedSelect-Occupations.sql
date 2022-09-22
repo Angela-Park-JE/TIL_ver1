@@ -9,7 +9,8 @@ The first column is an alphabetically ordered list of Doctor names.
 The second column is an alphabetically ordered list of Professor names.
 The third column is an alphabetically ordered list of Singer names.
 The fourth column is an alphabetically ordered list of Actor names.
-The empty cell data for columns with less than the maximum number of names per occupation (in this case, the Professor and Actor columns) are filled with NULL values.
+The empty cell data for columns with less than the maximum number of names per occupation 
+(in this case, the Professor and Actor columns) are filled with NULL values.
 """
 
 
@@ -60,3 +61,25 @@ select  name
         , (@grp := occupation) as dum
 from OCCUPATIONS, (select @rownum:=0, @grp:='') r 
 order by dum, name asc 
+
+
+"""참고"""
+/*- MySQL by.nobuh : 굳이 각 순서를 매긴 다음 순서 변수로 그룹화하여 불러오는 건 하고싶지 않아서 찾아보던 중 rank를 사용하는 좋은답.
+    This query creates the ranking value, smaller values are in alphabetical order.
+    Doctor and other occupations columns contain only a single value for each ranks, 
+    so you can reduce null value by MAX or MIN aggregate function with group by rank value.-*/
+-- MySQL
+SELECT 
+    MIN(CASE WHEN Occupation = 'Doctor' THEN Name ELSE NULL END) AS Doctor,
+    MIN(CASE WHEN Occupation = 'Professor' THEN Name ELSE NULL END) AS Professor,
+    MIN(CASE WHEN Occupation = 'Singer' THEN Name ELSE NULL END) AS Singer,
+    MIN(CASE WHEN Occupation = 'Actor' THEN Name ELSE NULL END) AS Actor
+FROM (
+  SELECT a.Occupation,
+         a.Name,
+         (SELECT COUNT(*) 
+            FROM Occupations AS b
+            WHERE a.Occupation = b.Occupation AND a.Name > b.Name) AS rank
+  FROM Occupations AS a
+    ) AS c
+GROUP BY c.rank;
