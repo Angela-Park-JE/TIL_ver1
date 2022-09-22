@@ -26,9 +26,9 @@ ORDER BY 1;
 SELECT TB1.day, TB1.idnumbers, 
     CASE WHEN (TB2.day = TB3.day AND TB2.maxsubs = TB3.subs)
         THEN (SELECT hacker_id FROM TB2, TB3 WHERE (TB2.day = TB3.day AND TB2.maxsubs = TB3.subs) ORDER BY hacker_id LIMIT 1) 
-FROM
+FROM 
     (
-    SELECT day, COUNT(TB1.id) idnumbers
+    SELECT tmptb1.day, COUNT(tmptb1.id) idnumbers
     FROM    
         (
             SELECT s1.submission_date day, s1.hacker_id id, COUNT(s1.submission_id) subs
@@ -38,7 +38,7 @@ FROM
     GROUP BY day
     ) TB1, /* COUNT hackers */
     (
-    SELECT day, MAX(subs) maxsubs
+    SELECT tmptb2.day, MAX(tmptb2.subs) maxsubs
     FROM
         (
             SELECT s2.submission_date day, s2.hacker_id id, COUNT(s2.submission_id) subs
@@ -58,3 +58,4 @@ WHERE 1=1
     AND TB2.maxsubs = TB3.subs
     AND TB3.id = h.hacker_id
 ;
+
