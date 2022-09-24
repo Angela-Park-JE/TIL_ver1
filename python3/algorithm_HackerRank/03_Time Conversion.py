@@ -22,7 +22,7 @@ import sys
 
 def timeConversion(s):
     daypart = s[-2:]
-    if (daypart == 'PM')&(s[:2] == '12'):      # 오후 12시
+    if (daypart == 'PM')&(s[:2] == '12'):      # 오후 12시 (이부분을 else와 합쳐버리면 runtime 오류가 하나 더 생긴다.)
         timepart = s[:-2]
     elif (daypart == 'PM')&(s[:2] != '12'):    # 나머지 오후
         timepart = str(int(s[:2])+12) + s[2:-2]
