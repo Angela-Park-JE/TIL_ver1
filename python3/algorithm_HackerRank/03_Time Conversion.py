@@ -60,6 +60,17 @@ def timeConversion(s):
         timepart == s[:-2]
     return timepart
 
+#1-1 검사 덜쓰기
+def timeConversion(s):
+    daypart = s[-2:]
+    if (daypart == 'PM')&(s[:2] != '12'):
+        timepart = str(int(s[:2])+12) + s[2:-2]
+    elif (daypart == 'AM')&(s[:2] == '12'):
+        timepart = '00' + s[2:-2]
+    else:
+        timepart == s[:-2]
+    return timepart
+
 #2
 def timeConversion(s):
     s = str(s)
