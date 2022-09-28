@@ -15,4 +15,4 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 4. Programmerstest : SQL coding test practice in programmers 
 
-5. Let'sGetItMySQL : TIL with reviewing the book [Let's get it SQL programming, Charlie Hong, Gilbut, 2021]
+5. [Book]SQLProgramming : TIL with reviewing the book [Let's get it SQL programming, Charlie Hong, Gilbut, 2021]
