@@ -33,5 +33,9 @@ SELECT LOG10(1000);
 
 SELECT POW(3, 2), SQRT(POW(3, 2)),  SIGN(5), SIGN(-5); -- : 9, 3, 1, -1
 
-SELECT ROUND(1.2345), ROUND(1.2345, 0), ROUND(1.2345, 1), ROUND(1.2345, 2), ROUND(1.2345, -1); -- : 1, 1, 1.2, 1.23, 0
-SELECT TRUNCATE(1.2345), TRUNCATE(1.2345, 1) -- : 1, 1.2
+-- ROUND(x) : rounding off the number, we can set the decimal point or cipher.
+-- TRUNCATE(x, d) : cut off the rounded numbers, we *have to* set the decimal point or cipher.
+SELECT ROUND(123.4567), ROUND(123.4567, 0), ROUND(123.4567, 1), ROUND(123.4567, 2), ROUND(123.4567, -1); 
+-- : 123, 123, 123.5, 123.46, 120
+SELECT TRUNCATE(123.4567,0), TRUNCATE(123.4567, 1), TRUNCATE(123.4567, 2), TRUNCATE(123.4567, -1); 
+-- : 123, 123.4, 123.45, 120
