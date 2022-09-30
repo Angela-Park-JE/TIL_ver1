@@ -56,13 +56,13 @@ SELECT LAST_DAY('2023-01-01');							-- : 2023-01-31
 -- QUARTER(date) : quarter
 -- WEEK(date) : week number in year
 SELECT YEAR('2023-01-31'), MONTH('2023-01-31 12:31:31'), QUARTER('2023-01-31'); 		-- : 2023, 1, 1
-SELECT WEEK('2023-01-31');								-- : 5
+SELECT WEEK('2023-01-31', 5);								-- : 5
 
 -- WEEKOFYEAR(date) : number of the week in year
 SELECT WEEKOFYEAR('2022-12-25');						-- : 51
 
 -- YEARWEEK(date, mode) : the year and the week number of the `date`
-SELECT YEARWEEK('2022-12-25');							-- : 202252 (? why added 1?)
+SELECT YEARWEEK('2022-12-25', 5);							-- : 202251 
 
 
 
@@ -166,3 +166,8 @@ minute_second
 
 
 */
+
+
+-- p.211 quiz. weekday of last day in the month, now.
+SELECT DAYNAME(LAST_DAY(SYSDATE())),
+		DATE_FORMAT(LAST_DAY(SYSDATE()), '%W');
