@@ -122,7 +122,7 @@ SELECT MAKEDATE(2022, 300),									-- : 2022-10-27
 
 
 
-/*- unit -*/
+/*- unit types-*/
 /* with ADDDATE(), SUBDATE()
 
 year, month, quarter, week, day, hour, minut, second
