@@ -44,7 +44,7 @@ SELECT NULLIF(1, 1),							-- : null
 -- CASE is not function, it's kinda calculator. So in some DBMS, it's classified to expressions.
 -- (1) CASE value WHEN compare_value1 THEN result1 WHEN compare_value2 THEN result2 ... ELSE result END (AS alias);
 -- (2) CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 ... ELSE result END (AS alias);
--- You can't write with condition(like BETWEEN) WHEN use(1).
+-- You can't write with condition(like BETWEEN) WHEN usage(1).
 -- `ELSE` can be dropped.
 SELECT CASE 1 WHEN 0 THEN '1=0?' WHEN 1 THEN '1=1!' END CASE1,										-- : 1=1!
 	   CASE 9 WHEN 0 THEN 'A' WHEN 1 THEN 'B' ELSE 'None' END CASE2,								-- : None
@@ -60,3 +60,37 @@ SELECT sysdate(), SLEEP(5), sysdate();		-- : 2022-10-02 21:46:39, 0, 2022-10-02 
 -- DATABASE(), SCHEMA(), USER() : return the database or schema and user name which are being used.
 SELECT DATABASE(), SCHEMA(), USER();		-- : sakila, sakila, root@localhost
 
+
+
+/*- practice -*/
+USE world;
+
+SELECT code, CONCAT(name, '(', continent, ')') names, region, population
+FROM country
+WHERE population BETWEEN 45000000 AND 550000000;
+/*-
+BGD	Bangladesh(Asia)	Southern and Central Asia	129155000
+BRA	Brazil(South America)	South America	170115000
+COD	Congo, The Democratic Republic of the(Africa)	Central Africa	51654000
+DEU	Germany(Europe)	Western Europe	82164700
+EGY	Egypt(Africa)	Northern Africa	68470000
+ETH	Ethiopia(Africa)	Eastern Africa	62565000
+FRA	France(Europe)	Western Europe	59225700
+GBR	United Kingdom(Europe)	British Islands	59623400
+IDN	Indonesia(Asia)	Southeast Asia	212107000
+IRN	Iran(Asia)	Southern and Central Asia	67702000
+ITA	Italy(Europe)	Southern Europe	57680000
+JPN	Japan(Asia)	Eastern Asia	126714000
+KOR	South Korea(Asia)	Eastern Asia	46844000
+MEX	Mexico(North America)	Central America	98881000
+MMR	Myanmar(Asia)	Southeast Asia	45611000
+NGA	Nigeria(Africa)	Western Africa	111506000
+PAK	Pakistan(Asia)	Southern and Central Asia	156483000
+PHL	Philippines(Asia)	Southeast Asia	75967000
+RUS	Russian Federation(Europe)	Eastern Europe	146934000
+THA	Thailand(Asia)	Southeast Asia	61399000
+TUR	Turkey(Asia)	Middle East	66591000
+UKR	Ukraine(Europe)	Eastern Europe	50456000
+USA	United States(North America)	North America	278357000
+VNM	Vietnam(Asia)	Southeast Asia	79832000
+-*/
