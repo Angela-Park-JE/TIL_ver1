@@ -113,3 +113,34 @@ ORDER BY 1;
 USE world;
 SELECT name, IFNULL(indepyear, '없음') as indepyear
 FROM country;
+
+
+
+/*- p.223 ch6 self check quiz -*/
+
+-- 1. 2021.05.21~ get anniversaries, 100, 500, 1000 day
+SELECT ADDDATE('2021-05-21', 100-1) 100일, ADDDATE('2021-05-21', 500-1) 500일, ADDDATE('2021-05-21', 1000-1) 1000일;
+-- > '2021-08-28','2022-10-02','2024-02-14'
+-- > answer doesn't minus 1.
+
+
+-- 2. box_office data ; 2019.12 released movies name, release date
+SELECT movie_name, release_date
+FROM practice.box_office
+WHERE EXTRACT(YEAR_MONTH FROM release_date) = 201912;
+
+
+-- 3. director column modifying
+SELECT movie_name, REPLACE(director, ',', '/')
+FROM practice.box_office;
+
+
+-- 4. movies which have name with ':'
+SELECT movie_name
+FROM practice.box_office
+WHERE movie_name IN (':');
+-- answer
+SELECT movie_name, release_date
+FROM practice.box_office
+WHERE Year(release_date) = 2019
+	AND INSTR(movie_name, ':')>0;
