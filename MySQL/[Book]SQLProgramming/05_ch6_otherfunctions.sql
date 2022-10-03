@@ -68,29 +68,48 @@ USE world;
 SELECT code, CONCAT(name, '(', continent, ')') names, region, population
 FROM country
 WHERE population BETWEEN 45000000 AND 550000000;
-/*-
-BGD	Bangladesh(Asia)	Southern and Central Asia	129155000
-BRA	Brazil(South America)	South America	170115000
-COD	Congo, The Democratic Republic of the(Africa)	Central Africa	51654000
-DEU	Germany(Europe)	Western Europe	82164700
-EGY	Egypt(Africa)	Northern Africa	68470000
-ETH	Ethiopia(Africa)	Eastern Africa	62565000
-FRA	France(Europe)	Western Europe	59225700
-GBR	United Kingdom(Europe)	British Islands	59623400
-IDN	Indonesia(Asia)	Southeast Asia	212107000
-IRN	Iran(Asia)	Southern and Central Asia	67702000
-ITA	Italy(Europe)	Southern Europe	57680000
-JPN	Japan(Asia)	Eastern Asia	126714000
-KOR	South Korea(Asia)	Eastern Asia	46844000
-MEX	Mexico(North America)	Central America	98881000
-MMR	Myanmar(Asia)	Southeast Asia	45611000
-NGA	Nigeria(Africa)	Western Africa	111506000
-PAK	Pakistan(Asia)	Southern and Central Asia	156483000
-PHL	Philippines(Asia)	Southeast Asia	75967000
-RUS	Russian Federation(Europe)	Eastern Europe	146934000
-THA	Thailand(Asia)	Southeast Asia	61399000
-TUR	Turkey(Asia)	Middle East	66591000
-UKR	Ukraine(Europe)	Eastern Europe	50456000
-USA	United States(North America)	North America	278357000
-VNM	Vietnam(Asia)	Southeast Asia	79832000
--*/
+
+USE practice;
+
+SELECT years, ranks, movie_name, release_date, audience_num, ROUND(sale_amt / 100000000) AS sales
+FROM box_office
+WHERE year(release_date) = 2019
+	AND audience_num >= 5000000;
+/*
+'2019','1','±ØÇÑÁ÷¾÷','2019-01-23 00:00:00','16265618','1397'
+'2019','2','¾îº¥Á®½º: ¿£µå°ÔÀÓ','2019-04-24 00:00:00','13934592','1222'
+'2019','3','°Ü¿ï¿Õ±¹ 2','2019-11-21 00:00:00','13369064','1116'
+'2019','4','¾Ë¶óµò','2019-05-23 00:00:00','12552283','1070'
+'2019','5','±â»ýÃæ','2019-05-30 00:00:00','10085275','859'
+'2019','6','¿¢½ÃÆ®','2019-07-31 00:00:00','9426011','792'
+'2019','7','½ºÆÄÀÌ´õ¸Ç: ÆÄ ÇÁ·Ò È¨','2019-07-02 00:00:00','8021145','690'
+'2019','8','¹éµÎ»ê','2019-12-19 00:00:00','6290502','529'
+'2019','10','Á¶Ä¿','2019-10-02 00:00:00','5247874','454'
+'2019','9','Ä¸Æ¾ ¸¶ºí','2019-03-06 00:00:00','5802810','515'
+*/
+
+SELECT ranks, movie_name, DAYNAME(release_date), 
+	CASE WHEN QUARTER(release_date) IN (1, 2) THEN '상반기' ELSE '하반기' END CASE1
+FROM box_office
+WHERE YEAR(release_date) = 2019
+	and ranks<= 10
+ORDER BY 1;
+/*
+'1','±ØÇÑÁ÷¾÷','Wednesday','상반기'
+'2','¾îº¥Á®½º: ¿£µå°ÔÀÓ','Wednesday','상반기'
+'3','°Ü¿ï¿Õ±¹ 2','Thursday','하반기'
+'4','¾Ë¶óµò','Thursday','상반기'
+'5','±â»ýÃæ','Thursday','상반기'
+'6','¿¢½ÃÆ®','Wednesday','하반기'
+'7','½ºÆÄÀÌ´õ¸Ç: ÆÄ ÇÁ·Ò È¨','Tuesday','하반기'
+'8','¹éµÎ»ê','Thursday','하반기'
+'9','Ä¸Æ¾ ¸¶ºí','Wednesday','상반기'
+'10','Á¶Ä¿','Wednesday','하반기'
+*/
+
+
+
+-- p.221 quiz
+USE world;
+SELECT name, IFNULL(indepyear, '없음') as indepyear
+FROM country;
