@@ -15,16 +15,16 @@ LIMIT n;
 USE world;
 
 -- DISTINCT : unique values
-SELECT DISTINCT continent
-FROM COUNTRY;
-
-
--- = get unique values with GROUP BY (1)
+-- GROUP BY : aggregate values by stated columns
+-- get unique values with GROUP BY (1) and same results with DISTINCT
 SELECT continent
 FROM COUNTRY
 GROUP BY continent;
 
--- get unique values with GROUP BY (2)
+SELECT DISTINCT continent
+FROM COUNTRY;
+
+-- get unique values with GROUP BY (2) and same results with DISTINCT
 SELECT continent, region
 FROM COUNTRY
 GROUP BY continent, region
@@ -33,6 +33,10 @@ ORDER BY 1, 2;
 SELECT continent, region
 FROM COUNTRY
 GROUP BY 1, 2
+ORDER BY 1, 2;
+
+SELECT DISTINCT continent, region
+FROM COUNTRY
 ORDER BY 1, 2;
 
 -- two first character, in Korean district 'do'.
