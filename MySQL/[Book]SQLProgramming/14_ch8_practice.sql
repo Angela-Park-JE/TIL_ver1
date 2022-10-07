@@ -110,7 +110,7 @@ ORDER BY a.emp_no;
 
 
 -- 2. code 8-28(all departments and their emp_no) + manager's name
--- I set the DEPARTMENS and attach the tables by turns (DEPARTMENTS-DEPT_MANAGER-EMPLOYEES)
+-- mine: I set the DEPARTMENS and attach the tables by turns (DEPARTMENTS-DEPT_MANAGER-EMPLOYEES)
 SELECT d.dept_name, IFNULL(m.emp_no, NULL), IFNULL(CONCAT(e.first_name, ' ', e.last_name), NULL) full_name, m.from_date, m.to_date
 FROM DEPARTMENTS d NATURAL LEFT JOIN DEPT_MANAGER m
 				   NATURAL LEFT JOIN EMPLOYEES e
@@ -141,7 +141,7 @@ WHERE 1=1
 
 
 -- 4. in DEPARTMENTS table, Sales dept_no is 'd007'. Bring dept_name, manager's number and sales, employees number and sales in Sales departments.
--- mine: I'll UNION the results of manager's and employees. and get the max salary (it'll be most recent salary...)
+-- mine was WRONG: I'll UNION the results of manager's and employees. and get the max salary (it'll be most recent salary...)
 SELECT d.dept_name, m.emp_no, MAX(s.salary)
 FROM DEPARTMENTS d INNER JOIN DEPT_MANAGER m ON d.dept_no = m.dept_no 
 				   INNER JOIN SALARIES s ON m.emp_no = s.emp_no
@@ -153,7 +153,8 @@ FROM DEPARTMENTS d INNER JOIN DEPT_EMP e ON d.dept_no = e.dept_no
 				   INNER JOIN SALARIES s ON e.emp_no = s.emp_no
 WHERE d.dept_no = 'd007'
 GROUP BY e.emp_no;
--- answer: using from_date and to_date column make it show the right salary.
+-- answer
+-- using from_date and to_date column make it show the right salary.
 -- and it doesn't need to DEPARTMENTS table because already DEPT_EMP/DEPT_MANAGER table has `dept_no`.
 SELECT 'managers' as 'position', m.emp_no, s.salary
 FROM DEPT_MANAGER m INNER JOIN SALARIES s ON m.emp_no = s.emp_no
