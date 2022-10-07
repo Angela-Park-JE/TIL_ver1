@@ -3,6 +3,7 @@
 USE PRACTICE;
 
 -- code 8-26 : employees number, name, department name
+-- mine
 SELECT e.emp_no, e.first_name, e.last_name, dep.dept_name
 FROM EMPLOYEES e 
 	INNER JOIN DEPT_EMP emp ON e.emp_no = emp.emp_no
@@ -14,7 +15,9 @@ FROM EMPLOYEES a
     INNER JOIN DEPARTMENTS c ON b.dept_no = c.dept_no
 ORDER BY a.emp_no;
 
+
 -- code 8-27 : managers information of Marketing and Finance
+-- mine
 SELECT d.dept_name, e.emp_no, CONCAT(e.first_name, ' ', e.last_name) emp_name
 FROM EMPLOYEES e 
 	INNER JOIN DEPT_MANAGER m ON e.emp_no = m.emp_no
@@ -29,7 +32,9 @@ FROM EMPLOYEES e
 WHERE d.dept_name IN ('Marketing', 'Finance') !=0
 	AND SYSDATE() BETWEEN m.from_date AND m.to_date; -- managers at this point
 
+
 -- code 8-28 : at this point, manager's emp number of all department and department name
+-- mine
 SELECT d.dept_name, e.emp_no
 FROM EMPLOYEES e INNER JOIN DEPT_MANAGER m ON e.emp_no = m.emp_no
 				 INNER JOIN DEPARTMENTS d ON m.dept_no = d.dept_no
@@ -42,7 +47,9 @@ FROM DEPT_MANAGER m RIGHT JOIN DEPARTMENTS d ON  m.dept_no = d.dept_no
 WHERE 1=1
   AND SYSDATE() BETWEEN IFNULL(m.from_date, SYSDATE()) AND IFNULL(m.to_date, SYSDATE());
 
+
 -- code 8-29 : number of employees in each department, and all employees number
+-- mine
 SELECT d.dept_name, COUNT(e.emp_no)
 FROM EMPLOYEES emp LEFT JOIN DEPT_EMP e ON emp.emp_no = e.emp_no
 				   -- LEFT JOIN dept_manager m ON emp.emp_no = m.emp_no
