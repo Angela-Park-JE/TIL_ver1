@@ -74,11 +74,50 @@ WHERE SYSDATE() BETWEEN m.from_date AND m.to_date
 ORDER BY 1;
 
 
--- 하다말음
 -- code 9-12: sometimes it must need a derived query case when the main query needs a calculated data
+-- mine
 SELECT d.dept_name, SUM(s.salary), AVG(s.salary)
 FROM DEPARTMENTS d RIGHT JOIN DEPT_EMP e ON d.dept_no = e.dept_no
 				  RIGHT JOIN SALARIES s ON e.emp_no = s.emp_no
 WHERE SYSDATE() BETWEEN e.from_date AND e.to_date
   AND SYSDATE() BETWEEN s.from_date AND s.to_date
 GROUP BY d.dept_name;
+-- code : dept_no, added COUNT employees
+SELECT a.dept_no, a.dept_name, COUNT(*) cnt, SUM(c.salary) sum_salary, AVG(c.salary) dept_avg
+FROM DEPARTMENTS a, DEPT_EMP b, SALARIES c
+WHERE a.dept_no = b.dept_no AND b.emp_no = c.emp_no
+  AND SYSDATE() BETWEEN b.from_date AND b.to_date 
+  AND SYSDATE() BETWEEN c.from_date AND c.to_date
+GROUP BY a.dept_no, a.dept_name
+ORDER BY 1;
+
+
+-- code 9-13 : departments total salary's AVG
+SELECT AVG(TB1.sum_salary)			-- 193044765.5556
+FROM 
+	(SELECT a.dept_no, a.dept_name, COUNT(*) cnt, SUM(c.salary) sum_salary, AVG(c.salary) dept_avg
+	FROM DEPARTMENTS a, DEPT_EMP b, SALARIES c
+	WHERE a.dept_no = b.dept_no AND b.emp_no = c.emp_no
+	  AND SYSDATE() BETWEEN b.from_date AND b.to_date 
+	  AND SYSDATE() BETWEEN c.from_date AND c.to_date
+	GROUP BY a.dept_no, a.dept_name
+	ORDER BY 1) TB1;
+
+
+-- code 9-14 : 2015년 이후 연도별 순위가 3위 안인 영화와 해당 영화의 매출액이 해당 연도 전체 매출액에서 차지하는 비율을 구하는 쿼리
+SELECT YEAR(b.release_date), b.ranks, b.movie_name, ROUND(b.sale_amt / TB.total_amt * 100, 2) percentage
+FROM box_office b
+		INNER JOIN (SELECT YEAR(release_date) years, SUM(sale_amt) total_amt -- the total sales of the year
+					FROM box_office
+                    WHERE YEAR(release_date) >= 2015
+                    GROUP BY 1
+                    ) TB
+		ON YEAR(b.release_date) = TB.years
+WHERE b.ranks <= 3
+ORDER BY 1, 2;
+
+
+
+/*- LATERAL derived table -*/
+-- AFTER MySQL 8.0.14 ver.
+-- 
