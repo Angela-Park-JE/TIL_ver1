@@ -120,4 +120,79 @@ ORDER BY 1, 2;
 
 /*- LATERAL derived table -*/
 -- AFTER MySQL 8.0.14 ver.
--- 
+-- PREVIOUS : subquery can't refer the main query's table
+-- BUT! WITH `LATERAL` can.
+-- Just the position before the subquery which refers the main query's table.
+
+-- code 9-15 : error
+SELECT a.dept_no, a.dept_name, mng.emp_no
+FROM DEPARTMENTS a, 
+	(
+    SELECT b.dept_no, b.emp_no, c.first_name, c.last_name
+	FROM DEPT_MANAGER b, EMPLOYEES c
+    WHERE b.emp_no = c.emp_no
+      AND SYSDATE() BETWEEN b.from_date AND b.to_date
+      AND a.dept_no = b.dept_no
+   ) mng
+ORDER BY 1;
+
+-- code 9-16 : LATERAL
+SELECT a.dept_no, a.dept_name, mng.emp_no
+FROM DEPARTMENTS a, 
+	LATERAL -- here
+	(
+    SELECT b.dept_no, b.emp_no, c.first_name, c.last_name
+	FROM DEPT_MANAGER b, EMPLOYEES c
+    WHERE b.emp_no = c.emp_no
+      AND SYSDATE() BETWEEN b.from_date AND b.to_date
+      AND a.dept_no = b.dept_no
+   ) mng
+ORDER BY 1;
+
+-- code 9-17 : LATERAL INNER JOIN (same with 9-16)
+SELECT a.dept_no, a.dept_name, mng.emp_no
+FROM DEPARTMENTS a	   -- remove ','
+	INNER JOIN LATERAL -- and here
+	(
+    SELECT b.dept_no, b.emp_no, c.first_name, c.last_name
+	FROM DEPT_MANAGER b, EMPLOYEES c
+    WHERE b.emp_no = c.emp_no
+      AND SYSDATE() BETWEEN b.from_date AND b.to_date
+      AND a.dept_no = b.dept_no
+   ) mng
+ORDER BY 1;
+
+-- actually this simple problem can be solved with INNER JOIN like this, haha.
+SELECT a.dept_no, a.dept_name, c.emp_no
+FROM DEPARTMENTS a, DEPT_MANAGER b, EMPLOYEES c
+WHERE a.dept_no = b.dept_no AND b.emp_no = c.emp_no 
+  AND SYSDATE() BETWEEN b.from_date AND b.to_date
+ORDER BY 1;
+
+
+
+-- p.321 quiz: edit the subquery in code 9-5, country name and continent in WORLD SCHEMA, without error.
+-- code 9-5: error
+USE WORLD;
+SELECT a.name, a.district, a.population, a.countrycode, 
+	(SELECT b.name, b.continent
+    FROM COUNTRY b
+    WHERE a.countrycode = b.code
+    ) countryname
+FROM CITY a;
+-- mine : I think mine is better ... 0_0 I make SCALAR subquery to derived subquery and join them using `LATERAL`
+-- so I can use all two columns.
+SELECT a.name, a.district, a.population, a.countrycode, c.*
+FROM CITY a
+	INNER JOIN LATERAL
+	(SELECT b.name, b.continent
+    FROM COUNTRY b
+    WHERE a.countrycode = b.code
+    ) c;
+-- answer : this method make SCALAR subquery's results to one value. 
+SELECT a.name, a.district, a.population,
+	(SELECT CONCAT(b.name, ' ', b.continent)
+    FROM COUNTRY b
+    WHERE a.countrycode = b.code
+    ) countryname
+FROM CITY a
