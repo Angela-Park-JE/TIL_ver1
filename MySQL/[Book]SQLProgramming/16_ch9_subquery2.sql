@@ -175,6 +175,7 @@ WHERE a.ranks = 1
 ORDER BY 1;
 
 -- 2. code now, who employee recieve the maximum salary in each department?
+-- mine: this do not work...
 SELECT e.dept_no, s.salary, emp.emp_no, emp.first_name, emp.last_name
 FROM DEPT_EMP e, SALARIES s, EMPLOYEES emp
 WHERE e.emp_no = emp.emp_no AND e.emp_no = s.emp_no
@@ -183,7 +184,54 @@ WHERE e.emp_no = emp.emp_no AND e.emp_no = s.emp_no
 								WHERE e.emp_no = s.emp_no
 								  AND SYSDATE() BETWEEN e.from_date AND e.to_date
 								  AND SYSDATE() BETWEEN s.from_date AND s.to_date
-								GROUP BY e.dept_no)
-;
+								GROUP BY e.dept_no);
+-- anxwer : find employee using a condition 'same salary' 
+--  I think it maybe has a problem in case of same max salary but different employee.
+SELECT TBL1.dept_no, s.salary, s.emp_no, TBL1.sal
+FROM SALARIES s,
+	(SELECT e.dept_no, MAX(s.salary) sal
+		FROM DEPT_EMP e INNER JOIN SALARIES s ON e.emp_no = s.emp_no
+		WHERE SYSDATE() BETWEEN s.from_date AND s.to_date
+		GROUP BY e.dept_no) TBL1
+WHERE s.salary = TBL1.sal
+ORDER BY 1;
 
-Error Code: 2013. Lost connection to MySQL server during query
+
+-- 3. KIND OF PIVOTING!!!!! : about 2018, 2019 released movies, sales amount by year, by quarter, 
+-- form : year | quar1 | quar2 | quar3 | quar4
+-- 		  2018 |
+-- 		  2019 |
+-- first got table : year's, quarter's sum 
+SELECT YEAR(release_date) years, QUARTER(release_date) quarters, SUM(sale_amt) sales
+FROM BOX_OFFICE
+WHERE 1=1
+  AND YEAR(release_date) IN (2018, 2019)
+GROUP BY YEAR(release_date), QUARTER(release_date)
+ORDER BY 1, 2;
+-- mine : I was wrong
+-- I have to `SUM(CASE WHEN ...sale_amt END)`, not `CASE WHEN ... SUM(sale_amt) END` .... 
+SELECT YEAR(release_date) years,
+		SUM(CASE WHEN QUARTER(release_date) = 1 THEN sale_amt END) quar1,
+		SUM(CASE WHEN QUARTER(release_date) = 2 THEN sale_amt END) quar2,
+        SUM(CASE WHEN QUARTER(release_date) = 3 THEN sale_amt END) quar3,
+        SUM(CASE WHEN QUARTER(release_date) = 4 THEN sale_amt END) quar4
+FROM BOX_OFFICE
+WHERE 1=1
+  AND YEAR(release_date) IN (2018, 2019)
+GROUP BY YEAR(release_date)
+ORDER BY 1, 2;
+-- answer
+SELECT years,
+		SUM(CASE WHEN months BETWEEN 1 AND 3 THEN sales ELSE 0 END) quar1,
+		SUM(CASE WHEN months BETWEEN 4 AND 6 THEN sales ELSE 0 END) quar2,
+		SUM(CASE WHEN months BETWEEN 7 AND 9 THEN sales ELSE 0 END) quar3,
+		SUM(CASE WHEN months BETWEEN 10 AND 12 THEN sales ELSE 0 END) quar4
+FROM 
+	(
+    SELECT YEAR(release_date) years, MONTH(release_date) months, SUM(sale_amt) sales
+    FROM BOX_OFFICE
+    WHERE YEAR(release_date) IN (2018, 2019)
+    GROUP BY 1, 2
+    ) a
+GROUP BY 1
+ORDER BY 1;
