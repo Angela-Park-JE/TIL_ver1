@@ -174,6 +174,7 @@ WHERE a.ranks = 1
   AND a.sale_amt > b.sale_amt
 ORDER BY 1;
 
+
 -- 2. code now, who employee recieve the maximum salary in each department?
 -- mine: this do not work...
 SELECT e.dept_no, s.salary, emp.emp_no, emp.first_name, emp.last_name
@@ -235,3 +236,23 @@ FROM
     ) a
 GROUP BY 1
 ORDER BY 1;
+
+
+-- 4. a number of employees who are not in any department
+-- mine : all results '0'...
+SELECT COUNT(e.emp_no)
+FROM EMPLOYEES e LEFT JOIN DEPT_EMP d ON e.emp_no = d.emp_no
+WHERE 1=1
+  AND SYSDATE() BETWEEN d.from_date AND d.to_date
+  AND dept_no IS NULL;
+SELECT COUNT(e.emp_no)
+FROM EMPLOYEES e 
+		LEFT JOIN (SELECT * FROM DEPT_EMP WHERE SYSDATE() BETWEEN from_date AND to_date) tb1 ON e.emp_no = tb1.emp_no
+WHERE 1=1
+  AND tb1.dept_no NOT IN (SELECT DISTINCT dept_no FROM DEPARTMENTS);
+-- answer : not in any department employees are not in dept_emp
+SELECT COUNT(*)
+FROM EMPLOYEES e
+WHERE NOT EXISTS (SELECT emp_no FROM DEPT_EMP d
+					WHERE SYSDATE() BETWEEN from_date AND to_date
+                      AND e.emp_no = d.emp_no);  -- not exist with this condition!!
