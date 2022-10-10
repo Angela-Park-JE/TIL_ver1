@@ -74,11 +74,12 @@ FROM TMP, DEPT_AVG;
 /* RECURSIVE QUERY with CTE */
 -- it refer to itself in query, so it repeat the subaggregate results until return the final result.
 -- using when making consecutive rows or writing hierarchical(계층형) query.
+-- CAN'T USE `GROUP BY` or `ORDER BY` in the part of referign itself.
 /* structure
 WITH RECURSIVE cte1 AS
 	(SELECT ... FROM ...       -- > first query
 	  UNION ALL
-	 SELECT ... FROM cte1 ...  -- > refer itself
+	 SELECT ... FROM cte1 ...  -- > refer itself : you can't use `group by` of `order by`.
      ),
 	...
 SELECT ... 
@@ -127,3 +128,67 @@ ORDER BY 1;
 
 
 -- writing hierarchical(계층형) query --
+
+-- code 11-8 : example table
+-- 11-8
+USE practice;
+CREATE TABLE emp_hierarchy (
+       employee_id   INT, 
+       emp_name      VARCHAR(80),
+       manager_id    INT,
+       salary        INT,
+       dept_name     VARCHAR(80)
+);
+       
+INSERT INTO emp_hierarchy VALUES 
+(200,'Jennifer Whalen',101,4400,'Administration'),
+(203,'Susan Mavris',101,6500,'Human Resources'),
+(103,'Alexander Hunold',102,9000,'IT'),
+(104,'Bruce Ernst',103,6000,'IT'),
+(105,'David Austin',103,4800,'IT'),
+(107,'Diana Lorentz',103,4200,'IT'),
+(106,'Valli Pataballa',103,4800,'IT'),
+(204,'Hermann Baer',101,10000,'Public Relations'),
+(100,'Steven King',null,24000,'Executive'),
+(101,'Neena Kochhar',100,17000,'Executive'),
+(102,'Lex De Haan',100,17000,'Executive'),
+(113,'Luis Popp',108,6900,'Finance'),
+(112,'Jose Manuel Urman',108,7800,'Finance'),
+(111,'Ismael Sciarra',108,7700,'Finance'),
+(110,'John Chen',108,8200,'Finance'),
+(108,'Nancy Greenberg',101,12008,'Finance'),
+(109,'Daniel Faviet',108,9000,'Finance'),
+(205,'Shelley Higgins',101,12008,'Accounting'),
+(206,'William Gietz',205,8300,'Accounting');
+
+SELECT *
+  FROM emp_hierarchy
+ ORDER BY 1; 
+
+-- code 11-9 : employees by level
+WITH RECURSIVE cte1 AS 
+	(
+	SELECT 1 level, employee_id, emp_name, CAST(employee_id AS CHAR(200)) path
+      FROM emp_hierarchy
+	 WHERE manager_id IS NULL	-- highest level of manager
+		UNION ALL
+    SELECT level + 1, b.employee_id, b.emp_name, CONCAT(a.path, ',', b.employee_id)
+      FROM cte1 a
+	INNER JOIN emp_hierarchy b ON a.employee_id = b.manager_id	
+			-- repeating part and if there is a repeat, plus 1 in `level` and add emp_no to `path`
+    )
+SELECT employee_id, emp_name, level, path, CONCAT(LPAD('', 2 * level, ' '), emp_name) hier_name -- indent as much as level
+FROM cte1
+ORDER BY path; -- see hierarchy
+
+
+-- p.407 quiz : 2021.1.1 ~ 2021.12.31, 365 rows query
+-- mine and answer
+WITH RECURSIVE cte AS
+	(SELECT '2021-01-01' dates 
+		UNION ALL
+	SELECT ADDDATE(dates, 1)
+    FROM cte 
+    WHERE ADDDATE(dates, 1) <= '2021-12-31')
+SELECT *
+FROM cte;
