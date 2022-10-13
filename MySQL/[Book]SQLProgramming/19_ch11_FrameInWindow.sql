@@ -28,7 +28,7 @@
 USE practice;
 -- code 11-21 : partial sum using FRAME sentence
 SELECT employee_id, emp_name, dept_name, salary,
-		SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
+			SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
 						  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) rows_value,
 	    SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC
 						  RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) range_value
@@ -46,7 +46,7 @@ ORDER BY 3, 4 DESC;
 
 -- code 11-22 : SUM of+- 1 row VS +-1000 values in range
 SELECT employee_id, emp_name, dept_name, salary,
-		SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
+			SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
 						  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) rows_value,
 	    SUM(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC
 						  RANGE BETWEEN 1000 PRECEDING AND 1000 FOLLOWING) range_value
@@ -76,7 +76,7 @@ ORDER BY 3, 4 DESC;
 -- FIRST_VALUE(), LAST_VALUE()
 -- code 11-23 : the frame range is set as 3 rows, front row and following row in the window.
 SELECT employee_id, emp_name, dept_name, salary,
-		FIRST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
+			FIRST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
 								  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) firstvalue,
 	    LAST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC
 								  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) lastvalue
@@ -100,7 +100,7 @@ ORDER BY 3, 4;
 
 -- code 11-24 : the frame range is set through the current value's +1000 and -1000 in the window.
 SELECT employee_id, emp_name, dept_name, salary,
-		FIRST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
+			FIRST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC 
 								  RANGE BETWEEN 1000 PRECEDING AND 1000 FOLLOWING) firstvalue,
 	    LAST_VALUE(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC
 								  RANGE BETWEEN 1000 PRECEDING AND 1000 FOLLOWING) lastvalue
@@ -125,7 +125,7 @@ ORDER BY 3, 4;
 -- NTH_VALUE()
 -- code 11-25 : 
 SELECT employee_id, emp_name, dept_name, salary,
-		NTH_VALUE(salary, 2) OVER (PARTITION BY dept_name ORDER BY salary DESC 
+			NTH_VALUE(salary, 2) OVER (PARTITION BY dept_name ORDER BY salary DESC 
 								  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) rowvalue,
 	    NTH_VALUE(salary, 3) OVER (PARTITION BY dept_name ORDER BY salary DESC
 								  RANGE BETWEEN 1000 PRECEDING AND 1000 FOLLOWING) rangevalue
@@ -162,7 +162,7 @@ ORDER BY ...; */
 
 -- code 11-26 : code 11-23 USING window alias
 SELECT employee_id, emp_name, dept_name, salary,
-		FIRST_VALUE(salary) OVER wa firstvalue, 
+				FIRST_VALUE(salary) OVER wa firstvalue, 
         LAST_VALUE(salary) OVER wa lastvalue
 FROM EMP_HIERARCHY
 WHERE dept_name IN ('IT', 'Finance')
@@ -172,10 +172,21 @@ ORDER BY 3, 4;
 
 
 -- p.433 quiz : Among the top 10 and 2019 released movies, Show rank, name, sales, total sales in BOX_OFFICE table, order by sales.
+-- mine : the result is same with the answer.
 SELECT ranks, movie_name, sale_amt, 
-		SUM(sale_amt) OVER sale_win total_sales
+				SUM(sale_amt) OVER (PARTITION BY YEAR(release_date)) total_sales,
+        CUME_DIST() OVER sale_win cume_sales									-- > WINDOW sale_win has `ORDER BY` so it worked.
 FROM BOX_OFFICE
 WHERE YEAR(release_date) = 2019
 	AND ranks <= 10
 WINDOW sale_win AS (PARTITION BY YEAR(release_date) ORDER BY sale_amt DESC)
 ORDER BY 1, 3, 4;
+-- answer : Because the results are only in 2019, so this is a partition.
+-- so it doesn't need another `PARTITION` sentence
+SELECT ranks, movie_name, sale_amt, 
+				SUM(sale_amt) OVER () total_sales,
+        CUME_DIST() OVER (ORDER BY sale_amt DESC) cume_sales  -- > CUME_DIST() needs `ORDER BY` !!!
+FROM BOX_OFFICE
+WHERE YEAR(release_date) = 2019
+  AND ranks <=10
+ORDER BY ranks;
