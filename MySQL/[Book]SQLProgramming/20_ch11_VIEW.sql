@@ -110,7 +110,7 @@ CREATE OR REPLACE VIEW DEPT_EMP_SAL_V AS
 -- mine
 WITH CTE AS 
 	(SELECT dept_name, emp_no, full_name, salary, 
-			DENSE_RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) rank_salary
+				DENSE_RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) rank_salary
 	FROM DEPT_EMP_SAL_V
     )
 SELECT dept_name, emp_no, full_name, salary
@@ -120,7 +120,7 @@ ORDER BY 1, 4 DESC;
 -- answer : same! but DENSE_RANK() -> RANK()
 WITH BASIS AS 
 	(SELECT dept_name, emp_no, full_name, salary, 
-			RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) ranks
+				RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) ranks
 	FROM DEPT_EMP_SAL_V
     )
 SELECT *
@@ -132,11 +132,11 @@ ORDER BY 1, 5;
 -- mine : divided the rank in CTE and NTILE in main query
 WITH CTE AS 
 	(SELECT dept_name, emp_no, full_name, salary, 
-			DENSE_RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) rank_salary
+				DENSE_RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) rank_salary
 	FROM DEPT_EMP_SAL_V
     )
 SELECT dept_name, emp_no, full_name, salary, rank_salary,
-	NTILE(3) OVER (PARTITION BY dept_name ORDER BY rank_salary) ntiles
+		NTILE(3) OVER (PARTITION BY dept_name ORDER BY rank_salary) ntiles
 FROM CTE
 WHERE rank_salary<=10
 ORDER BY 1, ntiles;
@@ -145,7 +145,7 @@ ORDER BY 1, ntiles;
 -- But this make an another CTE with BASIS and use CTE in main query simply.
 WITH BASIS AS 
 	(SELECT dept_name, emp_no, full_name, salary, 
-			RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) ranks
+				RANK() OVER (PARTITION BY dept_name ORDER BY salary DESC) ranks
 	FROM DEPT_EMP_SAL_V
     ),
      TOP10 AS
@@ -155,23 +155,46 @@ WITH BASIS AS
      )
 
 SELECT dept_name, emp_no, full_name, salary,
-	NTILE(3) OVER (PARTITION BY dept_name ORDER BY salary DESC) grade
+		NTILE(3) OVER (PARTITION BY dept_name ORDER BY salary DESC) grade
 FROM TOP10
 ORDER BY 1, grade;
 
 -- 4. In BOX_OFFICE table, get 2019 release movies' monthly sale amount and a rate of change by monthly
+-- mine : correct. We have to solve using multiple CTE
 WITH MONTHLY_SALES AS 
 	(
-    SELECT EXTRACT(YEAR_MONTH FROM release_date), sale_amt, 
-		SUM(sale_amt) OVER (PARTITION BY MONTH(release_date))
+	SELECT MONTH(release_date) months, SUM(sale_amt) monthly_total 
 	FROM BOX_OFFICE 
+	WHERE YEAR(release_date) = 2019
+	GROUP BY 1
+	ORDER BY 1
+	),
+     MONTHLY_LAGGED AS
+	(
+	SELECT months, monthly_total,
+			LAG(monthly_total, 1, 0) OVER (ORDER BY months)  pre_monthly_total 
+										-- doesn't need `PARTITION BY`, because it's already divided by month.
+	FROM MONTHLY_SALES 
+	)
+
+SELECT months, monthly_total, pre_monthly_total, ROUND( (monthly_total - pre_monthly_total) / pre_monthly_total * 100, 2) rates
+FROM MONTHLY_LAGGED
+ORDER BY 1;
+
+-- answer :
+WITH BASIS AS
+	(
+    SELECT MONTH(release_date) months, SUM(sale_amt) tot_amt
+    FROM BOX_OFFICE
     WHERE YEAR(release_date) = 2019
-	UNION
-	SELECT movie_name, 
-    );
-    
-SELECT EXTRACT(YEAR_MONTH FROM release_date) year_months, 
-		SUM(sale_amt) OVER (PARTITION BY MONTH(release_date))
-FROM BOX_OFFICE 
-WHERE YEAR(release_date) = 2019
-GROUP BY MONTH;
+    GROUP BY 1
+    ),
+    FINALS AS
+    (
+    SELECT months, tot_amt, 
+				LAG(tot_amt) OVER (ORDER BY months) pre_month_amt
+    FROM BASIS
+    )
+SELECT months, tot_amt, ROUND((tot_amt - pre_month_amt) / pre_month_amt * 100, 2) rates
+FROM FINALS
+ORDER BY 1;
