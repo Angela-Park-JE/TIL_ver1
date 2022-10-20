@@ -137,7 +137,7 @@ FROM raw_data1;
 '10', '3139', '6636', '988', '729', '1347', '1486', '5846', '3707', '2746', '8017', '27117', '16739', '11523'
 */
 
--- 4. Monthly deaths and cases by country AND save as a view
+-- 4. Monthly deaths and cases by country
 -- mine : ...
 SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
 FROM COVID19_DATA d INNER JOIN COVID19_COUNTRY c ON d.countrycode=c.countrycode
@@ -247,3 +247,58 @@ WHERE countryname = 'United States';
 'United States', '1. Cases', '7', '17', '192276', '888718', '717694', '843368', '1924850', '1458662', '1206239', '1926939', '4496449', '6406683', '6125132', '2391465'
 'United States', '2. Deaths', '0', '1', '5369', '60859', '41593', '19760', '26514', '29623', '23371', '24508', '39229', '80990', '96746', '64728'
 */
+
+
+-- 5. accumulated monthly death and cases of Korea
+-- mine : not work
+WITH raw_data1 AS
+	(
+	SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA 
+	WHERE countrycode = 'KOR'
+	GROUP BY 1
+    )
+
+SELECT months, death_num, case_num,
+	death_num OVER (ORDER BY months ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) accumulated_death,
+    case_num OVER (PARTITION BY months ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) accumulated_case
+FROM raw_data1;
+-- code12-17 : 
+WITH raw_data1 AS
+	(
+	SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(deaths) death_num, SUM(cases) case_num
+	FROM COVID19_DATA 
+	WHERE countrycode = 'KOR'
+	GROUP BY 1
+    )
+
+SELECT months, death_num, case_num,
+	SUM(death_num) OVER (ORDER BY months) accumulated_death,
+    SUM(case_num) OVER (ORDER BY months) accumulated_case
+FROM raw_data1
+ORDER BY 1;
+
+
+
+	SELECT c.countryname, EXTRACT(YEAR_MONTH FROM d.issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c
+	GROUP BY 1, 2;
+-- 6. TOP 3 country about accumulated death
+USE practice;
+WITH raw_data1 AS -- SUM 
+	(
+	SELECT c.countryname, EXTRACT(YEAR_MONTH FROM d.issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c
+	GROUP BY 1, 2
+    ),
+    raw_data2 AS -- accumulated SUM
+	(
+    SELECT countryname, months, death_num, case_num,
+	SUM(death_num) OVER (PARTITION BY countryname ORDER BY months) accumulated_death,
+    SUM(case_num) OVER (PARTITION BY countryname ORDER BY months) accumulated_case
+	FROM raw_data1
+	)
+SELECT countryname, months, death_num, case_num, accumulated_death, accumulated_case
+FROM raw_data2
+ORDER BY 4 DESC
+LIMIT 3;
