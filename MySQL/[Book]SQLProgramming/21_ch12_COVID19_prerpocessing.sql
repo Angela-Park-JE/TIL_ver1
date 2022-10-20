@@ -1,6 +1,5 @@
 /** COVID-19 analysis project **/
 
-
 /* data insert */
 
 USE practice;
@@ -51,7 +50,6 @@ FROM COVID19_data;  -- 71957
 -- string data consisting
 
 -- 1. DELETE data which is useless
-
 -- code 12-5 : countrycode starting with 'OWID', it's aggregated by OWID.
 SELECT COUNTRYCODE, COUNTRYNAME
 FROM COVID19_COUNTRY
@@ -75,7 +73,7 @@ UPDATE COVID19_COUNTRY
         
 /* Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column.  
 To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect. 
--- AND I did a solution. : set sql_safe_updates=0; */
+-- AND I did a solution. : `set sql_safe_updates=0;` */
 
 UPDATE COVID19_DATA
 	SET cases 					= IFNULL(cases, 0),
@@ -91,7 +89,8 @@ UPDATE COVID19_DATA
 -- = UPDATE SET cases = 0 WHERE cases IS NULL 
 
 -- code 12-8 : NULL CHECKING
--- If calculating with NULL, the results is NULL. So use '+'. SUM() can't be used because it calculates except NULL.
+-- If calculating with NULL, the results is NULL. So use '+'. 
+-- SUM() can't be used because it calculates except NULL.
 WITH null_check1 AS
 	(SELECT population + population_density + median_age + aged_65_older + aged_70_older + hospital_beds_per_thousand AS plus_col
     FROM COVID19_COUNTRY
