@@ -2,7 +2,9 @@
 
 /* Data analysis */
 
+
 -- 1. TOP 10 country by death in 2020
+
 -- code12-9 :
 SELECT c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
 FROM COVID19_DATA d INNER JOIN COVID19_COUNTRY c ON d.countrycode = c.countrycode
@@ -11,7 +13,9 @@ GROUP BY c.countryname
 ORDER BY 2 DESC 
 LIMIT 10;
 
+
 -- 2. death and cases per population in 2020
+
 -- mine : death/population do not work by above(12-9) SELECT column
 SELECT c.countryname, 
 		ROUND(death_num/c.population * 100, 5) death_per_pop_rate,
@@ -24,6 +28,7 @@ FROM
 	ORDER BY 2 DESC 
     ) TB1, COVID19_COUNTRY c
 WHERE TB1.countryname = c.countryname;
+
 -- code12-10 : put the population info column in the subquery, and ORDER BY death and cases, and LIMIT 10
 SELECT countryname, death_num, case_num, population, population_density,
 		ROUND(death_num/population * 100, 5) death_per_pop_rate,
@@ -59,12 +64,14 @@ FROM COVID19_DATA d
 WHERE countrycode = 'KOR'
 GROUP BY 1
 ORDER BY 1;
+
 -- code12-12 : with subtotal
 SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(deaths), SUM(cases)
 FROM COVID19_DATA d
 WHERE countrycode = 'KOR'
 GROUP BY 1 WITH ROLLUP
 ORDER BY 1;
+
 -- code 12-13 : `months` to column
 WITH raw_data1 AS
 	(
@@ -107,6 +114,7 @@ FROM raw_data1;
 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16739', '0'
 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '11523'
 */
+
 -- code12-14 : in 1 row from code12-12 (like code12-13 query)
 WITH raw_data1 AS
 	(
@@ -137,8 +145,9 @@ FROM raw_data1;
 '10', '3139', '6636', '988', '729', '1347', '1486', '5846', '3707', '2746', '8017', '27117', '16739', '11523'
 */
 
+
 -- 4. Monthly deaths and cases by country
--- mine : ...
+-- mine : ... I had to divide the deaths and cases by row...
 SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
 FROM COVID19_DATA d INNER JOIN COVID19_COUNTRY c ON d.countrycode=c.countrycode
 GROUP BY 1, 2
@@ -250,6 +259,7 @@ WHERE countryname = 'United States';
 
 
 -- 5. accumulated monthly death and cases of Korea
+
 -- mine : not work
 WITH raw_data1 AS
 	(
@@ -263,6 +273,7 @@ SELECT months, death_num, case_num,
 	death_num OVER (ORDER BY months ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) accumulated_death,
     case_num OVER (PARTITION BY months ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) accumulated_case
 FROM raw_data1;
+
 -- code12-17 : 
 WITH raw_data1 AS
 	(
@@ -277,28 +288,82 @@ SELECT months, death_num, case_num,
     SUM(case_num) OVER (ORDER BY months) accumulated_case
 FROM raw_data1
 ORDER BY 1;
+SELECT c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c ON d.countrycode = c.countrycode
+	GROUP BY c.countryname;
 
 
+-- 6. TOP 3 country by accumulated death among all period
 
-	SELECT c.countryname, EXTRACT(YEAR_MONTH FROM d.issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
-	FROM COVID19_DATA d INNER JOIN COVID19_country c
-	GROUP BY 1, 2;
--- 6. TOP 3 country about accumulated death
-USE practice;
+-- mine1 : not work, WINDOW function can't be used with HAVING!!
 WITH raw_data1 AS -- SUM 
 	(
-	SELECT c.countryname, EXTRACT(YEAR_MONTH FROM d.issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
-	FROM COVID19_DATA d INNER JOIN COVID19_country c
-	GROUP BY 1, 2
+	SELECT c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c ON d.countrycode = c.countrycode
+	GROUP BY c.countryname
     ),
-    raw_data2 AS -- accumulated SUM
+    raw_data2 AS -- RANK
 	(
-    SELECT countryname, months, death_num, case_num,
-	SUM(death_num) OVER (PARTITION BY countryname ORDER BY months) accumulated_death,
-    SUM(case_num) OVER (PARTITION BY countryname ORDER BY months) accumulated_case
+    SELECT c.continent, r.countryname, r.death_num, r.case_num,
+		RANK() OVER (PARTITION BY c.continent ORDER BY r.death_num DESC) deathrank_by_continent
+	FROM raw_data1 r INNER JOIN COVID19_country c on r.countryname = c.countryname
+    HAVING deathrank_by_continent <= 3
+	)
+SELECT continent, countryname, death_num, case_num, deathrank_by_continent
+FROM raw_data2
+ORDER BY 1, 5;
+
+-- mine2 : 
+WITH raw_data1 AS -- SUM 
+	(
+	SELECT c.continent, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c ON d.countrycode = c.countrycode
+	GROUP BY c.continent, c.countryname
+    ),
+    raw_data2 AS -- RANK
+	(
+    SELECT r.continent, r.countryname, r.death_num, r.case_num,
+		RANK() OVER (PARTITION BY r.continent ORDER BY r.death_num DESC) deathrank_by_continent
+	FROM raw_data1 r
+	)
+SELECT * 		-- main query - limit rank 3
+FROM raw_data2
+WHERE deathrank_by_continent <=3
+ORDER BY 1, 5;
+
+-- codd12-18 : same with mine
+WITH raw_data1 AS -- SUM 
+	(
+	SELECT c.continent, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
+	FROM COVID19_DATA d INNER JOIN COVID19_country c ON d.countrycode = c.countrycode
+	GROUP BY c.continent, c.countryname
+    ),
+    raw_data2 AS -- RANK
+	(
+    SELECT continent, countryname, death_num, case_num,
+		RANK() OVER (PARTITION BY continent ORDER BY death_num DESC) deathrank_by_continent
 	FROM raw_data1
 	)
-SELECT countryname, months, death_num, case_num, accumulated_death, accumulated_case
+SELECT * 		-- main query - limit rank 3
 FROM raw_data2
-ORDER BY 4 DESC
-LIMIT 3;
+WHERE deathrank_by_continent <=3;
+
+
+
+-- p.468 quiz : Monthly cases/test rates in Korea
+
+-- mine : showed all cases and tests number... It couldn't show the numbers with SUM()/SUM().
+SELECT months, total_cases, total_tests, ROUND(total_cases/total_tests * 100, 2) rates
+FROM (
+		SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(cases) total_cases, SUM(tests) total_tests
+		FROM COVID19_DATA
+		WHERE countrycode = 'KOR'
+		GROUP BY months ORDER BY months
+	 ) tb1
+;
+
+-- answer : simple.
+SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, (SUM(cases) / SUM(tests) * 100) test_num
+FROM COVID19_DATA
+WHERE countrycode = 'KOR'
+GROUP BY months ORDER BY months;
