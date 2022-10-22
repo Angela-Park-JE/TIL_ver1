@@ -29,7 +29,7 @@ FROM
     ) TB1, COVID19_COUNTRY c
 WHERE TB1.countryname = c.countryname;
 
--- code12-10 : put the population info column in the subquery, and ORDER BY death and cases, and LIMIT 10
+-- code12-10 : put the population info into the subquery, and ORDER BY death and cases, and LIMIT 10
 SELECT countryname, death_num, case_num, population, population_density,
 		ROUND(death_num/population * 100, 5) death_per_pop_rate,
 		ROUND(case_num/population * 100, 5) case_per_pop_rate
@@ -57,7 +57,7 @@ ORDER BY 6 DESC, 7 DESC;
 */
 
 
--- 3. Monthly deaths and cases in Korea occured in all date ranges
+-- 3. Monthly deaths and cases in Korea occured in all date ranges -- pivoting method!!! 
 -- code12-11 :
 SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(deaths), SUM(cases)
 FROM COVID19_DATA d
@@ -72,7 +72,7 @@ WHERE countrycode = 'KOR'
 GROUP BY 1 WITH ROLLUP
 ORDER BY 1;
 
--- code 12-13 : `months` to column
+-- code12-13 : `months` to column (to make like code 12-14)
 WITH raw_data1 AS
 	(
     SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(deaths) death_num, SUM(cases) case_num
@@ -154,9 +154,10 @@ GROUP BY 1, 2
 ORDER BY 1;
 -- code 12-15:
 -- montly country death and cases num in monthly row
-SELECT c.countryname, EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
-FROM COVID19_DATA d INNER JOIN COVID19_COUNTRY c ON d.countrycode=c.countrycode
-GROUP BY 1, 2;
+-- SELECT c.countryname, EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
+-- FROM COVID19_DATA d INNER JOIN COVID19_COUNTRY c ON d.countrycode=c.countrycode
+-- GROUP BY 1, 2;
+
 WITH raw_data1 AS
 	(
     SELECT c.countryname, EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
@@ -201,8 +202,8 @@ FROM raw_data1
 GROUP BY 1, 2
 ORDER BY 1, 2;
 
--- if want to look specific country, save this as a view.
-CREATE OR REPLACE VIEW covid19_summary1_v AS
+-- if you want to look specific country, save this as a view.
+CREATE OR REPLACE VIEW covid19_summary1_v AS -- < here
 WITH raw_data1 AS
 	(
     SELECT c.countryname, EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
@@ -247,7 +248,7 @@ FROM raw_data1
 GROUP BY 1, 2
 ORDER BY 1, 2;
 
--- USA
+-- using view to find a info about USA
 SELECT *
 FROM covid19_summary1_v
 WHERE countryname = 'United States';
@@ -260,7 +261,7 @@ WHERE countryname = 'United States';
 
 -- 5. accumulated monthly death and cases of Korea
 
--- mine : not work
+-- mine : not work, it's fool. didn't write aggregation FUNCTION before `OVER`.
 WITH raw_data1 AS
 	(
 	SELECT EXTRACT(YEAR_MONTH FROM issue_date) months, SUM(d.deaths) death_num, SUM(d.cases) case_num
@@ -284,13 +285,10 @@ WITH raw_data1 AS
     )
 
 SELECT months, death_num, case_num,
-	SUM(death_num) OVER (ORDER BY months) accumulated_death,
+	SUM(death_num) OVER (ORDER BY months) accumulated_death,  -- < here
     SUM(case_num) OVER (ORDER BY months) accumulated_case
 FROM raw_data1
 ORDER BY 1;
-SELECT c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
-	FROM COVID19_DATA d INNER JOIN COVID19_country c ON d.countrycode = c.countrycode
-	GROUP BY c.countryname;
 
 
 -- 6. TOP 3 country by accumulated death among all period
@@ -307,13 +305,13 @@ WITH raw_data1 AS -- SUM
     SELECT c.continent, r.countryname, r.death_num, r.case_num,
 		RANK() OVER (PARTITION BY c.continent ORDER BY r.death_num DESC) deathrank_by_continent
 	FROM raw_data1 r INNER JOIN COVID19_country c on r.countryname = c.countryname
-    HAVING deathrank_by_continent <= 3
+    HAVING deathrank_by_continent <= 3  -- < here
 	)
 SELECT continent, countryname, death_num, case_num, deathrank_by_continent
 FROM raw_data2
 ORDER BY 1, 5;
 
--- mine2 : 
+-- mine2 : good
 WITH raw_data1 AS -- SUM 
 	(
 	SELECT c.continent, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
@@ -331,7 +329,7 @@ FROM raw_data2
 WHERE deathrank_by_continent <=3
 ORDER BY 1, 5;
 
--- codd12-18 : same with mine
+-- codd12-18 : same with mine except ordering.
 WITH raw_data1 AS -- SUM 
 	(
 	SELECT c.continent, c.countryname, SUM(d.deaths) death_num, SUM(d.cases) case_num
