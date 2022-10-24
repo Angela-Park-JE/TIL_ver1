@@ -16,6 +16,7 @@ GROUP BY gender, survived ORDER BY 1, 2;
 '여성', '사망', '81'
 '여성', '생존', '385'
 */
+
 -- mine : results same with code 12-24
 WITH CTE1 AS
 	(
@@ -49,6 +50,7 @@ FROM (
 
 
 -- 2. survived and dead men rate by age groups
+
 -- mine : refered only age group name
 -- I already know that id has baby ages with float data type.
 WITH CTE1 AS 
@@ -86,6 +88,3 @@ SELECT CASE WHEN age BETWEEN 0 AND 9 THEN '1.10대 이하'
 		survived, COUNT(*) counts
 FROM TITANIC
 GROUP BY 1, 2 ORDER BY 1, 2;
-
-
-
