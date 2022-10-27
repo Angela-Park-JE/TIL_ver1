@@ -221,3 +221,9 @@ SELECT accompanies, survived, counts,
        counts/SUM(counts) OVER () total_rates 			-- < here : PARTITION's object is all
 FROM RAW_DATA
 ORDER BY 1, 2;
+
+
+
+-- p. 482 quiz : Get survived and dead men's number by `embarked`
+SELECT
+FROM 
