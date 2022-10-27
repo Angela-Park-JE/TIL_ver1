@@ -1,4 +1,4 @@
-/*- FUNCTIONS -*/
+/**- FUNCTIONS -**/
 -- If we do simpe calculate, we can write `SELECT` query without `FROM`.
 -- BUT! we can not write SUM(), AVG() etc, aggregating functions. 
 
