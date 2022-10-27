@@ -1,3 +1,5 @@
+/**- FUNCTIONS -**/
+
 /*- DATE and TIME FUNCTIONS -*/
 
 /*- functions about now -*/
@@ -25,12 +27,12 @@ SELECT DATE('2022-09-30 20:21:38'), 					-- : 2022-09-30
 
 -- DATE_FORMAT(date, format) : alter the `date` in `format`
 SELECT DATE_FORMAT('2022-09-30 20:21:38', 'YEAR: %Y'),	-- : YEAR: 2022
-		DATE_FORMAT('2022-09-30 20:21:38', '%i:%S'),	-- : 21:38
-        DATE_FORMAT('2022-09-30', '%y/%m/%d %W (%j)'); 	-- : 22/09/30 Friday (273)
+	   DATE_FORMAT('2022-09-30 20:21:38', '%i:%S'),	-- : 21:38
+	   DATE_FORMAT('2022-09-30', '%y/%m/%d %W (%j)'); 	-- : 22/09/30 Friday (273)
 
 -- STR_TO_DATE(str, format) : change the str to sql date format
 SELECT STR_TO_DATE('22,9,30', '%y, %m, %d'),			-- : 2022-09-30
-		STR_TO_DATE('22, 30, 9', '%y, %d, %m');			-- : 2022-09-30
+	   STR_TO_DATE('22, 30, 9', '%y, %d, %m');			-- : 2022-09-30
 
 
 
@@ -59,7 +61,7 @@ SELECT YEAR('2023-01-31'), MONTH('2023-01-31 12:31:31'), QUARTER('2023-01-31'); 
 SELECT WEEK('2023-01-31', 5);								-- : 5
 
 -- WEEKOFYEAR(date) : number of the week in year
-SELECT WEEKOFYEAR('2022-12-25');						-- : 51
+SELECT WEEKOFYEAR('2022-12-25');							-- : 51
 
 -- YEARWEEK(date, mode) : the year and the week number of the `date`
 SELECT YEARWEEK('2022-12-25', 5);							-- : 202251 
@@ -81,43 +83,43 @@ SELECT HOUR('2022-12-25 11:22:33'), MINUTE('2022-12-25 11:22:33'), SECOND('11:22
 -- = ADDDATE(date, INTERVAL expr unit)
 -- ADDDATE(expr, days) : `expr` + `days` 
 SELECT DATE_ADD('2022-09-30 20:21:38', INTERVAL 100 day),					-- : 2023-01-08 20:21:38
-		ADDDATE('2022-09-30 20:21:38', INTERVAL 10 month),					-- : 2023-07-30 20:21:38
-		ADDDATE('2022-09-30 20:21:38', 100),								-- : 2023-01-08 20:21:38
-        ADDDATE('2022-09-30', INTERVAL '1 1' year_month);					-- : 2023-10-30
+	   ADDDATE('2022-09-30 20:21:38', INTERVAL 10 month),					-- : 2023-07-30 20:21:38
+	   ADDDATE('2022-09-30 20:21:38', 100),									-- : 2023-01-08 20:21:38
+	   ADDDATE('2022-09-30', INTERVAL '1 1' year_month);					-- : 2023-10-30
 
 -- DATE_SUB(date INTERVAL expr unit) : `date` - `expr`, `unit` means day or month etc.
 -- = SUBDATE(date INTERVAL expr unit) 
 -- SUBDATE(expr, days) : `expr` - `days`
-SELECT DATE_SUB('2022-09-30 20:21:38', INTERVAL 100 day),					-- : 2022-06-22 20:21:38
-		SUBDATE('2022-09-30 20:21:38', INTERVAL 10 month),					-- : 2021-11-30 20:21:38
-		SUBDATE('2022-09-30 20:21:38', 100),								-- : 2022-06-22 20:21:38
-        SUBDATE('2022-09-30', INTERVAL '10 10' day_hour);					-- : 2022-09-19 14:00:00
+SELECT DATE_SUB('2022-09-30 20:21:38', INTERVAL 100 day),				-- : 2022-06-22 20:21:38
+	   SUBDATE('2022-09-30 20:21:38', INTERVAL 10 month),				-- : 2021-11-30 20:21:38
+	   SUBDATE('2022-09-30 20:21:38', 100),								-- : 2022-06-22 20:21:38
+	   SUBDATE('2022-09-30', INTERVAL '10 10' day_hour);				-- : 2022-09-19 14:00:00
         
 -- I found that `ADDTIME`, `SUBTIME` are also calculate time, and it works with 6 number of expr
 -- ADDTIME(time, expr) : `time` + `expr`
 -- SUBTIME(time, expr) : `time` - `expr`
-SELECT ADDTIME('13:13:13', 100000),				-- : 23:13:13
-		ADDTIME('13:13:13', 110000),			-- : 24:13:13
-        SUBTIME('13:13:13', 111000),			-- : 02:03:13
-        SUBTIME('13:13:13', 111100),			-- : 02:02:13
-        ADDTIME('13:13:13', 111110),			-- : 24:24:23
-        SUBTIME('13:13:13', 111111),			-- : 02:02:02
-        ADDTIME('2022-09-30 20:21:38', 100),	-- : 2022-09-30 20:22:38
-        SUBTIME('2022-09-30 20:21:38', 300);	-- : 2022-09-30 20:18:38
+SELECT ADDTIME('13:13:13', 100000),			-- : 23:13:13
+	   ADDTIME('13:13:13', 110000),			-- : 24:13:13
+	   SUBTIME('13:13:13', 111000),			-- : 02:03:13
+	   SUBTIME('13:13:13', 111100),			-- : 02:02:13
+	   ADDTIME('13:13:13', 111110),			-- : 24:24:23
+	   SUBTIME('13:13:13', 111111),			-- : 02:02:02
+	   ADDTIME('2022-09-30 20:21:38', 100),	-- : 2022-09-30 20:22:38
+	   SUBTIME('2022-09-30 20:21:38', 300);	-- : 2022-09-30 20:18:38
 
 -- EXTRACT(unit FROM date) : return the `unit` from `date`
 SELECT EXTRACT(YEAR_MONTH FROM '2022-09-30 20:18:38'), 		-- : 202209
-		EXTRACT(DAY_HOUR FROM '2022-09-30'),				-- : 0
-        EXTRACT(HOUR_MINUTE FROM '2022-09-30 20:18:38'),	-- : 2018
-        EXTRACT(MINUTE_SECOND FROM '2022-09-30 20:18:38'); 	-- : 1838
+	   EXTRACT(DAY_HOUR FROM '2022-09-30'),					-- : 0
+	   EXTRACT(HOUR_MINUTE FROM '2022-09-30 20:18:38'),		-- : 2018
+	   EXTRACT(MINUTE_SECOND FROM '2022-09-30 20:18:38'); 	-- : 1838
 
 -- DATEDIFF(expr1, expr2) : `expr1` - `expr2` days, time unit is ignored.
 SELECT DATEDIFF('2022-09-30 20:18:38', '2022-06-22'),		-- : 100
-		DATEDIFF('2023-01-01 00:00:00', '2022-12-31 23:59:59'); -- : 1
+	   DATEDIFF('2023-01-01 00:00:00', '2022-12-31 23:59:59'); -- : 1
 
 -- MAKEDATE(year, dayofyear) : return the day of the year in `year`
 SELECT MAKEDATE(2022, 300),									-- : 2022-10-27
-		MAKEDATE('2022', 300);								-- : 2022-10-27
+	   MAKEDATE('2022', 300);								-- : 2022-10-27
 
 
 
