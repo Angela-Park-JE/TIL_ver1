@@ -1,4 +1,4 @@
-/** Titanic analysis project **/
+/**- Titanic analysis project -**/
 -- data reference : Kaggle
 
 /* Data Analyzing */
@@ -50,6 +50,7 @@ FROM (
 
 
 -- 2. survived and dead men's rate by age groups
+
 -- mine : refered only age group name(Korean and numbering)
 -- I already know that id has baby ages with float data type.
 WITH CTE1 AS 
@@ -223,7 +224,97 @@ FROM RAW_DATA
 ORDER BY 1, 2;
 
 
+-- p. 482 quiz : Get survived and dead men's number by `embarked` port.
+SELECT embarked, survived, COUNT(*) counts
+FROM TITANIC
+GROUP BY 1, 2
+ORDER BY 1, 2;
 
--- p. 482 quiz : Get survived and dead men's number by `embarked`
-SELECT
-FROM 
+
+
+/* SELF CHECK */
+
+-- 1. NULL checking in table 'COVID19_DATA' refer to code12-8.
+
+-- mine, answer: checking with Numeric Columns
+WITH null_check1 AS
+	( -- sum of numeric columns 
+    SELECT cases + deaths + icu_patients + hosp_patients + tests + reproduction_rate + new_vaccinations + stringency_index AS plus_col
+    FROM COVID19_DATA
+    ),
+    null_check2 AS
+    ( -- Null or Not Null results
+    SELECT CASE WHEN plus_col IS NULL THEN 'NULL' ELSE 'NOT NULL' END chk
+    FROM null_check1
+    )
+SELECT chk, COUNT(*)
+FROM null_check2
+GROUP BY chk;
+
+
+-- 2. survived and dead men's percentage by embarked port in table `TITANIC`
+
+-- mine:
+WITH CTE1 AS
+	(
+	SELECT embarked, survived, COUNT(*) counts
+	FROM TITANIC
+	GROUP BY 1, 2
+	ORDER BY 1, 2
+	)
+
+SELECT embarked, survived, counts, ROUND(counts/(SUM(counts) OVER (PARTITION BY embarked)) * 100, 2) percentage
+FROM CTE1;
+
+-- anwser: it could be summed at once.
+SELECT embarked, survived, COUNT(*), 
+	   COUNT(*)/( SUM(COUNT(*)) OVER (PARTITION BY embarked) ) percentage
+FROM TITANIC
+GROUP BY embarked, survived
+ORDER BY embarked, survived;
+
+
+-- 3. Vaccinating was begin since 2020-12.
+-- Compare the monthly cases and vaccination in 2020-10 ~ 2021-02, 
+-- and analyze whether the new cases were decreased or increased among Vaccination top 10.
+
+-- mine: 접종탑10 + 월별확진과 백신접종 정보 => LAG() 사용하여 백신접종이 시작된 뒤로 전달에 비해 늘었는지 줄었는지 구하기
+WITH topvacc AS
+	( -- top 10 vaccinated nations
+    SELECT countrycode, SUM(new_vaccinations)
+    FROM COVID19_DATA
+    GROUP BY 1
+    ORDER BY 2 DESC
+    LIMIT 10
+    ),
+     mthvacc AS
+     ( -- monthly vaccination and cases 
+     SELECT EXTRACT(YEAR_MONTH FROM c.issue_date) months, c.countrycode, SUM(c.cases) new_cases, SUM(c.new_vaccinations) new_vaccinations
+	 FROM COVID19_DATA c, topvacc cte1
+	 WHERE 1 = 1
+		   AND c.countrycode = cte1.countrycode
+		   AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= (SELECT MIN(EXTRACT(YEAR_MONTH FROM issue_date)) FROM COVID19_DATA WHERE new_vaccinations > 0) -- start of vaccination
+	 GROUP BY 1, 2
+	 ORDER BY 2, 1
+     )
+     
+SELECT EXTRACT(YEAR_MONTH FROM c.issue_date) months, c.countrycode, cte2.new_cases, cte2.new_vaccinations,
+	   CASE WHEN (LAG(cte2.new_vacc) OVER (PARTITION BY c.countrycode) != 0) 
+			 AND (LAG(cte2.new_cases) OVER (PARTITION BY c.countrycode) != 0) < new_cases 
+			THEN 'decreased' 
+            ELSE NULL END fluctuation
+FROM COVID19_DATA c, mthvacc cte2
+WHERE 1 = 1
+	  AND c.countrycode = cte2.countrycode
+	  AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= 202010
+GROUP BY 1, 2
+ORDER BY 2, 1;
+
+
+Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 
+near '!= 0) AND (lag(new_cases, 1) < new_cases)     THEN 'decreased'              ELSE' at line 21
+
+Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 
+near ')     THEN 'decreased'              ELSE NULL END fluctuation FROM COVID19_DATA ' at line 21
+Error Code: 1054. Unknown column 'new_vacc' in 'field list'
+
