@@ -278,7 +278,7 @@ ORDER BY embarked, survived;
 -- Compare the monthly cases and vaccination in 2020-10 ~ 2021-02, 
 -- and analyze whether the new cases were decreased or increased among Vaccination top 10.
 
--- mine: 접종탑10 + 월별확진과 백신접종 정보 => LAG() 사용하여 백신접종이 시작된 뒤로 전달에 비해 늘었는지 줄었는지 구하기
+-- mine: 접종 top10 CTE + 월별 확진과 백신접종 정보 => LAG() 사용하여 백신접종이 시작된 뒤로 전달에 비해 늘었는지 줄었는지 구하기
 WITH topvacc AS
 	( -- top 10 vaccinated nations
     SELECT countrycode, SUM(new_vaccinations)
@@ -317,4 +317,5 @@ near '!= 0) AND (lag(new_cases, 1) < new_cases)     THEN 'decreased'            
 Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 
 near ')     THEN 'decreased'              ELSE NULL END fluctuation FROM COVID19_DATA ' at line 21
 Error Code: 1054. Unknown column 'new_vacc' in 'field list'
+
 
