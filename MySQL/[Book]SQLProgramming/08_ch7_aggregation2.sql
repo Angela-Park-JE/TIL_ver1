@@ -1,4 +1,4 @@
-/*- Aggregation Query -*/
+/**- Aggregation Query -**/
 
 /*-- GROUP BY 
 SELECT *
@@ -70,6 +70,7 @@ NULL,'4517000'
 'ÀåÆí','1870657354798'
 NULL,'1870784163188'
 */
+
 -- this make a NULL with the rows which not have a data with grouped column. It seems uncomfortable.
 -- we use grouping(), it mark with '1' when it is aggregated data with GROUP BY.
 SELECT movie_type, SUM(sale_amt), GROUPING(movie_type)
@@ -83,6 +84,7 @@ NULL,'4517000','0'
 'ÀåÆí','1870657354798','0'
 NULL,'1870784163188','1'
 */
+
 -- And it can be expressed like this
 SELECT IF(GROUPING(movie_type) = 1, 'subtotal', movie_type) movie_type, SUM(sale_amt)
 FROM box_office
