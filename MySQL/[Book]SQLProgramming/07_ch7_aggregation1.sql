@@ -1,4 +1,4 @@
-/*- Aggregation Query -*/
+/**- Aggregation Query -**/
 
 /*-- GROUP BY 
 SELECT *
@@ -48,17 +48,17 @@ WHERE continent = 'EUROPE';
 
 /* USAGE */
 
-use practice;
+USE practice;
 
 -- release movies summary by years
 SELECT year(release_date) released_year, COUNT(*)
-FROM box_office
+FROM BOX_OFFICE
 GROUP BY year(release_date)
 ORDER BY 1 DESC;
 
 -- 2019 released movies: max, min sales by movie type and total sale_amt.
 SELECT movie_type, MAX(sale_amt), MIN(sale_amt), SUM(sale_amt)
-FROM box_office
+FROM BOX_OFFICE
 WHERE YEAR(release_date) = 2019
 GROUP BY movie_type
 ORDER BY 1;
@@ -71,17 +71,17 @@ NULL,'4417000','100000','4517000'
 
 -- sale_amt >= 100000000 , 2019 released movie count, sales: by quarter, by distributor 
 SELECT QUARTER(release_date) quarter, distributor, COUNT(DISTINCT movie_name) movies, SUM(sale_amt) total
-FROM box_office
+FROM BOX_OFFICE
 WHERE YEAR(release_date) = 2019 AND sale_amt >= 100000000
 GROUP BY quarter, distributor
 ORDER BY 1, 2;
 -- answer : use not null but result rows number is same
 SELECT QUARTER(release_date) 분기, distributor 배급사, COUNT(*) 영화편수, ROUND(SUM(sale_amt)/ 100000000) 매출_억원
-FROM box_office
+FROM BOX_OFFICE
 WHERE 1=1
-	AND EXTRACT(YEAR FROM release_date) = 2019
-    AND distributor IS NOT NULL
-    AND sale_amt >= 100000000
+  AND EXTRACT(YEAR FROM release_date) = 2019
+  AND distributor IS NOT NULL
+  AND sale_amt >= 100000000
 GROUP BY QUARTER(release_date), distributor
 ORDER BY 1, 2, 3;
 
@@ -89,6 +89,6 @@ ORDER BY 1, 2, 3;
 
 -- p.240 quiz : count the cities by country code in CITY table
 SELECT CountryCode, count(DISTINCT Name)
-FROM world.CITY
+FROM WORLD.CITY
 GROUP BY CountryCode;
 -- in CITY table, one row means one city so it can be just `COUNT(*)`.
