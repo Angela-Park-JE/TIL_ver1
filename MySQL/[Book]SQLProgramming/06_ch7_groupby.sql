@@ -1,4 +1,4 @@
-/*- Aggregation Query -*/
+/**- Aggregation Query -**/
 
 /*-- GROUP BY 
 SELECT *
