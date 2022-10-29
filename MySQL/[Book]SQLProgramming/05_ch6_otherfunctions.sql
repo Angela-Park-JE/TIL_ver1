@@ -1,3 +1,5 @@
+/**- FUNCTIONS -**/
+
 /*- Other FUNCTIONS -*/
 
 /*- converting type functions -*/
@@ -74,7 +76,7 @@ USE practice;
 SELECT years, ranks, movie_name, release_date, audience_num, ROUND(sale_amt / 100000000) AS sales
 FROM box_office
 WHERE year(release_date) = 2019
-	AND audience_num >= 5000000;
+  AND audience_num >= 5000000;
 /*
 '2019','1','±ØÇÑÁ÷¾÷','2019-01-23 00:00:00','16265618','1397'
 '2019','2','¾îº¥Á®½º: ¿£µå°ÔÀÓ','2019-04-24 00:00:00','13934592','1222'
@@ -89,10 +91,10 @@ WHERE year(release_date) = 2019
 */
 
 SELECT ranks, movie_name, DAYNAME(release_date), 
-	CASE WHEN QUARTER(release_date) IN (1, 2) THEN '상반기' ELSE '하반기' END CASE1
+	   CASE WHEN QUARTER(release_date) IN (1, 2) THEN '상반기' ELSE '하반기' END CASE1
 FROM box_office
 WHERE YEAR(release_date) = 2019
-	and ranks<= 10
+  AND ranks<= 10
 ORDER BY 1;
 /*
 '1','±ØÇÑÁ÷¾÷','Wednesday','상반기'
@@ -139,8 +141,9 @@ FROM practice.box_office;
 SELECT movie_name
 FROM practice.box_office
 WHERE movie_name IN (':');
+
 -- answer
 SELECT movie_name, release_date
 FROM practice.box_office
 WHERE Year(release_date) = 2019
-	AND INSTR(movie_name, ':')>0;
+  AND INSTR(movie_name, ':')>0;
