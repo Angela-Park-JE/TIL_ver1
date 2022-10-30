@@ -1,4 +1,4 @@
-/*- JOIN -*/
+ /**- JOIN -**/
 -- MUST know the 'join' columns name
 -- CAN 'join' more than two tables
 -- MUST state the table alias'
@@ -43,6 +43,7 @@ GROUP BY 1;
 'Oceania', '56'
 'Antarctica', '5' --> this means country table's row
 */
+
 -- more specific
 SELECT a.continent, COUNT(*) all_, COUNT(b.name) cities
 FROM country a LEFT JOIN city b ON a.code = b.countrycode
@@ -81,6 +82,7 @@ GROUP BY 1;
 'Oceania', '55', '55'
 'South America', '470', '470'
 */
+
 -- if want to see the 'Antarctica' (not in city table)
 SELECT b.continent, COUNT(*) all_, COUNT(a.name) cities
 FROM city a RIGHT OUTER JOIN country b ON a.countrycode = b.code
@@ -104,6 +106,7 @@ WHERE 1=1
   AND l.language is null 
   AND c.continent = 'Africa'
 GROUP BY c.name;				-- : 'British Indian Ocean Territory'
+
 -- results are same
 SELECT c.name, COUNT(l.language)
 FROM country c LEFT JOIN countrylanguage l ON l.countrycode = c.code
