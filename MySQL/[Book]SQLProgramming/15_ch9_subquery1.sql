@@ -1,4 +1,4 @@
-/*** SUBQUERY ***/
+/**- SUBQUERY -**/
 -- a query inside of a query
 -- independent SELECT sentence, and covered '( )'
 -- using for main query
@@ -29,10 +29,11 @@ SELECT a.dept_no, a.dept_name,
 		(SELECT b.emp_no
 		   FROM DEPT_MANAGER b
 		  WHERE b.dept_no = a.dept_no
-				AND SYSDATE() BETWEEN b.from_date AND b.to_date
+			AND SYSDATE() BETWEEN b.from_date AND b.to_date
 		) emp_no
 FROM DEPARTMENTS a
 ORDER BY 1;
+
 -- code 9-7: also can do with JOIN 
 -- but this need to use IFNULL because it can't show the case when the MANAGER isn't.
 SELECT a.dept_no, a.dept_name, b.emp_no
@@ -61,7 +62,7 @@ FROM DEPARTMENTS d,
 	(SELECT m.dept_no, m.emp_no, emp.first_name, emp.last_name
        FROM DEPT_MANAGER m, EMPLOYEES emp
 	  WHERE m.emp_no = emp.emp_no
-			AND SYSDATE() BETWEEN m.from_date AND m.to_date
+		AND SYSDATE() BETWEEN m.from_date AND m.to_date
 	) mng
 WHERE d.dept_no = mng.dept_no
 ORDER BY 1;
@@ -82,6 +83,7 @@ FROM DEPARTMENTS d RIGHT JOIN DEPT_EMP e ON d.dept_no = e.dept_no
 WHERE SYSDATE() BETWEEN e.from_date AND e.to_date
   AND SYSDATE() BETWEEN s.from_date AND s.to_date
 GROUP BY d.dept_name;
+
 -- code : dept_no, added COUNT employees
 SELECT a.dept_no, a.dept_name, COUNT(*) cnt, SUM(c.salary) sum_salary, AVG(c.salary) dept_avg
 FROM DEPARTMENTS a, DEPT_EMP b, SALARIES c
@@ -180,6 +182,7 @@ SELECT a.name, a.district, a.population, a.countrycode,
     WHERE a.countrycode = b.code
     ) countryname
 FROM CITY a;
+
 -- mine : I think mine is better ... 0_0 I make SCALAR subquery to derived subquery and join them using `LATERAL`
 -- so I can use all two columns.
 SELECT a.name, a.district, a.population, a.countrycode, c.*
@@ -189,6 +192,7 @@ FROM CITY a
     FROM COUNTRY b
     WHERE a.countrycode = b.code
     ) c;
+	
 -- answer : this method make SCALAR subquery's results to one value. 
 SELECT a.name, a.district, a.population,
 	(SELECT CONCAT(b.name, ' ', b.continent)
