@@ -45,7 +45,7 @@ SELECT col1, col2 FROM tbl2;
 '2', 'b'
 */
 
--- case3: UNION ALL : whether it is duplicates or not depends on all colums in SELECT state.
+-- case3: UNION ALL : whether it is duplicates or not, depends on all colums in SELECT state.
 SELECT col1 FROM tbl1 
 UNION ALL
 SELECT col1 FROM tbl2;
