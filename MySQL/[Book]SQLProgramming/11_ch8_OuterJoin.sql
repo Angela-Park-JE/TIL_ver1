@@ -19,7 +19,7 @@ WHERE ... ; */
 -- case1: numbers of city in each continent
 USE world;
 SELECT a.continent, COUNT(*)
-FROM country a JOIN city b ON a.code = b.countrycode
+FROM COUNTRY a JOIN CITY b ON a.code = b.countrycode
 GROUP BY 1;
 /*
 # continent, COUNT(*)
@@ -31,7 +31,7 @@ GROUP BY 1;
 'Oceania', '55'
 */
 SELECT a.continent, COUNT(*)
-FROM country a LEFT JOIN city b ON a.code = b.countrycode
+FROM COUNTRY a LEFT JOIN CITY b ON a.code = b.countrycode
 GROUP BY 1;
 /*
 # continent, COUNT(*)
@@ -46,7 +46,7 @@ GROUP BY 1;
 
 -- more specific
 SELECT a.continent, COUNT(*) all_, COUNT(b.name) cities
-FROM country a LEFT JOIN city b ON a.code = b.countrycode
+FROM COUNTRY a LEFT JOIN CITY b ON a.code = b.countrycode
 GROUP BY 1;
 /*
 # continent, all_, cities
@@ -71,7 +71,7 @@ WHERE ... ; */
 
 -- case1: previous case1 same structure but different
 SELECT a.continent, COUNT(*) all_, COUNT(b.name) cities
-FROM country a RIGHT JOIN city b ON a.code = b.countrycode
+FROM COUNTRY a RIGHT JOIN CITY b ON a.code = b.countrycode
 GROUP BY 1;
 /*
 # continent, all_, cities
@@ -85,7 +85,7 @@ GROUP BY 1;
 
 -- if want to see the 'Antarctica' (not in city table)
 SELECT b.continent, COUNT(*) all_, COUNT(a.name) cities
-FROM city a RIGHT OUTER JOIN country b ON a.countrycode = b.code
+FROM CITY a RIGHT OUTER JOIN COUNTRY b ON a.countrycode = b.code
 GROUP BY 1;
 /*
 # continent, all_, cities
@@ -101,7 +101,7 @@ GROUP BY 1;
 
 -- p.278 quiz
 SELECT c.name
-FROM countrylanguage l RIGHT JOIN country c ON l.countrycode = c.code
+FROM COUNTRYLANGUAGE l RIGHT JOIN COUNTRY c ON l.countrycode = c.code
 WHERE 1=1
   AND l.language is null 
   AND c.continent = 'Africa'
@@ -109,7 +109,7 @@ GROUP BY c.name;				-- : 'British Indian Ocean Territory'
 
 -- results are same
 SELECT c.name, COUNT(l.language)
-FROM country c LEFT JOIN countrylanguage l ON l.countrycode = c.code
+FROM COUNTRY c LEFT JOIN COUNTRYLANGUAGE l ON l.countrycode = c.code
 WHERE 1=1
   AND c.continent = 'Africa'
 GROUP BY c.name
