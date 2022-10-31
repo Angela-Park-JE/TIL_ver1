@@ -30,7 +30,7 @@ FROM EMPLOYEES e
 	INNER JOIN DEPT_MANAGER m ON e.emp_no = m.emp_no
     INNER JOIN DEPARTMENTS d ON m.dept_no = d.dept_no
 WHERE d.dept_name IN ('Marketing', 'Finance') !=0
-	AND SYSDATE() BETWEEN m.from_date AND m.to_date; -- managers at this point
+  AND SYSDATE() BETWEEN m.from_date AND m.to_date; -- managers at this point
 
 
 -- code 8-28 : at this point, manager's emp number of all department and department name
@@ -41,6 +41,7 @@ FROM EMPLOYEES e INNER JOIN DEPT_MANAGER m ON e.emp_no = m.emp_no
 WHERE 1=1
   AND SYSDATE() BETWEEN m.from_date AND m.to_date
 ORDER BY 1;
+
 -- answer : date columns, and in case of manager's absence
 SELECT d.dept_name, m.emp_no, m.from_date, m.to_date
 FROM DEPT_MANAGER m RIGHT JOIN DEPARTMENTS d ON  m.dept_no = d.dept_no
@@ -58,6 +59,7 @@ WHERE 1=1
   -- AND SYSDATE() BETWEEN IFNULL(m.from_date, SYSDATE()) AND IFNULL(m.to_date, SYSDATE())
   AND SYSDATE() BETWEEN IFNULL(e.from_date, SYSDATE()) AND IFNULL(e.to_date, SYSDATE())
 GROUP BY d.dept_name WITH ROLLUP;
+
 -- answer: results is right but... without ROLLUP XP
 -- and it doesn't need to IFNULL with 'date' because this needs only employees, excluding managers.
 SELECT d.dept_name, COUNT(*)
@@ -116,12 +118,14 @@ FROM DEPARTMENTS d NATURAL LEFT JOIN DEPT_MANAGER m
 				   NATURAL LEFT JOIN EMPLOYEES e
 WHERE 1=1
 	AND SYSDATE() BETWEEN IFNULL(m.from_date, SYSDATE()) AND IFNULL(m.to_date, SYSDATE());
+	
 -- Actually, this doesn't need to IFNULL in SELECT, like this:
 SELECT d.dept_name, m.emp_no, CONCAT(e.first_name, ' ', e.last_name) full_name, m.from_date, m.to_date
 FROM DEPARTMENTS d NATURAL LEFT JOIN DEPT_MANAGER m
 				   NATURAL LEFT JOIN EMPLOYEES e
 WHERE 1=1
 	AND SYSDATE() BETWEEN IFNULL(m.from_date, SYSDATE()) AND IFNULL(m.to_date, SYSDATE());
+	
 -- answer 
 -- centered the DEPT_MANAGER and attacht the tables right and left (DEPARTMENTS-DEPT_MANAGER-EMPLOYEES)
 SELECT d.dept_name, m.emp_no, CONCAT(e.first_name, ' ', e.last_name) full_name, m.from_date, m.to_date
@@ -153,17 +157,18 @@ FROM DEPARTMENTS d INNER JOIN DEPT_EMP e ON d.dept_no = e.dept_no
 				   INNER JOIN SALARIES s ON e.emp_no = s.emp_no
 WHERE d.dept_no = 'd007'
 GROUP BY e.emp_no;
+
 -- answer
 -- using from_date and to_date column make it show the right salary.
 -- and it doesn't need to DEPARTMENTS table because already DEPT_EMP/DEPT_MANAGER table has `dept_no`.
 SELECT 'managers' as 'position', m.emp_no, s.salary
 FROM DEPT_MANAGER m INNER JOIN SALARIES s ON m.emp_no = s.emp_no
 WHERE m.dept_no = 'd007'
-	AND SYSDATE() BETWEEN m.from_date AND m.to_date
-    AND SYSDATE() BETWEEN s.from_date AND s.to_date
+  AND SYSDATE() BETWEEN m.from_date AND m.to_date
+  AND SYSDATE() BETWEEN s.from_date AND s.to_date
 UNION
 SELECT 'employees', e.emp_no, s.salary
 FROM DEPT_EMP e INNER JOIN SALARIES s ON e.emp_no = s.emp_no
 WHERE e.dept_no = 'd007'
-	AND SYSDATE() BETWEEN e.from_date AND e.to_date
-    AND SYSDATE() BETWEEN s.from_date AND s.to_date;
+  AND SYSDATE() BETWEEN e.from_date AND e.to_date
+  AND SYSDATE() BETWEEN s.from_date AND s.to_date;
