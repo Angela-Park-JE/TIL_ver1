@@ -1,6 +1,6 @@
-/*** CTE ***/
+/**- CTE -**/
 -- CTE : Common Table Expression
--- = WITH : sentence, kind of subquery but it is stated in front of the main query.
+-- = WITH sentence : kind of subquery but it is stated in front of the main query.
 
 -- subquery can't refer the other subquery in derived subquery situation,
 -- but if use CTE, can do.
@@ -14,7 +14,7 @@ SELECT ...
 FROM cte1, cte2 ...
 WHERE ... ; */
 
--- code 11-1 :
+-- code 11-1 : using CTE like JOIN multiple tables
 USE practice;
 
 WITH MNG AS 
@@ -31,21 +31,22 @@ WHERE a.dept_no = b.dept_no
 ORDER BY 1;
 
 
--- code 11-2 : error, subquery can't refer the other subquery
+-- code 11-2 : error- the subquery can't refer the other subquery
 SELECT a.dep_no, a.dept_name, sal.emp_no, sal.salary
 FROM DEPARTEMENTS a,
-	(SELECT emp_no, dept_no FROM DEPT_MANAGER 
-		WHERE SYSDATE() BETWEEN from_date AND to_date) DEPT_MGR,
+	(SELECT emp_no, dept_no FROM DEPT_MANAGER 						-- making these subqueries to CTE in code 11-3
+		WHERE SYSDATE() BETWEEN from_date AND to_date) DEPT_MGR,	-- managers who work currently
     (SELECT a.emp_no, a.salary, b.dept_no FROM SALARIES a, DEPT_MGR b 
-		WHERE SYSDATE() BETWEEN a.from_date AND a.to_date 
-          AND a.emp_no = b.emp_no) SAL
+		WHERE SYSDATE() BETWEEN a.from_date AND a.to_date
+          AND a.emp_no = b.emp_no) SAL								-- managers salary information			
 WHERE a.dept_no = sal.dept_no;
+
 -- code 11-3 : alter the 11-2 using CTE
 WITH DEPT_MGR AS 
 		(SELECT emp_no, dept_no 
         FROM DEPT_MANAGER 
 		WHERE SYSDATE() BETWEEN from_date AND to_date),
-	SAL AS
+	 SAL AS
 		(SELECT a.emp_no, a.salary, b.dept_no FROM SALARIES a, DEPT_MGR b 
 		WHERE SYSDATE() BETWEEN a.from_date AND a.to_date 
           AND a.emp_no = b.emp_no)
@@ -55,7 +56,7 @@ FROM DEPARTMENTS a, SAL
 WHERE a.dept_no = sal.dept_no;
 
 -- code 11-4 : 9-13's subquery to CTE
-WITH TMP AS
+WITH TMP AS 		-- salary and total salary by department
 		(SELECT a.dept_no, a.dept_name, COUNT(*) cnt, SUM(c.salary) sum_salary
 			FROM DEPARTMENTS a, DEPT_EMP b, SALARIES c
 			WHERE a.dept_no = b.dept_no AND b.emp_no = c.emp_no
@@ -63,7 +64,7 @@ WITH TMP AS
 			  AND SYSDATE() BETWEEN c.from_date AND c.to_date
 			GROUP BY a.dept_no, a.dept_name
 			ORDER BY 1),
-	DEPT_AVG AS
+	DEPT_AVG AS 	-- average salary : refered to previous CTE 
 		(SELECT AVG(TMP.sum_salary) avg_sal			-- 193044765.5556
 		   FROM TMP)
 
@@ -71,10 +72,12 @@ SELECT dept_no, dept_name, sum_salary, avg_sal
 FROM TMP, DEPT_AVG;
 
 
+
 /* RECURSIVE QUERY with CTE */
 -- it refer to itself in query, so it repeat the subaggregate results until return the final result.
 -- using when making consecutive rows or writing hierarchical(계층형) query.
 -- CAN'T USE `GROUP BY` or `ORDER BY` in the part of referign itself.
+
 /* structure
 WITH RECURSIVE cte1 AS
 	(SELECT ... FROM ...       -- > first query
@@ -92,7 +95,8 @@ WITH RECURSIVE cte AS
 			UNION ALL
 		 SELECT n + 1 FROM cte WHERE n < 5  -- repeat the SELECT until the WHERE condition comes true.
          )
-SELECT * FROM cte;
+SELECT * 
+FROM cte;
 /*
 # n
 '1'
@@ -103,12 +107,14 @@ SELECT * FROM cte;
 */
 
 -- code 11-6 : released moives by release_date
+-- this showes only dates which is including in `release_date`
 SELECT DATE(release_date) dates, COUNT(*) 
-FROM box_office
+FROM BOX_OFFICE
 WHERE EXTRACT(YEAR_MONTH FROm release_date) = 201901
 GROUP BY 1
 ORDER BY 1;
--- code 11-7 : making other days which are not in `DATE(release_date)`
+
+-- code 11-7 : making other days in 2019 January which are not in `release_date`
 WITH RECURSIVE cte1 AS 
 	(
     SELECT MIN(DATE(release_date)) dates
@@ -121,7 +127,7 @@ WITH RECURSIVE cte1 AS
     )
 
 SELECT a.dates, COUNT(b.movie_name) cnt
-FROM cte1 a 
+FROM CTE1 a 
 	LEFT JOIN BOX_OFFICE b ON a.dates = b.release_date
 GROUP BY 1
 ORDER BY 1;
@@ -129,10 +135,10 @@ ORDER BY 1;
 
 -- writing hierarchical(계층형) query --
 
--- code 11-8 : example table
+-- code 11-8 : making example table
 -- 11-8
 USE practice;
-CREATE TABLE emp_hierarchy (
+CREATE TABLE EMP_HIERARCHY (
        employee_id   INT, 
        emp_name      VARCHAR(80),
        manager_id    INT,
@@ -162,20 +168,20 @@ INSERT INTO emp_hierarchy VALUES
 (206,'William Gietz',205,8300,'Accounting');
 
 SELECT *
-  FROM emp_hierarchy
+  FROM EMP_HIERARCHY
  ORDER BY 1; 
 
 -- code 11-9 : employees by level
 WITH RECURSIVE cte1 AS 
 	(
 	SELECT 1 level, employee_id, emp_name, CAST(employee_id AS CHAR(200)) path
-      FROM emp_hierarchy
-	 WHERE manager_id IS NULL	-- highest level of manager
-		UNION ALL
+      FROM EMP_HIERARCHY
+	 WHERE manager_id IS NULL	-- filtering highest level of manager
+	 UNION ALL
     SELECT level + 1, b.employee_id, b.emp_name, CONCAT(a.path, ',', b.employee_id)
       FROM cte1 a
-	INNER JOIN emp_hierarchy b ON a.employee_id = b.manager_id	
-			-- repeating part and if there is a repeat, plus 1 in `level` and add emp_no to `path`
+		   INNER JOIN EMP_HIERARCHY b ON a.employee_id = b.manager_id	
+			-- with repeating part and if there is a repeat, plus 1 in `level` and add emp_no to `path`
     )
 SELECT employee_id, emp_name, level, path, CONCAT(LPAD('', 2 * level, ' '), emp_name) hier_name -- indent as much as level
 FROM cte1
@@ -192,3 +198,15 @@ WITH RECURSIVE cte AS
     WHERE ADDDATE(dates, 1) <= '2021-12-31')
 SELECT *
 FROM cte;
+
+
+-- practice : recursive query- making dates cell until end of this year
+WITH RECURSIVE CTE1 AS
+	(SELECT DATE(SYSDATE()) dates
+	UNION ALL
+    SELECT ADDDATE(dates, 1) dates
+    FROM CTE1
+    WHERE YEAR(dates) = YEAR(SYSDATE())
+    )
+SELECT dates, DAYOFWEEK(dates), DAYNAME(dates) 
+FROM CTE1;
