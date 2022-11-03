@@ -1,4 +1,4 @@
-/*** Window Functions ***/
+/**- Window Functions -**/
 -- window : group of rows which is grouped by specific column values
 -- if use `group by`, the row number decreases.
 -- but if use window functions, we can maintain the row number and see the aggregated value.
@@ -9,13 +9,14 @@
 -- Window function MUST use `OVER` sentence
 -- PARTIION BY : this sets the aggregating group, but it don't short the rows.
 
--- code 11-10 :
+-- code 11-10 : when using only `group by`
 SELECT YEAR(release_date) years, SUM(sale_amt) sum_amt, AVG(sale_amt) avg_amt
 FROM BOX_OFFICE
 WHERE YEAR(release_date) >= 2018
   AND ranks <= 10
 GROUP BY 1 ORDER BY 1;
--- code 11-11 : using CTE, show each movies rank and the aggregated values. good but complex
+
+-- code 11-11 : when using CTE, show each movies rank and the aggregated values. good but complex
 WITH SUMMARY AS 
 	(SELECT YEAR(release_date) years, SUM(sale_amt) sum_amt, AVG(sale_amt) avg_amt
 	FROM BOX_OFFICE
@@ -27,7 +28,8 @@ SELECT b.years, a.ranks, a.movie_name, a.sale_amt, b.sum_amt, b.avg_amt
 FROM BOX_OFFICE a INNER JOIN SUMMARY b ON YEAR(a.release_date) = b.years
 WHERE a.ranks <= 10
 ORDER BY 1, 2;
--- code 11-12 : using window function
+
+-- code 11-12 : when using window function
 SELECT YEAR(release_date) years, ranks, movie_name, sale_amt,
 	   SUM(sale_amt) OVER (PARTITION BY YEAR(release_date)) sum_amt,
        AVG(sale_amt) OVER (PARTITION BY YEAR(release_date)) avg_amt
@@ -61,7 +63,8 @@ FROM EMP_HIERARCHY
 ORDER BY 3, 4 DESC;
 
 
--- RANK() : same scores are treated in the same rank but the next ranks are pushed back as the previous same scores' number.
+-- ranking by the value
+-- RANK() : same scores are treated in the same rank, but the next ranks are pushed back as the previous same scores' number.
 -- DENSE_RANK() : same scores are treated in the same rank and the next ranks are not pushed back, just the next number is allotted.
 -- PERCENT_RANK() : percentile rank
 
@@ -96,21 +99,21 @@ ORDER BY 3, 4 DESC;
 */
 
 
--- LAG(expr, n, default_value) : get the previous `expr` as `n`
--- LEAD(expr, n, default_value) : get the next `expr` as`n`
--- default `n` is 1, `default_value` set the value when the value is NULL, default is NULL.
+-- LAG(expr, n, default_value) : get the previous `expr` value as `n`
+-- LEAD(expr, n, default_value) : get the next `expr` value as`n`
+-- default `n` is 1, `default_value` set the value when the value is NULL(default is NULL).
 
 -- code 11-15 : lag or lead next man's salary in a department
 SELECT employee_id, emp_name, dept_name, salary, 
-		LAG(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC) lag_previous,
-        LEAD(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC) lead_next
+	   LAG(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC) lag_previous,
+       LEAD(salary) OVER (PARTITION BY dept_name ORDER BY salary DESC) lead_next
 FROM EMP_HIERARCHY
 ORDER BY 3, 4 DESC;
 
 -- code 11-16 : NULL -> 0
 SELECT employee_id, emp_name, dept_name, salary, 
-		LAG(salary, 1, 0) OVER (PARTITION BY dept_name ORDER BY salary DESC) lag_previous_higherman_salary,
-        LEAD(salary, 1, 0) OVER (PARTITION BY dept_name ORDER BY salary DESC) lead_next_lowerman_salary
+	   LAG(salary, 1, 0) OVER (PARTITION BY dept_name ORDER BY salary DESC) lag_previous_higherman_salary,
+       LEAD(salary, 1, 0) OVER (PARTITION BY dept_name ORDER BY salary DESC) lead_next_lowerman_salary
 FROM EMP_HIERARCHY
 ORDER BY 3, 4 DESC;
 /*
@@ -140,7 +143,7 @@ ORDER BY 3, 4 DESC;
 WITH BASIS AS
 		(
         SELECT YEAR(release_date) years, sale_amt,
-				LAG(sale_amt, 1, 0) OVER (ORDER BY YEAR(release_date)) lastyear_sale_amt
+			   LAG(sale_amt, 1, 0) OVER (ORDER BY YEAR(release_date)) lastyear_sale_amt
 		FROM BOX_OFFICE
         WHERE ranks = 1
         )
@@ -170,12 +173,12 @@ ORDER BY 1 DESC;
 
 
 -- CUME_DIST() : cumulative distribution value(누적 분포 값)
--- but in MySQL, (the values number under now row's number) / (all row number)
+-- but in MySQL, (the values number under now row's number) / (all row number which is in the partition)
 -- 'under' means all previous values by `ORDER BY`, in other words, the relative position in the group.
 
 -- code 11-19 :
 SELECT employee_id, emp_name, dept_name, salary,
-		CUME_DIST() OVER (PARTITION BY dept_name ORDER BY salary DESC) rates
+	   CUME_DIST() OVER (PARTITION BY dept_name ORDER BY salary DESC) rates
 FROM emp_hierarchy
 ORDER BY 3, 4 DESC;
 /*
@@ -202,12 +205,12 @@ ORDER BY 3, 4 DESC;
 */
 
 
--- NTILE(n) : divide the rows in a group to `n`. 
--- 'Which bucket should we put it in if we divide the rows?'
+-- NTILE(n) : divide the rows to `n` by the value in the partitioned group. 
+-- 'Which bucket should we put it in if we divide the rows to `n`?'
 
 -- code 11-20 : give a grades in each department by salary
 SELECT employee_id, emp_name, dept_name, salary,
-		NTILE(3) OVER (PARTITION BY dept_name ORDER BY salary DESC) ntiles
+	   NTILE(3) OVER (PARTITION BY dept_name ORDER BY salary DESC) ntiles
 FROM EMP_HIERARCHY
 ORDER BY 3, 4 DESC;
 /*
