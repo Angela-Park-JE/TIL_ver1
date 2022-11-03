@@ -1,9 +1,10 @@
 /**- VIEW -**/
--- a temporary table from a saved query
--- not saving table, save a query. so look a view, it bring the result of the query.
--- USE in `FROM` sentence like a table.
+-- a temporary table from 'saved' query
+-- not saving table, save a query. so look a view, it bring the result from 'saved' query.
+-- USE in `FROM` sentence like a table to bring the view.
 -- CAN be composed with CTE.
 -- CAN refer other views.
+-- Good at handling calculation with variable values(values which is changing)
 
 -- CREATE OR REPLACE : create a view / alter a view if there existing view in the same name
 /* structure
