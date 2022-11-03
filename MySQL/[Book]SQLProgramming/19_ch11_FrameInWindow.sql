@@ -1,4 +1,4 @@
-/*** Window Functions ***/
+/**- Window Functions -**/
 -- window : group of rows which is grouped by specific column values
 -- if use `group by`, the row number decreases.
 -- but if use window functions, we can maintain the row number and see the aggregated value.
@@ -10,7 +10,7 @@
 
 
 
-/*** FRAME sentence (프레임 절) ***/
+/*- FRAME sentence (프레임 절) -*/
 -- ADJUST the range of aggregation with Window Functions.
 -- frame : partitioned part(subaggregate) in `PARTITION BY` group
 /* structure : {ROWS or RANGE} BETWEEN 'frame_start' AND 'frame_end' */
@@ -24,6 +24,7 @@
 -- UNBOUNDED FOLLOWING : last row in partition
 -- n PRECEDING : {ROWS}: n'th previous row in current row | {RANGE}: a row which is (current row - n)
 -- n FOLLOWING : {ROWS}: n'th next row in current row | {RANGE}: a row which is (current row + n)
+
 
 USE practice;
 -- code 11-21 : partial sum using FRAME sentence
@@ -122,6 +123,7 @@ ORDER BY 3, 4;
 '103', 'Alexander Hunold', 'IT', '9000', '9000', '9000'
 */
 
+
 -- NTH_VALUE()
 -- code 11-25 : 
 SELECT employee_id, emp_name, dept_name, salary,
@@ -169,6 +171,7 @@ WHERE dept_name IN ('IT', 'Finance')
 WINDOW wa AS (PARTITION BY dept_name ORDER BY salary DESC
 			  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
 ORDER BY 3, 4;
+
 
 
 -- p.433 quiz : Among the top 10 and 2019 released movies, Show rank, name, sales, total sales in BOX_OFFICE table, order by sales.
