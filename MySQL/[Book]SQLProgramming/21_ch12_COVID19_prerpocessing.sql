@@ -92,13 +92,14 @@ UPDATE COVID19_DATA
 -- If calculating with NULL, the results is NULL. So use '+'. 
 -- SUM() can't be used because it calculates except NULL.
 WITH null_check1 AS
-	(SELECT population + population_density + median_age + aged_65_older + aged_70_older + hospital_beds_per_thousand AS plus_col
-    FROM COVID19_COUNTRY
-    ),
+		(SELECT population + population_density + median_age + aged_65_older + aged_70_older + hospital_beds_per_thousand AS plus_col
+		FROM COVID19_COUNTRY
+		),
     null_check2 AS
-    (SELECT CASE WHEN plus_col IS NULL THEN 'NULL' ELSE 'NOT NULL' END chk
-    FROM null_check1
-    )
+		(SELECT CASE WHEN plus_col IS NULL THEN 'NULL' ELSE 'NOT NULL' END chk
+		FROM null_check1
+		)
+
 SELECT chk, COUNT(*)
 FROM null_check2
 GROUP BY chk;
