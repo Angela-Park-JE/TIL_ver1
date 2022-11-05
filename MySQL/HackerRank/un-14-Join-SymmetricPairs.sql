@@ -31,6 +31,26 @@ FROM MAIN_CTE
 WHERE x1 <= y1;
 
 
+"""좋은 답"""
+/*- MSSQL, MySQL by.vvk78 : 메인쿼리에서 아예 같은 것을 짝지어 놓는 것이 내가 하고싶었던 방식인데, HAVING 이 잘 이해가 가지 않아서 가져왔다.
+    HAVING 절이 없을 때는 모든 데이터를 가져오게 되는데,
+    `COUNT(f1.X)>1` 여기서 x=y인 데이터를 가져오고,
+    `f1.X<f1.Y` 여기서는 서로짝인 것들 중 중복될 수 있는 row들을 거른다.
+    (his explanation)
+    The criteria in the having clause allows us to prevent duplication in our output while still achieving our goal of finding mirrored pairs. 
+    We have to treat our pairs where f1.x = f1.y and f1.x <> f1.y differently to capture both. 
+    The first criteria handles pairs where f1.x = f1.y and the 2nd criteria handles pairs where f1.x <> f1.y, which is why the or operator is used.
+    The first part captures records where f1.x = f1.y. The 'count(f1.x) > 1' requires there to be at least two records of a mirrored pair to be pulled through. 
+    Without this a pair would simply match with itself (since it's already it's own mirrored pair) and be pulled through incorrectly when you join the table on itself.
+    The 2nd part matches the remaining mirrored pairs. It's important to note that for this challenge, the mirrored match of (f1.x,f1.y) is considered a duplicate and excluded from the final output. 
+    You can see this in the sample output where (20, 21) is outputted, but not (21,20). The 'or f1.x < f1.y' criteria allows us to pull all those pairs where f1.x does not equal f1.y, but where f1.x is also less than f1.y so we don't end up with the mirrored paired duplicate.-*/
+SELECT f1.X, f1.Y FROM Functions f1
+INNER JOIN Functions f2 ON f1.X=f2.Y AND f1.Y=f2.X
+GROUP BY f1.X, f1.Y
+HAVING COUNT(f1.X)>1 or f1.X<f1.Y
+ORDER BY f1.X 
+
+
 
 """오답노트"""
 
