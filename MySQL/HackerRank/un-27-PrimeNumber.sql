@@ -7,9 +7,13 @@ For example, the output for all prime numbers <= 10 would be:
 `2&3&5&7`
 """
 
-"""답을 보고 배우는 git"""
 
-/*- MySql by.bvsenthil : RECURSIVE CTE를 사용하고 싶었던, 내가 원하는 풀이에 가장 가깝다.-*/
+"""답을 보고 배우는 git"""
+-- 도저히 풀지 못하겠어서 알아보던 중 배울만한 답들을 가져왔다.
+
+
+/*- MySql by.bvsenthil : RECURSIVE CTE를 사용하고 싶었던, 내가 원하는 풀이에 가장 가깝다. 
+	WHERE 부분이 가장 어려웠다. WHERE NOT EXISTS 를 활용하는 것도 잊고 있었고.-*/
 #select all the numbers till 1000 in the tblnums
 with recursive tblnums
 as (
@@ -27,7 +31,7 @@ where not exists -- WHERE 절이 이 부분이 핵심
 	where t2.nums <= tt.nums/2 and mod(tt.nums,t2.nums)=0)  
 	
 
-/*- MySql by.Popuko : 도저히 풀지 못하겠어서 알아보던 중 신기한 풀이 *-/
+/*- MySql by.Popuko : 상당히 신기한 풀이 -*/
 delimiter //
 create procedure Print_Prime()
 begin
@@ -54,3 +58,23 @@ begin
 end//
 delimiter ;
 call Print_Prime();
+
+
+/*- MySql by.DipS91 : 변수 정의를 활용해서 풀이한 방법인데 아직 내가 이해하기에는 부족하다.-*/
+SELECT GROUP_CONCAT(NUMB SEPARATOR '&')
+FROM (
+    SELECT @num:=@num+1 as NUMB FROM
+    information_schema.tables t1,
+    information_schema.tables t2,
+    (SELECT @num:=1) tmp
+) tempNum
+WHERE NUMB<=1000 AND NOT EXISTS(
+		SELECT * FROM (
+			SELECT @nu:=@nu+1 as NUMA FROM
+			    information_schema.tables t1,
+			    information_schema.tables t2,
+			    (SELECT @nu:=1) tmp1
+			    LIMIT 1000
+			) tatata
+		WHERE FLOOR(NUMB/NUMA)=(NUMB/NUMA) AND NUMA<NUMB AND NUMA>1
+	)
