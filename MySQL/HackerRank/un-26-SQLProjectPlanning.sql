@@ -107,3 +107,26 @@ SELECT p.task_id, p.start_date,
         END next_end_date
 FROM PROJECTS p;
 
+
+/*- MySQL : 2022.11.06  시간이 지나고 도전해보았으나 비슷한 난관에 부딪힌 듯 하다 -*/ 
+WITH CTE_1 AS
+    (
+    SELECT task_id,
+           LAG(end_date, 1) OVER (ORDER BY start_date) lagged_ed,
+           start_date sd, 
+           end_date ed,
+           LEAD(start_date, 1) OVER (ORDER BY start_date) leaded_sd
+    FROM PROJECTS 
+    ORDER BY start_date, task_id
+    ),
+     CTE_2 AS
+    (
+    SELECT task_id, lagged_ed, sd, ed, leaded_sd
+    FROM CTE_1
+    WHERE (lagged_ed != sd) -- project opening
+       OR (leaded_sd != ed) -- project ending
+       OR sd = (SELECT MIN(start_date) FROM PROJECTS) -- data first row
+    )
+
+SELECT *
+FROM CTE_2;
