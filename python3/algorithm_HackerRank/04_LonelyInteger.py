@@ -11,5 +11,13 @@ def lonelyinteger(a):
         if v < 2:
             print(k)
 
-
-def 
+""" other ways, but it return `None` too.. """
+def lonelyinteger(a):
+    ar = list(a)
+    zeros = [0] * n
+    dic = dict(zip(ar, zeros)) 
+    for i in ar:
+        dic[i] = dic[i] + 1
+    for k, v in dic.items():
+        if v < 2:
+            print(k) 
