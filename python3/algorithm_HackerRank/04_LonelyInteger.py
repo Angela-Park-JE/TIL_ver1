@@ -1,3 +1,8 @@
+"""
+Prepare> Interview Preparation Kits> 1 Week Preparation Kit> Day 2> Lonely Integer
+https://www.hackerrank.com/challenges/one-week-preparation-kit-lonely-integer/problem
+"""
+
 """ what I thought first, but it return `None` """
 
 def lonelyinteger(a):
