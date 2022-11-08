@@ -38,3 +38,15 @@ def lonelyinteger(a):
     for k, v in dic.items():
         if v < 2:
             print(k) 
+
+""" used searching by `if` but... `None` too. """
+def lonelyinteger(a):
+    dic = dict()
+    for i in a:
+        if i not in dic.keys():
+            dic[i] = 1
+        else:
+            dic[i] = dic[i] +1
+    for k, v in dic.items():
+        if v < 2:
+            print(k)
