@@ -15,8 +15,40 @@ Given an array of integers, where all elements but one occur twice, find the uni
   The second line contains `n` space-separated integers that describe the values in `a`.
 """
 
-""" what I thought first, but it return `None` """
+#!/bin/python3
+import math
+import os
+import random
+import re
+import sys
 
+# `list`.count(`elements`) 
+def lonelyinteger(a):
+    for i in a:
+       times= a.count(i)
+       if times ==1:
+        return i
+    return
+
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input().strip())
+
+    a = list(map(int, input().rstrip().split()))
+
+    result = lonelyinteger(a)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+
+
+"""오답노트"""
+
+""" what I thought first, but it return `None` """
 def lonelyinteger(a):
     ar = list(a)
     dic = dict.fromkeys(ar)
