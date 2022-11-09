@@ -279,7 +279,9 @@ ORDER BY embarked, survived;
 -- and analyze whether the new cases were decreased or increased among Vaccination top 10.
 
 -- mine: 접종 top10 CTE + 월별 확진과 백신접종 정보 => LAG() 사용하여 백신접종이 시작된 뒤로 전달에 비해 늘었는지 줄었는지 구하기
-WITH topvacc AS
+-- first, I get the top vaccination countries (CTE `TOPVACC`)
+-- and I got the amount of cases and vaccinations after starting vaccination
+WITH TOPVACC AS
 	( -- top 10 vaccinated nations
     SELECT countrycode, SUM(new_vaccinations)
     FROM COVID19_DATA
@@ -287,35 +289,46 @@ WITH topvacc AS
     ORDER BY 2 DESC
     LIMIT 10
     ),
-     mthvacc AS
-     ( -- monthly vaccination and cases 
+     MONTHLYVACC AS
+     ( -- monthly vaccination and cases : 
+	   -- I get the exact 'vaccination starting date' from the dataset directly, not using the given date(2020-12) from the quiz.
      SELECT EXTRACT(YEAR_MONTH FROM c.issue_date) months, c.countrycode, SUM(c.cases) new_cases, SUM(c.new_vaccinations) new_vaccinations
-	 FROM COVID19_DATA c, topvacc cte1
+	 FROM COVID19_DATA c, TOPVACC cte1
 	 WHERE 1 = 1
-		   AND c.countrycode = cte1.countrycode
-		   AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= (SELECT MIN(EXTRACT(YEAR_MONTH FROM issue_date)) FROM COVID19_DATA WHERE new_vaccinations > 0) -- start of vaccination
+	   AND c.countrycode = cte1.countrycode
+	   AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= (SELECT MIN(EXTRACT(YEAR_MONTH FROM issue_date)) FROM COVID19_DATA WHERE new_vaccinations > 0) -- start of vaccination
 	 GROUP BY 1, 2
 	 ORDER BY 2, 1
      )
-     
-SELECT EXTRACT(YEAR_MONTH FROM c.issue_date) months, c.countrycode, cte2.new_cases, cte2.new_vaccinations,
-	   CASE WHEN (LAG(cte2.new_vacc) OVER (PARTITION BY c.countrycode) != 0) 
-			 AND (LAG(cte2.new_cases) OVER (PARTITION BY c.countrycode) != 0) < new_cases 
-			THEN 'decreased' 
-            ELSE NULL END fluctuation
-FROM COVID19_DATA c, mthvacc cte2
-WHERE 1 = 1
-	  AND c.countrycode = cte2.countrycode
-	  AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= 202010
-GROUP BY 1, 2
-ORDER BY 2, 1;
+-- but the quiz require that the data since 2020-10, not the vaccination starting month(2020-12).
+-- so I got the data after 2020-10.
+WITH TOPVACC AS
+	( -- top 10 vaccinated nations
+    SELECT countrycode, SUM(new_vaccinations)
+    FROM COVID19_DATA
+    GROUP BY 1
+    ORDER BY 2 DESC
+    LIMIT 10
+    ),
+     MONTHLYVACC AS
+     ( -- monthly vaccination and cases
+     SELECT EXTRACT(YEAR_MONTH FROM c.issue_date) months, c.countrycode, 
+			SUM(c.cases) new_cases, 
+            LAG(SUM(c.cases)) OVER (PARTITION BY c.countrycode ORDER BY EXTRACT(YEAR_MONTH FROM c.issue_date)) pre_month_new_cases,
+            SUM(c.new_vaccinations) new_vaccinations,
+            LAG(SUM(c.new_vaccinations)) OVER (PARTITION BY c.countrycode ORDER BY EXTRACT(YEAR_MONTH FROM c.issue_date)) pre_month_vaccination
+	 FROM COVID19_DATA c, TOPVACC cte1
+	 WHERE 1 = 1
+	   AND c.countrycode = cte1.countrycode
+	   AND EXTRACT(YEAR_MONTH FROM c.issue_date) >= 202010
+	 GROUP BY 1, 2
+	 ORDER BY 2, 1
+     )
 
-
-Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 
-near '!= 0) AND (lag(new_cases, 1) < new_cases)     THEN 'decreased'              ELSE' at line 21
-
-Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use 
-near ')     THEN 'decreased'              ELSE NULL END fluctuation FROM COVID19_DATA ' at line 21
-Error Code: 1054. Unknown column 'new_vacc' in 'field list'
-
-
+SELECT c.countryname, cte2.months, cte2.new_cases, cte2.pre_month_new_cases, cte2.new_vaccinations,
+		-- 'Increased' or 'Decreased' state column
+	   CASE WHEN cte2.new_vaccinations >0 AND cte2.new_cases >= cte2.pre_month_new_cases THEN 'Increased' 
+			WHEN cte2.new_vaccinations >0 AND cte2.new_cases < cte2.pre_month_new_cases THEN 'Decreased'
+			ELSE NULL END case_state
+FROM MONTHLYVACC cte2 JOIN COVID19_COUNTRY c ON cte2.countrycode = c.countrycode
+ORDER BY 1, 2;
