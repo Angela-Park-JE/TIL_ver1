@@ -89,7 +89,7 @@ def diagonalDifference(arr):
     left, right = 0, 0
     for i in range(n):
         left += arr[i][i]
-        right += arr[i][(n - 1) - i]
+        right += arr[i][(n - 1) - i]  # arr[i][-i-1]로 한 풀이도 있었다.
     return abs(left - right)
 
 # by. jleeee
