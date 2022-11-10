@@ -37,10 +37,9 @@ https://www.hackerrank.com/challenges/one-week-preparation-kit-countingsort1/pro
   - int[100]: a frequency array
 """
 
-# Don't worry about the explanation. The longer words, the simpler problem.
+# Don't worry about the explanation. The longer words, the simpler problem. 
 
 #!/bin/python3
-
 import math
 import os
 import random
@@ -48,15 +47,16 @@ import re
 import sys
 
 
-
 def countingSort(arr):
-  # write your code
-    range_arr = range(0, n, 1)    
-    dic_arr = dict.fromkeys(range_arr, 0)  # can switch like this : dic_arr = {i : 0 for i in arr_range}
+    # write your code
+    # n is numbers, and elements is 0~99.
+    range_ele = range(0, 100, 1)
+    dic_arr = dict.fromkeys(range_ele, 0)  # dic_arr = {i : 0 for i in arr_range}
     for j in arr:
         dic_arr[j] = dic_arr[j] + 1
     return dic_arr.values()
 
+  
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
