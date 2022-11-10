@@ -40,7 +40,9 @@ https://www.hackerrank.com/challenges/one-week-preparation-kit-countingsort1/pro
 # Don't worry about the explanation. The longer words, the simpler problem. 
 # 문제를 읽으며 우려했던것과 달리, 다음날 앉아서 막상 보니 어렵지 않게 풀었다.
 # n의 역할에 대해 잠시 헷갈렸으나 바로 어디서 틀렸는지 확인하고 해결.
-# 딕셔너리를 이용하는 방법이다. 요소가 숫자가 아닐 때에도-인덱스를 그대로 이용할 수 없는 상황- 사용할 수 있다.
+# 딕셔너리를 이용하는 방법이다. 
+# 여기서는 범위 내에 한번도 등장하지 않는 숫자들도 세어야 하기 때문에 range를 사용하지만, 
+# range만 수정하면(주석) 요소가 숫자가 아닐 때에도-인덱스를 그대로 이용할 수 없는 상황- 사용할 수 있다.
 
 
 #!/bin/python3
@@ -54,10 +56,13 @@ import sys
 def countingSort(arr):
     # n is numbers, and elements is 0~99.
     range_ele = range(0, 100, 1)
-    dic_arr = dict.fromkeys(range_ele, 0)  # can switch like this: dic_arr = {i : 0 for i in arr_range}
+      # this range can be switched like this: range_ele = arr.list()
+    dic_arr = dict.fromkeys(range_ele, 0)  
+      # we can switch like this: dic_arr = {i : 0 for i in range_ele}
     for j in arr:
         dic_arr[j] = dic_arr[j] + 1
     return dic_arr.values()
+
 
   
 if __name__ == '__main__':
