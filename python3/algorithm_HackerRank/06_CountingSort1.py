@@ -38,6 +38,10 @@ https://www.hackerrank.com/challenges/one-week-preparation-kit-countingsort1/pro
 """
 
 # Don't worry about the explanation. The longer words, the simpler problem. 
+# 문제를 읽으며 우려했던것과 달리, 다음날 앉아서 막상 보니 어렵지 않게 풀었다.
+# n의 역할에 대해 잠시 헷갈렸으나 바로 어디서 틀렸는지 확인하고 해결.
+# 딕셔너리를 이용하는 방법이다. 요소가 숫자가 아닐 때에도-인덱스를 그대로 이용할 수 없는 상황- 사용할 수 있다.
+
 
 #!/bin/python3
 import math
@@ -69,3 +73,25 @@ if __name__ == '__main__':
     fptr.write('\n')
 
     fptr.close()
+
+    
+""" 다른 풀이들 """
+
+# by.bmacho
+# 인덱스를 요소 그대로 이용할 수 있는 점을 착안하여 0으로 된 리스트를 만들어놓고 사용
+# 매우 간단하게 해결할 수 있다는 장점이 있지만 숫자가 아닌 인덱스의 경우 어렵다.
+def countingSort(arr):
+    sol=[0]*100  # creates an array filled with 0s
+    for a in arr : 
+        sol[a] += 1
+    return sol
+
+
+# by.kartheekanand
+# 리스트 컴프리헨션으로 count()를 하는 방식이다.
+# if문으로 결점을 검사할 수도 있도록 되어있다. 어차피 숫자 어레이의 길이는 n과 같고 즉 그것은 len(arr)과 같기 때문에 간단한 방식인듯.
+# 리스트 컴프리헨션이 아직도 익숙하지 않기 때문에 신기한 풀이.
+def countingSort(arr):
+  # Write your code here
+  a=[ arr.count(i) for i in range(len(arr)) if i>=0 and i<100 ]
+  return a
