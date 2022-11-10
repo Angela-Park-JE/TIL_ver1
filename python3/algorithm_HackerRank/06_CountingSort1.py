@@ -48,10 +48,9 @@ import sys
 
 
 def countingSort(arr):
-    # write your code
     # n is numbers, and elements is 0~99.
     range_ele = range(0, 100, 1)
-    dic_arr = dict.fromkeys(range_ele, 0)  # dic_arr = {i : 0 for i in arr_range}
+    dic_arr = dict.fromkeys(range_ele, 0)  # can switch like this: dic_arr = {i : 0 for i in arr_range}
     for j in arr:
         dic_arr[j] = dic_arr[j] + 1
     return dic_arr.values()
