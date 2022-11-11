@@ -9,6 +9,7 @@ Order your output by ascending company_code.
 """
 
 /*- MySql, Oracle : I was right but I wandered over. I just forgot to sort the result. I thought that mine was wrong X( -*/
+--  there's just 4 problem to the end of solving SQL in HackerRank!
 
 -- 최종
 SELECT a.company_code, b.founder,
@@ -23,7 +24,6 @@ ORDER BY a.company_code;
 
 
 """오답노트"""
--- 내가 해커랭크에서 풀지 않은 문제가 6개 이하라는 것에 아주 약간의 위안을 얻었다 
 
 -- 1. Misunderstanding : 한 명 아래의 사람들을 세도록 한 후 구조를 구하는 줄 알았다. 그래서 사용했던 부분, 하지만 코드가 일하지 않았다.
     -- COUNT(a.lead_manager_code) OVER (PARTITION BY a.company_code),
