@@ -41,7 +41,6 @@ having count(n1.num)=2
 order by 1;
 
 
-
 """오답노트"""
 -- 일부 소수의 배수를 지워놓고 시작하려고 했으나, 이것을 반복적으로 하기 위해 함수를 활용하여 recursive cte를 만들면 어떨까 했다. 
 -- 미완성이고, @같이 실패...
@@ -72,35 +71,25 @@ WITH RECURSIVE RE_CTE AS (
      SELECT n + 1 FROM RE_CTE WHERE n< 1000
     )
     , CTE_2 AS (    -- delete 2's multiple
-     SELECT n
-     FROM RE_CTE
-     WHERE (n%2 != 0) 
+     SELECT n FROM RE_CTE WHERE (n%2 != 0) 
     )
     , CTE_3 AS (   -- delete 3's multiple
-     SELECT n
-     FROM CTE_2
-     WHERE (n%3 != 0) 
+     SELECT n FROM CTE_2 WHERE (n%3 != 0) 
     )
     , CTE_5 AS (   -- delete 5's multiple
-     SELECT n
-     FROM CTE_3
-     WHERE (n%5 != 0) 
+     SELECT n FROM CTE_3 WHERE (n%5 != 0) 
     )
     , CTE_7 AS (   -- delete 7's multiple
-     SELECT n
-     FROM CTE_5
-     WHERE (n%7 != 0)
+     SELECT n FROM CTE_5 WHERE (n%7 != 0)
     )
     , CTE_ AS (
-     SELECT n
-     FROM CTE_7
-     WHERE 
+     SELECT n FROM CTE_7
+     WHERE ...........
     )
 
 SELECT CASE WHEN a.n%b.n = 0 
 FROM 
 WHERE n**2 <= 1000
-
 
 
 """답을 보고 배우는 git"""
