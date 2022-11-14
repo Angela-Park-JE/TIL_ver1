@@ -18,9 +18,9 @@ WITH RECURSIVE RE_CTE AS
     (
     SELECT n1.num nums
     FROM RE_CTE n1, RE_CTE n2
-    WHERE mod(n1.num,n2.num)=0
+    WHERE MOD(n1.num,n2.num)=0
     GROUP BY n1.num
-    HAVING count(n1.num)=2
+    HAVING COUNT(n1.num)=2
     ORDER BY 1
     )
 
@@ -44,26 +44,6 @@ order by 1;
 """오답노트"""
 -- 일부 소수의 배수를 지워놓고 시작하려고 했으나, 이것을 반복적으로 하기 위해 함수를 활용하여 recursive cte를 만들면 어떨까 했다. 
 -- 미완성이고, @같이 실패...
-CREATE FUNCTION function1 (
-    num1 DOUBLE,
-    num2 DOUBLE
-    ) RETURNS DOUBLE
-BEGIN
-    DECLARE divs DOUBLE;
-    DECLARE remains DOUBLE;
-    DECLARE squares DOUBLE; -- 변수 선언
-    
-    SELECT num1/num2
-      INTO divs;
-    SELECT num1%num2
-      INTO remains;
-    SELECT SQRT(num1)
-      INTO squares; -- 여기까지 정의하다가 두었음 아래 함수 알고리즘은 짜지 
-    
---     SET RETURNS = ;
-
---     RETURN ... ;
--- END
 
 WITH RECURSIVE RE_CTE AS (
      SELECT 1 AS n 
@@ -93,7 +73,7 @@ WHERE n**2 <= 1000
 
 
 """답을 보고 배우는 git"""
--- 도저히 풀지 못하겠어서 알아보던 중 배울만한 답들을 찾아본 적이 있다.
+-- 도저히 풀지 못하겠어서 알아보던 중 배울만한 답들을 찾아본 적이 있었다.
 
 /*- MySql by.bvsenthil : RECURSIVE CTE를 사용하고 싶었던, 내가 원하는 풀이에 가장 가깝다. 
 	WHERE 부분이 가장 어려웠다. WHERE NOT EXISTS 를 활용하는 것도 잊고 있었고.-*/
@@ -108,13 +88,13 @@ as (
 	
 select group_concat(tt.nums order by tt.nums separator '&')  as nums
 from tblnums tt
-where not exists -- WHERE 절이 이 부분이 핵심
+where not exists 		-- WHERE 절이 이 부분이 핵심
 	#the num should not be divisible by any number less than it
 	( select 1 from tblnums t2 
 	where t2.nums <= tt.nums/2 and mod(tt.nums,t2.nums)=0)  
 	
 
-/*- MySql by.Popuko : 상당히 신기한 풀이. 실제로 함수를 정의하여 하려고 했던 내 시도가 향했던 방향이다. -*/
+/*- MySql by.Popuko : 상당히 신기한 풀이. 실제로 함수를 정의하여 하려고 했었을 때 만들 수 있었다면 이렇게 만들지 않았을까. -*/
 delimiter //
 create procedure Print_Prime()
 begin
