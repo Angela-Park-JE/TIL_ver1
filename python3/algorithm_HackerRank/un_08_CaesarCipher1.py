@@ -99,3 +99,18 @@ if __name__ == '__main__':
     # fptr.write(result + '\n')
     fptr.write(result)
     fptr.close()
+
+
+""" 다른 해답 """
+
+# chr()를 사용한 답들이 굉장히 많았다.
+
+# by.tuo20482 : chr() 나 ord()를 사용하지 않은 답이라고 설명했다. 명답이다. 내가 하고싶었던 그대로인데...
+def caesarCipher(s, k):
+    k %= 26
+    lower = "abcdefghijklmnopqrstuvwxyz"
+    upper = lower.upper()
+    key = dict(zip(lower, lower[k:] + lower[:k])) | dict(zip(upper, upper[k:] + upper[:k]))
+    return s.translate(s.maketrans(key))
+
+  
