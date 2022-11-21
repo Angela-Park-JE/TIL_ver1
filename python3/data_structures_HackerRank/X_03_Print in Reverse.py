@@ -11,11 +11,12 @@ If the given list is empty, do not print anything.
 
 """현답들"""
 
-# by.iambanker 
+# by.iambanker : recursive solution
 def ReversePrint(head):
     if head:
         ReversePrint(head.next)
         print(head.data)
+
 
 # by.AffineStructure
 def ReversePrint(head):
@@ -28,6 +29,7 @@ def ReversePrint(head):
             head = head.next
         while stack:
             print(stack.pop())
+
 
 # by.khoai345678
 # recursive python solution
@@ -47,7 +49,7 @@ def reversePrint(llist):
         print(_)
 
 
-# by.tameem1361
+# by.tameem1361 : alike with `by.AffineStructure` but little different
 def reversePrint(llist):
     head=llist
     if llist is None:
@@ -59,4 +61,3 @@ def reversePrint(llist):
             head=head.next
         for i in arr1:
             print(i)
-
