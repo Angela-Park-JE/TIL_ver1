@@ -1,15 +1,14 @@
-""" 22.12.07
+""" 
+22.12.07
 Prepare> Artificial Intelligence> Bot Building> Bot saves princess
 https://www.hackerrank.com/challenges/saveprincess/problem
 Princess Peach is trapped in one of the four corners of a square grid. 
 You are in the center of the grid and can move one step at a time in any of the four directions. Can you rescue the princess?
-
 * Input format
 The first line contains an odd integer N (3 <= N < 100) denoting the size of the grid. 
 This is followed by an NxN grid. Each cell is denoted by '-' (ascii value: 45). 
-The bot position is denoted by 'm' and the princess position is denoted by 'p'. Grid is indexed using Matrix Convention
-
-*Output format
+The bot position is denoted by 'm' and the princess position is denoted by 'p'. Grid is indexed using Matrix Convention(https://www.hackerrank.com/scoring/board-convention).
+* Output format
 Print out the moves you will take to rescue the princess in one go. The moves must be separated by '\n', a newline. 
 The valid moves are LEFT or RIGHT or UP or DOWN.
 
@@ -27,9 +26,10 @@ LEFT
 
 """
 
+
 # 생각한대로 짜니 해결방식 자체는 문제가 없었으나 'DOWN'등의 프린트에서 문제가 생겨서 좀 헤맸다.
-# 함수만 완성하면 되고, 나머지는 건드리면 해결할 수 없다. 
-# 위아래, 그리고 왼쪽오른쪽 각각 네 방향을 따로 썼을 때에는 개별 print()로 인해 한 줄 줄바꿈이 생겨 문제가 있었으나,
+# 함수만 완성하면 되고, 나머지(m = int(input())...)는 건드리면 해결할 수 없다. 
+# 위 아래, 그리고 왼쪽 오른쪽 각각 네 방향을 if elif if elif 식으로 나누어 썼을 때에는 개별 print()로 인해 위아래와 왼오 사이에 한 줄 줄바꿈이 생겨 문제가 있었으나,
 # 각 방향에 의한 조합에 따라 네 케이스 중 하나의 print()만 실행되도록 바꾸었더니 잘 되었다.
 
 #!/usr/bin/python
