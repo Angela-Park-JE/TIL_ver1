@@ -29,11 +29,12 @@ LEFT
 
 # 생각한대로 짜니 해결방식 자체는 문제가 없었으나 'DOWN'등의 프린트에서 문제가 생겨서 좀 헤맸다.
 # 함수만 완성하면 되고, 나머지는 건드리면 해결할 수 없다. 
+# 위아래, 그리고 왼쪽오른쪽 각각 네 방향을 따로 썼을 때에는 개별 print()로 인해 한 줄 줄바꿈이 생겨 문제가 있었으나,
+# 각 방향에 의한 조합에 따라 네 케이스 중 하나의 print()만 실행되도록 바꾸었더니 잘 되었다.
 
 #!/usr/bin/python
 def displayPathtoPrincess(n, grid):
 #print all the moves here
-    size = n
     for i in range(0, n):
         for j in range(0, n):
             if grid[i][j] == 'm':
@@ -58,3 +59,57 @@ grid = []
 for i in range(0, m): 
     grid.append(input().strip())
 displayPathtoPrincess(m, grid)
+
+
+
+"""현답들"""
+
+# by. rahulchoudhary01 
+# grid에서 바로 찾아서 수행한 경우. 봇은 항상 중앙에 위치함을 이용하여 실행시킨 문제이다. 
+# 문제는 만약 봇이 중앙 자리에 없게 변형된다면 실행이 불가하다.
+def displayPathtoPrincess(n,grid):
+    if(grid[0][0]=="p"):
+        for i in range(n//2):
+            print("LEFT")
+            print("UP")
+    elif(grid[0][n-1]=="p"):
+        for i in range(n//2):
+            print("RIGHT")
+            print("UP")
+    elif(grid[n-1][0]=="p"):
+        for i in range(n//2):
+            print("LEFT")
+            print("DOWN")
+    else:
+        for i in range(n//2):
+            print("RIGHT")
+            print("DOWN")
+
+
+
+# by. etnicotinate 
+# 주어진 grid를 펼친다음 거기서 me와 princess의 위치를 찾아서 거리를 구함. 
+# 문제는 이 사람도 이 코드로는 n이 3 초과일 때 문제를 겪었을 것으로 생각된다. 
+def displayPathtoPrincess(n,grid):
+#print all the moves here
+    for i,line in enumerate(grid):
+        if line.find('m')>-1:
+            me_pos=[line.find('m'),i]
+        if line.find('p')>-1:
+            prince_pos=[line.find('p'),i]
+    x_move,y_move=[x-y for x,y in zip(prince_pos,me_pos)]
+#    print(prince_pos,me_pos)
+#    print(x_move,y_move)
+    if y_move>0:
+        print('DOWN'*y_move)
+    else:
+        print('UP'*(-y_move))
+    if x_move>0:
+        print('RIGHT'*x_move)
+    else:
+        print('LEFT'*(-x_move))
+m = int(input())
+grid = [] 
+for i in range(0, m): 
+    grid.append(input().strip())
+displayPathtoPrincess(m,grid)
