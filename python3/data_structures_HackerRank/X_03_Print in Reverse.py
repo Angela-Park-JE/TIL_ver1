@@ -8,7 +8,7 @@ Given a pointer to the head of a singly-linked list, print each `data` value fro
 If the given list is empty, do not print anything.
 """
 
-""" 채 하지못한 나의  """
+""" 채 하지못한 나의 답 """
 
 #!/bin/python3
 
@@ -60,22 +60,12 @@ def print_singly_linked_list(node, sep):
 # SinglyLinkedListNode:
 #     int data
 #     SinglyLinkedListNode next
-# first number is number of cases
-# second number is number of first case's integer
+#
 #
 
 def reversePrint(llist):
-    ar = []
-    while llist:
-        ar.append(llist.data)
-        llist = llist.next
-    for _ in ar[::-1]:
-        print(_)
-    return 
-        
-        
-        
-    return llist
+    # Write your code here
+
 if __name__ == '__main__':
     tests = int(input())
 
