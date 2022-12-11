@@ -19,6 +19,6 @@ Here is practice and repeat what I learned from lectures and books.
   08장_Arithmetic_수치계산법.ipynb
   08장_Statistic_통게처리법.ipynb
   09장_데이터접근_csv_xlsx.ipynb
-  10장_데이터정돈.ipynb
-  11장_데이터조합.ipynb
+  10장_데이터정돈.ipynb : 결측값 대체, .interpolate(), .duplicated(), .map(), .apply(), 
+  11장_데이터조합.ipynb : .concat() , .merge()|.join() , .pivot() , .stack()|.unstack()
   ```
