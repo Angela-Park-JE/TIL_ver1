@@ -11,6 +11,17 @@ If there is more than one project that have the same number of completion days, 
 
 
 """오답노트"""
+
+/*- MySQL :  가장 최근에 짜다 만것-*/
+WITH CTE1 AS
+    (
+    SELECT p1.task_id, p1.start_date starts, p1.end_date end1, p2.end_date end2
+    FROM PROJECTS p1 LEFT JOIN PROJECTS p2 ON p1.end_date = p2.start_date
+    )
+
+
+
+
 /*- MySQL : 끝나는 날짜가 다음 날의 시작 날짜와 같거나, 다음 태스크(날짜)의 시작 날짜가 끝나는 날과 같거나 ... 하다가 어지러워져버렸다.
     3 rows의 결과가 나오는데 아 어렵다 논리를 짜기가-*/
 SELECT -- p1.task_id, 
