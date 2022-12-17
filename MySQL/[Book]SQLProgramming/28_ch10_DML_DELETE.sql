@@ -1,4 +1,3 @@
-----------------
 /**- INSERT/UPDATE/DELETE -**/
 
 /*- DELETE -*/
@@ -135,4 +134,12 @@ SELECT * FROM emp_delete2;
 /* '1019','Chamber','2022-02-15','4000' */
 
 
-/* p.371 quiz : in emp_delete, delete name '플랑크', and delete lower emp_no. */
+/* p.371 quiz : in emp_delete, delete name '플랑크', and delete lower emp_no. 
+	'플랑크' -> 'Sage' */
+-- mine:
+DELETE FROM emp_delete
+	WHERE emp_name = 'Sage'
+    ORDER BY emp_no ASC 		-- lower emp_no row will be deleted.
+    LIMIT 1;					-- delete just 1 row
+
+SELECT * FROM emp_delete;
