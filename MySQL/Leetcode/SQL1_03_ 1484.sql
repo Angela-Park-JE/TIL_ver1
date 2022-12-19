@@ -35,6 +35,7 @@ Output:
 /* mine : GROUP_CONCAT 이 생각이 안나서 검색의 도움을 받아버렸다. 
     날짜별로 중복되는 물건에 대해서는 표시가 한 가지만 되어야 한다. 그래서 DISTINCT 필요. */
 
+-- MySQL
 SELECT sell_date, COUNT(DISTINCT product) AS num_sold, 
     GROUP_CONCAT(DISTINCT product) products
 FROM ACTIVITIES 
@@ -42,9 +43,9 @@ GROUP BY sell_date
 ORDER BY sell_date;
 
 
-"""다른 답안"""
-/* MySQL by. DonBosco256 : 상세하게 지정하는 부분들을 적은 코드이다. 커스텀이 필요한 경우 이것을 참고하면 좋을 듯.*/
 
+"""다른 답안"""
+-- MySQL by. DonBosco256 : 상세하게 지정하는 부분들을 적은 코드이다. 커스텀이 필요한 경우 이것을 참고하면 좋을 듯.
 SELECT sell_date, count( DISTINCT product ) as num_sold ,
     
     GROUP_CONCAT( DISTINCT product order by product ASC separator ',' ) as products
