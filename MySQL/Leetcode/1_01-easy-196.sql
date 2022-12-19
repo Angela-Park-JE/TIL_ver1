@@ -1,20 +1,31 @@
 """
 196. Delete Duplicate Emails
 https://leetcode.com/problems/delete-duplicate-emails/?envType=study-plan&id=sql-i
-+-------------+---------+
-| Column Name | Type    |
-+-------------+---------+
-| id          | int     |
-| email       | varchar |
-+-------------+---------+
+
 id is the primary key column for this table.
 Each row of this table contains an email. The emails will not contain uppercase letters.
 
 Write an SQL query to delete all the duplicate emails, keeping only one unique email with the smallest id. 
 Note that you are supposed to write a 'DELETE' statement and 'not a SELECT' one.
-
 After running your script, the answer shown is the Person table. 
 The driver will first compile and run your piece of code and then show the Person table. The final order of the Person table does not matter.
+
+Input: 
+Person table:
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
+| 3  | john@example.com |
++----+------------------+
+Output: 
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
++----+------------------+
 """
 
 /*- MySQL : 이메일로 GROUP BY하여 가장 id가 작은 것에 대한 데이터 남기고, 거기에 속하지 않은 id를 DELETE 하는 방식이다. 
