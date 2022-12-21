@@ -32,6 +32,11 @@ SELECT MAX(salary) SecondHighestSalary
 FROM EMPLOYEE
 WHERE salary != (SELECT MAX(salary) FROM EMPLOYEE);
 
+-- 속도를 올리는 방법: != 으로 일일히 비교하게 만들지 말고 부등호를 쓰자
+SELECT MAX(salary) SecondHighestSalary
+FROM EMPLOYEE
+WHERE salary < (SELECT MAX(salary) FROM EMPLOYEE);
+
 
 
 """오답노트"""
