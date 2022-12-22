@@ -47,3 +47,31 @@ FROM TRANSACTIONS t RIGHT JOIN VISITS v ON t.visit_id = v.visit_id
 WHERE v.visit_id NOT IN (SELECT visit_id FROM TRANSACTIONS)
 GROUP BY 1;
 
+
+
+"""다른 풀이"""
+
+-- MySQL by.AleksandrEfimenko : LEFT로 visit 에 붙이되 IS NULL로 'transaction_id'을 찾았다. 나와 방식은 같으나 반대로 한 것.
+SELECT customer_id, COUNT(v.visit_id) as count_no_trans 
+FROM Visits v
+LEFT JOIN Transactions t ON v.visit_id = t.visit_id
+WHERE transaction_id IS NULL
+GROUP BY customer_id
+
+-- MySQL : 같은 사람 것인데, 굳이 조인을 하지 않고 찾았다. 어차피 없는 것을 찾는 것이기 떄문이다. 결국 찾는건 customer_id이고.
+SELECT customer_id, COUNT(visit_id) as count_no_trans 
+FROM Visits
+WHERE visit_id NOT IN (
+	SELECT visit_id FROM Transactions
+	)
+GROUP BY customer_id
+
+-- MySQL : NOT EXISTS 를 활요한다. WHERE 절에서 NOT EXSIT를 사용하면서 조인을 그 안의 쿼리에서 작동하도록 했다. 
+-- 그래서 거래에 방문아이디가 없는 경우를 찾는 방식이다.
+SELECT customer_id, COUNT(visit_id) as count_no_trans 
+FROM Visits v
+WHERE NOT EXISTS (
+	SELECT visit_id FROM Transactions t 
+	WHERE t.visit_id = v.visit_id
+	)
+GROUP BY customer_id
