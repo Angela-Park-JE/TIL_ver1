@@ -1,5 +1,54 @@
+"""
+197. Rising Temperature
+https://leetcode.com/problems/rising-temperature/description/?envType=study-plan&id=sql-i
+id is the primary key for this table.
+This table contains information about the temperature on a certain day.
+
+Write an SQL query to find all dates' Id with higher temperatures compared to its previous dates (yesterday).
+Return the result table in any order.
+
+Input: 
+Weather table:
++----+------------+-------------+
+| id | recordDate | temperature |
++----+------------+-------------+
+| 1  | 2015-01-01 | 10          |
+| 2  | 2015-01-02 | 25          |
+| 3  | 2015-01-03 | 20          |
+| 4  | 2015-01-04 | 30          |
++----+------------+-------------+
+Output: 
++----+
+| id |
++----+
+| 2  |
+| 4  |
++----+
+"""
 
 
+
+/* mine : 허허 함부로 연산 하지 말기 배움.*/
+
+-- MySQL : 3번에서 발전시킨 것. 다른 답들을 찾아본 뒤로 date 타입 계산 관련한 문제인 것이라는 결론에 닿았다. 
+-- WHERE에서 조인하든 이렇게 FROM 절에 명시하든 다 같은 결과를 반환했으니 말이다.
+SELECT t1.id Id
+FROM WEATHER t1 JOIN WEATHER t2 
+    ON SUBDATE(t1.recorddate, 1)= t2.recorddate
+WHERE t1.temperature > t2.temperature;
+
+-- 실제로 오답으로 처리가 되었던 2번도 date 연산 관련한 부분만 고쳤더니 (SUBDATE 사용) 제대로 돌아갔다.
+SELECT id Id
+FROM 
+    (SELECT id, 
+            recorddate, 
+            temperature, 
+            LAG(temperature, 1) OVER (ORDER BY recorddate) as tem,
+            LAG(recorddate, 1) OVER (ORDER BY recorddate) as prev
+    FROM WEATHER
+    ORDER BY recorddate) temp
+WHERE tem < temperature
+  AND SUBDATE(recorddate, 1) = prev;
 
 
 """오답노트"""
@@ -39,9 +88,6 @@ FROM WEATHER t1 JOIN WEATHER t2
 WHERE t1.temperature > t2.temperature;
 
 
--- 4. 다른 답들을 찾아본 뒤로 date 타입 
-
-
 
 """다른 풀이"""
 
@@ -54,5 +100,3 @@ SELECT wt1.Id
 FROM Weather wt1, Weather wt2
 WHERE wt1.Temperature > wt2.Temperature AND 
       TO_DAYS(wt1.DATE)-TO_DAYS(wt2.DATE)=1;
-      
-    
