@@ -51,6 +51,7 @@ WHERE tem < temperature
   AND SUBDATE(recorddate, 1) = prev;
 
 
+
 """오답노트"""
 -- 1. 일단 id 와 record와 순서가 둘다 오름차순이 아니다 섞여있고, date는 건너뛰는 날이 있기도 하다.
 -- 하지만 여기서 원하는 건 어제이고, 어제 데이터가 없으면 그 날짜도 나오면 안된다. 정확한 검증 방법을 이런식으로 하려다 말렸다.
@@ -100,3 +101,45 @@ SELECT wt1.Id
 FROM Weather wt1, Weather wt2
 WHERE wt1.Temperature > wt2.Temperature AND 
       TO_DAYS(wt1.DATE)-TO_DAYS(wt2.DATE)=1;
+
+
+
+"""솔루션 업로드 내용
+**_WARNING!_**
+    You must use date column, not 'Id'.
+    'Id' ins't ordered data. it just unique value or the row. 
+
+### simple Code
+you just join with a condition, minus date.
+you should use SUBDATE or date function etc. 
+Do not `recordDate -1`. this makes error... (I don't know why)
+```sql
+SELECT t1.id Id
+FROM WEATHER t1 JOIN WEATHER t2 
+     ON SUBDATE(t1.recorddate, 1)= t2.recorddate
+WHERE t1.temperature > t2.temperature;
+```
+
+
+### complecated code
+Not used `JOIN`
+I used a window function `LAG()`. 
+It lags the data directly, within the set window(range).
+And check the data within a row.
+
+
+```sql
+SELECT id Id
+FROM 
+    (SELECT id, 
+            recorddate, 
+            temperature, 
+            LAG(temperature, 1) OVER (ORDER BY recorddate) as tem,
+            LAG(recorddate, 1) OVER (ORDER BY recorddate) as prev
+    FROM WEATHER
+    ORDER BY recorddate) temp
+WHERE tem < temperature
+  AND SUBDATE(recorddate, 1) = prev
+;
+```
+"""
