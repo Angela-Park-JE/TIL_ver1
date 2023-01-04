@@ -38,7 +38,7 @@ Output:
 /*- mine : WINDOW 함수를 써서 해보고 싶었는데 잘 안됐다. HAVING 으로 해결하고 끝냈다. -*/
 
 -- MySQL
-SELECT u.name NAME, SUM(t.amount) BALANCE
+SELECT u.name name, SUM(t.amount) balance
 FROM USERS u, TRANSACTIONS t
 WHERE u.account = t.account
 GROUP BY u.account
@@ -57,3 +57,6 @@ FROM
     WHERE u.account = t.account
     ) tmp
 WHERE balance > 10000;
+
+
+-- 솔루션 upload 한 곳-> https://leetcode.com/problems/bank-account-summary-ii/solutions/2997407/mysql-2-sols-window-function-and-having-condition/
