@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
 
     
-# 나중에 문제가 또나와서 풀었는데 큰 변화는 없다 (23.01.05)
+# 나중에 문제가 또나와서 풀었는데 큰 변화는 없다 (23.01.05) 오히려 이전이 깔끔해보이는 이유는?
 def plusMinus(arr):
     # Write your code here
     p, m, z = [], [], []
@@ -59,9 +59,3 @@ arr = [1 if int(temp)>0 else -1 if int(temp)<0 else 0 for temp in input().strip(
 print("{0:.6f}".format(arr.count(1)/n))
 print("{0:.6f}".format(arr.count(-1)/n))
 print("{0:.6f}".format(arr.count(0)/n))
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
