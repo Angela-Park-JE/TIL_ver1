@@ -11,6 +11,9 @@ Write a program that prints a staircase of size `n`.
 """
 
 
+# 처음에 로직 짤 때 i를 그대로 사용하고 아래에는 `# * (i+1)` 을 했었는데 한 칸이 더 비는 문제가 자꾸 생겼다.
+# 재미있는 건 공백 부분을 고정을 해두면 반대 모양 별이 생겨~
+
 #!/bin/python3
 
 import math
