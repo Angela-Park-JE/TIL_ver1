@@ -81,6 +81,7 @@ if __name__ == '__main__':
 print(len([x for x in apples if x >= s-a and x <= t-a]))
 print(len([x for x in oranges if x <= t-b and x >= s-b]))
 
+
 # by.brewjunk : 나와 방식은 같지만 count + 1을 올리는 방식으로 풀이했다.
 def countApplesAndOranges(s, t, a, b, apples, oranges):
     apple_count = 0
@@ -93,6 +94,7 @@ def countApplesAndOranges(s, t, a, b, apples, oranges):
             orange_count += 1
     print(apple_count)
     print(orange_count)
+
 
 # by.hafiz_muhammad01 : 방식은 역시 같은 로직이지만 lambda 를 활용하여 미리 더하는 과정을 거쳤다.
 def countApplesAndOranges(s, t, a, b, apples, oranges):
