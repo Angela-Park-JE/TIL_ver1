@@ -12,7 +12,8 @@ Using the information given below, determine the number of apples and oranges th
 """
 
 
-# 문제가 상당히 복잡한 경향이 있긴 하지만 간단히 생각했다. 나무에서 
+# 문제가 복잡한 경향이 있긴 하지만 간단히 생각했다. 미리 더해놓고 검증하는 것 보다, 각 나무에서 떨어진 정도를 for 문에서 더하기로 하고.
+# 한 가지 마음에 걸린건 `for i, j in apples, oranges` 로 쓰고 싶었는데 능력이 딸려서 자꾸 에러가 났다.
 
 #!/bin/python3
 
@@ -36,7 +37,7 @@ import sys
 
 def countApplesAndOranges(s, t, a, b, apples, oranges):
     # Write your code here
-    alist, olist = [], []
+    alist, olist = [], []   # 집으로 떨어졌을 과실의 위치를 담는 리스트
     for i in apples:
         if (i+a >= s) and (i+a <= t):
             alist.append(i)
@@ -71,3 +72,11 @@ if __name__ == '__main__':
     oranges = list(map(int, input().rstrip().split()))
 
     countApplesAndOranges(s, t, a, b, apples, oranges)
+
+
+
+"""다른 풀이"""
+
+# by.riccardovarrazza : 난 언제쯤 이런 풀이를 할 수 있나..ㅠ
+print(len([x for x in apples if x >= s-a and x <= t-a]))
+print(len([x for x in oranges if x <= t-b and x >= s-b]))
