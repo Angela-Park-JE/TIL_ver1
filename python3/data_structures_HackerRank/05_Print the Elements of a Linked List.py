@@ -55,10 +55,10 @@ class SinglyLinkedList:
 
 # iterative한 방법
 def printLinkedList(head):
-    cnt = head
-    while cnt is not None:
-        print(cnt.data)
-        cnt = cnt.next # head 는 정말 첫 번째 노드를 가리키는 것이다. 다음 노드를 가르키도록 next 지정.
+    crnt = head
+    while crnt is not None:
+        print(crnt.data)
+        crnt = crnt.next # head 는 정말 첫 번째 노드를 가리키는 것이다. 다음 노드를 가르키도록 next 지정.
 
 # 강의를 보고 따라한 recursive한 방법인데 이건 안먹음
 # def printLinkedList(head):
