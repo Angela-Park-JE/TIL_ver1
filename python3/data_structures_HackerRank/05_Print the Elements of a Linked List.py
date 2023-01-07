@@ -11,7 +11,8 @@ Print
   For each node, print its `data` value on a new line (console.log in Javascript).
 """
 
-"""원본코드"""
+
+# SinglyLinkedListNode 에 대해 유튜브에서 공부를 하고와서, 만들어보았다.
 
 #!/bin/python3
 
@@ -51,8 +52,20 @@ class SinglyLinkedList:
 #     int data
 #     SinglyLinkedListNode next
 #
-#
+
+# iterative한 방법
 def printLinkedList(head):
+    cnt = head
+    while cnt is not None:
+        print(cnt.data)
+        cnt = cnt.next # head 는 정말 첫 번째 노드를 가리키는 것이다. 다음 노드를 가르키도록 next 지정.
+
+# 강의를 보고 따라한 recursive한 방법인데 이건 안먹음
+# def printLinkedList(head):
+#     print(head.data)
+#     if head.next is not None:
+#         print(head.next)
+
 
 if __name__ == '__main__':
     llist_count = int(input())
