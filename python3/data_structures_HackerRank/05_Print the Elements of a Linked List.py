@@ -13,6 +13,7 @@ Print
 
 
 # SinglyLinkedListNode 에 대해 유튜브에서 공부를 하고와서, 만들어보았다.
+# https://www.youtube.com/watch?v=79OmVgeNoUY
 
 #!/bin/python3
 
