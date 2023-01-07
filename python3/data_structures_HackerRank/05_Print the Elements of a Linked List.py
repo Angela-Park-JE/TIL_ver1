@@ -13,6 +13,7 @@ Print
 
 
 # SinglyLinkedListNode 에 대해 유튜브에서 공부를 하고와서, 만들어보았다.
+# 실무에서는 iterative 한 방법을 더 많이 쓰지만, 코딩테스트에서 종종 recursive 한 방법도 물어본다고.
 # https://www.youtube.com/watch?v=79OmVgeNoUY
 
 #!/bin/python3
