@@ -52,7 +52,11 @@ def solution(today, terms, privacies):
         #     destruct_term_num_list.append(n+1) 
         # elif cond3 == True:
         #     destruct_term_num_list.append(n+1) 
+        
+        # 이 방법은 사용할 수 없음 연도 상관업싱 돌아서
+        for j in range(3):
+            if today[j] > dates[j]:
+                destruct_term_num_list.append(n+1)
             
 
-    
     return destruct_term_num_list
