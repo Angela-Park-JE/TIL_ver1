@@ -22,8 +22,10 @@ fig.set_facecolor('white')
 # plt.show()
 
 
+
 """ 2. plt.rcParams[] 로 고정해주는 방법. axis.facecolor 를 지정하면 그래프 외의 곳도 전부 지정 색상으로 바꿀 수 있다.
-    plt.rcParams['savefig.facecolor']='white' 는 아직 이해하지 못함. 이것은 사용하지 않아도 배경이 나옴. """
+    plt.rcParams['savefig.facecolor']='white' 는 아직 이해하지 못함. 이것은 사용하지 않아도 배경이 나옴. 
+    참조 : https://stackoverflow.com/questions/4804005/matplotlib-figure-facecolor-background-color """
 
 # 캐릭터들의 레벨 histplot 을 그리는 셀 전체 코드 
 # plt.rcParams["font.family"] = 'AppleGothic'
