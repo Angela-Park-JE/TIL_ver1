@@ -16,10 +16,24 @@ SEX_UPON_OUTCOME	VARCHAR(N)	FALSE
 """
 
 
-/*- mine : -*/
+/*- mine : 그래도 이 정도 문제에 구글링을 안해도 되는 것 같아 기쁘다. -*/
+
+-- MySQL
+WITH RECURSIVE hour_sqc AS
+    (SELECT 0 hours 
+     UNION ALL
+     SELECT hours + 1
+     FROM hour_sqc
+     WHERE hours < 23
+    )
+
+SELECT h.hours HOUR, COUNT(a.animal_id) COUNT
+FROM hour_sqc h LEFT JOIN ANIMAL_OUTS a ON h.hours = HOUR(a.datetime)
+GROUP BY h.hours
+ORDER BY 1;
 
 
--- MySQL 작년의 내가 풀었던것
+-- MySQL 작년의 내가 풀었던것 아마 구글링 열심히 하면서 풀었을 것이다.
 WITH RECURSIVE TEMP_TABLE AS 
     (SELECT 0 AS hour_number
      UNION ALL
@@ -32,3 +46,22 @@ FROM TEMP_TABLE AS t
 LEFT JOIN ANIMAL_OUTS AS o
       ON t.hour_number = HOUR(o.datetime)
 GROUP BY hour;
+
+
+
+"""오답노트"""
+
+-- 그냥 WHERE 절에서 조인하게 되면 HOUR가 INNER JOIN 조건이 되면서, 입양이 일어나지 않은 시각은 아예 표시되지 않는다.
+WITH RECURSIVE hour_sqc AS
+    (SELECT 0 hours 
+     UNION ALL
+     SELECT hours + 1
+     FROM hour_sqc
+     WHERE hours < 23
+    )
+
+SELECT h.hours HOUR, COUNT(a.animal_id) COUNT
+FROM ANIMAL_OUTS a, hour_sqc h
+WHERE h.hours = HOUR(a.datetime)
+GROUP BY h.hours
+ORDER BY 1;
