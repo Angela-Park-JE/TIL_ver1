@@ -25,3 +25,20 @@ SELECT a.prc PRICE_GROUP, COUNT(p.product_id) PRODUCTS
 FROM AMT a RIGHT JOIN PRODUCT p ON a.prc = TRUNCATE(p.price, -4)
 GROUP BY a.prc
 ORDER BY 1;
+
+
+
+"""다른 해답"""
+
+-- MySQL : Doyeong Park 님의 코드이다. FLOOR를 쓴 답안인데 정말 훨씬 깔끔한것 같다. 없는 가격대는 표시할 필요가 없으니 RECURSIVE로 만들 필요가 없는 것이다.
+SELECT
+    CASE
+        WHEN price then FLOOR(price/10000) * 10000
+    END as PRICE_GROUP,
+    count(*) as PRODUCTS
+FROM
+    product
+GROUP BY
+    1
+ORDER BY
+    1
