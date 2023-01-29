@@ -13,6 +13,6 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
   
 3. Traffic Data : 
 
-4. Programmerstest : SQL coding test practice in programmers 
+4. Programmerstest : SQL coding test practice in programmers (순서는 문제의 난이도와 관계없습니다.)
 
 5. [Book]SQLProgramming : TIL with reviewing the book [Let's get it SQL programming, Charlie Hong, Gilbut, 2021]
