@@ -9,7 +9,9 @@
 > poe_stats.csv : https://www.kaggle.com/datasets/gagazet/path-of-exile-league-statistic
 
 > ### kaggle questions
-> 본 캐글 프로젝트에서 제시하는 문항을 해결하는 파일: POE_rankers_analysis.ipynb
+> 본 캐글 프로젝트에서 제시하는 문항을 해결하는 파일: 
+> - POE_rankers_analysis.ipynb
+> - POE_rankers_analysis-reboot-pt1, 2.ipynb
 
 
 ### files info  
