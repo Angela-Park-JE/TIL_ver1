@@ -6,12 +6,13 @@ PRODUCT_ID	    VARCHAR(10)	FALSE
 PRODUCT_NAME	VARCHAR(50)	FALSE
 PRODUCT_CD	    VARCHAR(10)	TRUE
 CATEGORY	    VARCHAR(10)	TRUE
-PRICE	NUMBER	TRUE
+PRICE       	NUMBER  	TRUE
 FOOD_PRODUCT 테이블에서 가격이 제일 비싼 식품의 식품 ID, 식품 이름, 식품 코드, 식품분류, 식품 가격을 조회하는 SQL문을 작성해주세요.
 """
 
 
-/*- mine : where 절에서 max 가격을 찾는 것으로 가장 간단한 방법 사용. -*/
+/*- mine : where 절에서 max 가격을 찾는 것으로 가장 간단한 방법 사용. 
+    만약 다른 것 순으로 한 가지만 출력해야 한다면 `ORDER BY 기준 LIMIT 1` 을 쓰면 될 것이다.-*/
 
 -- MySQL 
 SELECT product_id, product_name, product_cd, category, price
