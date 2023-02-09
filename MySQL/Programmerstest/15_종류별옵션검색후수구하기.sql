@@ -36,7 +36,10 @@ ORDER BY 1;
 
 """잘못된 예"""
 
--- 
+-- 옵션을 in 을 사용하여 찾는 것은 불가하다. 옵션은 여러 옵션들이 options라는 컬럼에 들어가있는 것인데 이것이 in () 과 일치하느냐는 물음은 잘못되었다.
+-- 위의 예시들은 options 안에 해당 옵션이 있는지를 찾는 것이고, 아래 예시는 해당 옵션들이랑 같은 options가 있는지 묻는 것이다. 
+-- 만약 옵션같은 것이 아닌 이름, 카테고리 처럼 하나로 정해진 것이었으면 할 수 있다.
+-- https://school.programmers.co.kr/learn/courses/30/lessons/59046
 SELECT car_type, COUNT(*) CARS
 FROM CAR_RENTAL_COMPANY_CAR
 WHERE options in ('통풍시트','열선시트','가죽시트')
