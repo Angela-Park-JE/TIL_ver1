@@ -17,3 +17,21 @@ WHERE s.book_id = b.book_id and b.author_id = a.author_id
   AND EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
 GROUP BY a.author_id, b.category
 ORDER BY 1 ASC, 3 DESC;
+
+
+
+
+"""
+저자 별 카테고리 별 매출액 집계하기
+https://school.programmers.co.kr/learn/courses/30/lessons/144855
+2022년 1월의 카테고리 별 도서 판매량을 합산하고, 카테고리(CATEGORY), 총 판매량(TOTAL_SALES) 리스트를 출력하는 SQL문을 작성해주세요.
+결과는 카테고리명을 기준으로 오름차순 정렬해주세요.
+"""
+
+/*- mine: 이 문제가 먼저였다. 간단하다. 이번엔 JOIN을 FROM절에서 했다. -*/
+
+-- MySQL
+SELECT b.category, SUM(s.sales) total_sales
+FROM BOOK b RIGHT JOIN BOOK_SALES s ON b.book_id = s.book_id
+WHERE EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
+GROUP BY 1 ORDER BY 1 ASC;
