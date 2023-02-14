@@ -1,5 +1,9 @@
 # TIL_ver1
-pandas, numpy, statsmodel, SQL etc... what I learned(practiced) today....!  
+Analyzing process,  
+Python3 Libraries(pandas, numpy, sklearn, scipy, keras... )  
+SQL and Data structures
+
+etc... what I learned(practiced) today....!  
 Almost the codes and notes are in Jupyter notebook(`.ipynb`).
 
 ### List table
