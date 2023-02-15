@@ -39,7 +39,10 @@ def solution(s, skip, index):
   """다른 풀이"""
   
 # https://school.programmers.co.kr/learn/courses/30/lessons/155652/solution_groups?language=python3# 
-# 여기서 가장 
+
+
+# 여기서 가장 많은 좋아요 수를 받은 풀이이다.
+# -=를 사용하여 제외하고 정렬을 했다. 나도 딕셔너리 쓰고 싶었는데...
 from string import ascii_lowercase
 
 def solution(s, skip, index):
@@ -56,3 +59,12 @@ def solution(s, skip, index):
         result += a_to_z[(dic_alpha[i] + index) % l]
 
     return result
+  
+  
+  # 두번째로 많은 좋아요수.
+  # ans 부분만 참고. 바로 위에서도 쓰였지만 %len() 할 생각을 했었는데 '어떻게 하지?'만 했었다. 이렇게다.
+    ans = ''
+    for i in s:
+        ans += atoz[(atoz.index(i)+index)%len(atoz)]
+
+    return ans
