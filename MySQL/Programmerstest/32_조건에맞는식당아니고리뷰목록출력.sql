@@ -49,6 +49,46 @@ ORDER BY 3 ASC, 2 ASC;
 """다른 풀이"""
 
 -- MySQL
+-- https://school.programmers.co.kr/questions/43900
+-- PARTITION을 쓰면 멋져보이는 경향이 있다. 아직 난 뉴비이다.
+-- 첫번째 CTE에서는 member_name 별 리뷰 개수를 가져오고 두번째 CTE에서는 기존 CTE에다가 카운트의 맥스가 적힌 컬럼을 넣는다. 
+-- 첫번째 CTE: 아이디|이름|리뷰|날짜|해당윈도우시작~끝개수카운트(count(1)의 1은 이름이나 리뷰아이디 등 무엇을 넣어도 같음) 
+-- 두번째 CTE: 아이디|이름|리뷰|날짜|해당윈도우시작~끝개수카운트|MAX(해당윈도우시작~끝카운트)
+-- 그리고 본 쿼리에서는 이름-리뷰-날짜 를 해당윈도우내카운트=해당윈도우내카운트맥스값으로 거른다.
+
+with
+temp_01 as
+(select m.member_id, m.member_name, r.review_text,r.review_date
+    , count(1) over (partition by member_name rows between unbounded preceding and unbounded following) as count
+    from MEMBER_PROFILE m
+    join REST_REVIEW r on m.member_id = r.member_id
+    order by 2) 
+, temp_02 as
+(select *,
+    max(count) over () as max
+    from temp_01)
+select MEMBER_NAME,REVIEW_TEXT, date_format(REVIEW_DATE,'%Y-%m-%d') as REVIEW_DATE
+from temp_02 a
+where a.count = a.max
+order by 3,2;
+
+
+-- MySQL
+-- https://school.programmers.co.kr/questions/41442
+-- 위 처럼 WINDOW 함수를 이용하였다. 그러나 스마트했던 부분이 카운트를 기준으로 DENSE_RANK(누적 랭크)로 카운트가 큰것 순으로 매겼다. 
+-- 그러면 큰 순이니 rank = 1인 것만 골라 가져오면 되는 것이다! 개인적으로 가장 마음에 드는 풀이였다.
+select member_name, review_text, date_format(review_date,"%Y-%m-%d") as review_date
+from(
+    SELECT MEMBER_ID, count(member_id), dense_rank() over(ORDER BY COUNT(MEMBER_ID) DESC) as ran
+    FROM REST_REVIEW
+    GROUP BY MEMBER_ID
+    ORDER BY COUNT(MEMBER_ID) DESC
+    ) A natural join member_profile join rest_review using (member_id)
+where A.ran =1
+order by review_date,review_text;
+
+
+-- MySQL
 -- https://school.programmers.co.kr/questions/44144
 SELECT 
     A.MEMBER_NAME, 
@@ -87,6 +127,3 @@ GROUP BY 2
 ORDER BY 3 DESC
 LIMIT 1) as toprev INNER JOIN REST_REVIEW as c on toprev.MEMBER_ID = c.MEMBER_ID
 ORDER BY 3 ASC, 2 ASC
-
-
--- 
