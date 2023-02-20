@@ -9,7 +9,7 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 1. admin : administrative query folder
 
-2. HackerRank : SQL practice, sql problems in HackerRank
+2. HackerRank : SQL practice, sql problems in HackerRank (MySQL version 5.7 X^( )
   
 3. Traffic Data : 
 
