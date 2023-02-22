@@ -14,19 +14,20 @@ If there is more than one project that have the same number of completion days, 
     시작날은 end_date에 없고 끝나는 날은 start_date에 없다는 점을 이용했다. row넘버를 매기고 그대로 이어붙였다. 조금 무식한 방식으로 조인을 하긴 했다. 
     굳이 조건을 더 건다고 하면 로우넘버가 같고 `AND t1.start_date < t2.end_date` 인 것을 조인 조건에 추가하는 정도이다. -*/
 
+-- MySQL
 SELECT t1.start_date, t2.end_date
 FROM
     ( -- only real start_date
-    SELECT tasK_id, start_date, row_number() over(order by start_date asc) rn
+    SELECT start_date, row_number() over(order by start_date asc) rn
     FROM PROJECTS 
-    WHERE start_date NOT in (SELECT end_date FROM PROJECTS)
+    WHERE start_date NOT IN (SELECT end_date FROM PROJECTS)
     ) t1 JOIN 
     ( -- only real end_date : this is kinda filter 'completed' projects
-    SELECT tasK_id, end_date, row_number() over(order by start_date asc) rn
+    SELECT end_date, row_number() over(order by start_date asc) rn
     FROM PROJECTS 
-    WHERE end_date NOT in (SELECT start_date FROM PROJECTS)
-    ) t2 ON t1.rn = t2.rn -- AND t1.start_date < t2.end_date 를 추가하면 더 좋다.
-ORDER BY DATEDIFF(t2.end_date, t1.start_date) ASC;
+    WHERE end_date NOT IN (SELECT start_date FROM PROJECTS)
+    ) t2 ON t1.rn = t2.rn --if we plus `AND t1.start_date < t2.end_date` would be more correct.
+ORDER BY DATEDIFF(t2.end_date, t1.start_date) ASC, 1 ASC ;
 
 -- notes
 
@@ -48,9 +49,6 @@ ORDER BY DATEDIFF(t2.end_date, t1.start_date) ASC;
 -- SELECT tasK_id, end_date, row_number() over(order by end_date asc)
 -- FROM PROJECTS 
 -- WHERE end_date NOT in (SELECT start_date FROM PROJECTS);
-
-
-
 
 
 
