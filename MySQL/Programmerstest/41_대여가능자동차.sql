@@ -24,3 +24,36 @@ FROM
     ) tmp
 GROUP BY car_id
 ORDER BY 1 DESC;
+
+
+
+"""다른 풀이"""
+
+-- 훨씬 똑똑한 방법. CASE WHEN을 한 번만 썼다. 해당날짜가 사이에 있는 car_id는 대여중이고, 그렇지 않은 차는 대여가능이도록!
+-- https://school.programmers.co.kr/questions/44463
+SELECT DISTINCT CAR_ID,
+    CASE 
+        WHEN CAR_ID IN (
+            SELECT CAR_ID 
+            FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY 
+            WHERE DATE('2022-10-16') BETWEEN START_DATE AND END_DATE
+        ) THEN '대여중'
+        ELSE '대여 가능'
+    END `AVAILABILITY`
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+ORDER BY 1 DESC;
+
+-- 그래서 다른분 질문 올린것 답 달면서 수정해드린 것이 아래이다. 바로 위와 같은 방식으로(IN 사용) 해결했다.
+-- https://school.programmers.co.kr/questions/44581
+SELECT distinct CAR_ID,
+    CASE WHEN 
+        car_id in 
+        (
+        select car_id from car_rental_company_rental_history 
+        where '2022-10-16' BETWEEN TO_CHAR(START_DATE,'YYYY-MM-DD') AND TO_CHAR(END_DATE,'YYYY-MM-DD') 
+        )
+        THEN '대여중'
+        ELSE '대여 가능'
+        END AS AVAILABILITY
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+ORDER BY CAR_ID DESC;
