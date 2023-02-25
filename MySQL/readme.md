@@ -11,7 +11,7 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 2. HackerRank : SQL practice, sql problems in HackerRank (MySQL version 5.7 X^( )
   
-3. Traffic Data : 
+~3. Traffic Data :~
 
 4. Programmerstest : SQL coding test practice in programmers (순서는 문제의 난이도와 관계없습니다.)
 
