@@ -43,7 +43,7 @@ SELECT DISTINCT CAR_ID,
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 ORDER BY 1 DESC;
 
--- 그래서 다른분 질문 올린것 답 달면서 수정해드린 것이 아래이다. 바로 위와 같은 방식으로(IN 사용) 해결했다.
+-- 그래서 다른분 질문 올린것 답 달면서 수정해드린 것이 아래이다. 바로 위와 같은 방식으로(IN 사용) 해결했다. (소문자로 첨삭함)
 -- https://school.programmers.co.kr/questions/44581
 SELECT distinct CAR_ID,
     CASE WHEN 
