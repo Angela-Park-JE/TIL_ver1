@@ -23,3 +23,6 @@ WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00'
 GROUP BY MONTH(start_date), car_id
 HAVING COUNT(*) IS NOT NULL
 ORDER BY 1, 2 DESC;
+
+
+-- 다른 사람들 도와주면서 본 건데, 바깥 WHERE 절에서 WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00' 이것을 안한 사람들이 정말 많더라
