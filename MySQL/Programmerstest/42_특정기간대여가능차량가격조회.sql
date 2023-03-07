@@ -9,7 +9,25 @@ CAR_RENTAL_COMPANY_CAR 테이블과 CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블�
 결과는 대여 금액을 기준으로 내림차순 정렬하고, 대여 금액이 같은 경우 자동차 종류를 기준으로 오름차순 정렬, 자동차 종류까지 같은 경우 자동차 ID를 기준으로 내림차순 정렬해주세요.
 """
 
+/*- mine : '해당 기간동안 빌릴 수 없는 차'를 리스트로 만들어서 NOT IN 을 하는게 논리적이었다.
+    해결하는데 밤새 하다가 안됙, 다음날 25분정도 차분히 기간의 문제가 컸다. 기간을 구하는 논리를 잘 생각해야 하는 것이었다. 
+    먼저 unavailable for rent 리스트를 만들고 거기에 살을 붙여나갔다. -*/
 
+-- MySQL
+SELECT c.car_id, c.car_type, CAST(c.daily_fee * 30 * (1-p.discount_rate/100) AS signed integer) fee
+FROM CAR_RENTAL_COMPANY_CAR c JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p 
+    ON c.car_type = p.car_type AND p.duration_type LIKE '30%'       -- 차종으로 결합하고 기간은 30일로 연결
+WHERE c.car_id NOT IN
+            (
+            SELECT DISTINCT car_id    -- (조건2) 대여 불가능한 car_id 목록
+            FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+            WHERE (EXTRACT(YEAR_MONTH FROM start_date) = 202211)    -- 대여 날이 22년11월이거나
+               OR (EXTRACT(YEAR_MONTH FROM end_date) = 202211)      -- 반납 날이 22년11월이거나
+               OR (start_date <= '2022-11-01' AND '2022-11-01' <= end_date) -- 대여 날과 반납 날 사이에 2022년 11월이 있거나(하루만으로 검색해도 됨 다른 날들은 위에서 걸러줌)
+            )
+  AND c.car_type IN ('세단', 'SUV')    -- (조건1) 세단과 SUV만
+HAVING fee BETWEEN 500000 AND 2000000 -- (조건3) 엄밀히 하자면 BETWEEN이 아니라 >=, < 을 사용해야 한다. 아니면 200만 대신 1999900을 쓰거나.
+ORDER BY 3 DESC, 2 ASC, 1 DESC;
 
 """오답노트"""
 
