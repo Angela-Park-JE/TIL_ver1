@@ -19,15 +19,32 @@ SELECT CAST( REGEXP_REPLACE(duration_type, '[가-힣()]', '') AS DOUBLE) AS dtyp
   FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN 
  WHERE car_type = '트럭';
 
+
 -- combine
+-- 차종, 할인타입, 할인시 곱해야할 것
 WITH CTE AS (
-SELECT car_type, CAST( REGEXP_REPLACE(duration_type, '[가-힣()]', '') AS DOUBLE) AS dtype, (1-discount_rate/100) discounted
-  FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN 
+    SELECT c.car_id, c.daily_fee, 
+            CAST( REGEXP_REPLACE(duration_type, '[가-힣()]', '') AS DOUBLE) AS dtype, 
+            (1-discount_rate/100) AS discounted
+    FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_DISCOUNT_PLAN p
+    WHERE c.car_type = p.car_type 
+      AND c.car_type = '트럭'
+    ),
+-- 히스토리, 할인타입
+    CTE2 AS (
+    SELECT DISTINCT h.history_id, 
+           (DATEDIFF(h.end_date, h.start_date) + 1) AS restdays,
+           CASE WHEN DATEDIFF(h.end_date, h.start_date) + 1 >= 90 THEN 90
+                WHEN DATEDIFF(h.end_date, h.start_date) + 1 BETWEEN 30 AND 89 THEN 30
+                WHEN DATEDIFF(h.end_date, h.start_date) + 1 BETWEEN 7 AND 29 THEN 7
+                ELSE 0 END dtype
+    FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY h 
+         LEFT JOIN CAR_RENTAL_COMPANY_CAR c ON h.car_id = c.car_id 
+    WHERE c.car_type = '트럭'
     )
 
-SELECT DISTINCT h.history_id, 
-       CASE WHEN DATEDIFF(h.end_date, h.start_date) + 1 >= cte.dtype 
-            THEN cte.discounted * daily_fee * DATEDIFF(h.end_date, h.start_date) + 1 
-            WHEN 
-FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY h LEFT JOIN CAR_RENTAL_COMPANY_CAR c ON h.car_id = c.car_id, CTE 
-WHERE c.car_type = '트럭' AND c.car_type = cte.car_type;
+SELECT cte2.history_id, 
+       cte.daily_fee * cte.discounted * cte2.restdays FEE
+FROM CTE2 LEFT JOIN CTE ON cte.dtype = cte2.dtype 
+ORDER BY 2 DESC, 1 DESC;
+
