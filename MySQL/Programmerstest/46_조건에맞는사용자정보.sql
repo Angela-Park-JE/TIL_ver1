@@ -5,6 +5,7 @@ USED_GOODS_BOARD와 USED_GOODS_USER 테이블에서 완료된 중고 거래의 �
 결과는 총거래금액을 기준으로 오름차순 정렬해주세요.
 """
 
+
 /*- mine : WHERE에서 조건을 걸었다. 복잡할 것 없는 문제. 
     쓰는 스타일에 대한 생각을 하고있다. 
     개인적으로 오름차순 내림차순은 ASC, DESC 써주는게 나중에 긴 쿼리에서 더 직관적으로 보기 편한 것 같고 정리되어 보여서 선호하는데, 다들 오름차순은 안쓰더라. 
@@ -17,5 +18,5 @@ SELECT b.writer_id, u.nickname, SUM(b.price) AS total_sales
  WHERE b.writer_id = u.user_id
    AND b.status = 'DONE'
  GROUP BY b.writer_id
-HAVING SUM(b.price) >= 700000
+HAVING SUM(b.price) >= 700000   -- HAVING total_sales >= 700000 도 가능하다. 
  ORDER BY 3 ASC;
