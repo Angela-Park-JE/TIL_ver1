@@ -11,18 +11,19 @@ CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블에서 대여 시작일을 기준으�
 
 -- MySQL
 SELECT MONTH(start_date), car_id, COUNT(*) records
-FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00'
-  AND car_id IN 
-    (
-    SELECT car_id
-    FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-    WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00'
-    GROUP BY car_id HAVING COUNT(history_id) >= 5
-    )
-GROUP BY MONTH(start_date), car_id
--- HAVING COUNT(*) != 0 -- 해당 조건은 사족임. 이미 대여 기록이 있는 것들을 기준으로 검색하기 때문에.!
-ORDER BY 1, 2 DESC;
+  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+ WHERE 1=1
+   AND start_date BETWEEN '2022-08-00' AND '2022-11-00'
+   AND car_id IN 
+        (
+        SELECT car_id
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00'
+        GROUP BY car_id HAVING COUNT(history_id) >= 5
+        )
+ GROUP BY MONTH(start_date), car_id
+ -- HAVING COUNT(*) != 0 -- 해당 조건은 사족임. 이미 대여 기록이 있는 것들을 기준으로 검색하기 때문에.!
+ ORDER BY 1 ASC, 2 DESC;
 
 
 -- 다른 사람들 도와주면서 본 건데, 바깥 WHERE 절에서 WHERE start_date BETWEEN '2022-08-00' AND '2022-11-00' 이것을 안한 사람들이 정말 많더라
