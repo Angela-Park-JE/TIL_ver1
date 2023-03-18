@@ -4,7 +4,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/151141
 """
 
 
-"""메모"""
+""" 메모 """
 
 -- 코드를 입력하세요
 -- CAR_RENTAL_COMPANY_CAR c CAR_RENTAL_COMPANY_RENTAL_HISTORY h CAR_RENTAL_COMPANY_DISCOUNT_PLAN p
@@ -21,7 +21,7 @@ SELECT CAST( REGEXP_REPLACE(duration_type, '[가-힣()]', '') AS DOUBLE) AS dtyp
 
 
 -- combine
--- 차종, 할인타입, 할인시 곱해야할 것
+-- CTE1 : 차종, 할인타입, 할인시 곱해야할 것
 WITH CTE AS (
     SELECT c.car_id, c.daily_fee, 
             CAST( REGEXP_REPLACE(duration_type, '[가-힣()]', '') AS DOUBLE) AS dtype, 
@@ -30,7 +30,7 @@ WITH CTE AS (
     WHERE c.car_type = p.car_type 
       AND c.car_type = '트럭'
     ),
--- 히스토리, 할인타입
+-- CTE2 : 히스토리, 할인타입
     CTE2 AS (
     SELECT DISTINCT h.history_id, 
            (DATEDIFF(h.end_date, h.start_date) + 1) AS restdays,
