@@ -30,7 +30,7 @@ WITH CTE AS (
     WHERE c.car_type = p.car_type 
       AND c.car_type = '트럭'
     ),
--- CTE2 : 히스토리, 할인타입
+-- 히스토리, 할인타입
     CTE2 AS (
     SELECT DISTINCT h.history_id, 
            (DATEDIFF(h.end_date, h.start_date) + 1) AS restdays,
@@ -45,6 +45,8 @@ WITH CTE AS (
 
 SELECT cte2.history_id, 
        cte.daily_fee * cte.discounted * cte2.restdays FEE
-FROM CTE2 LEFT JOIN CTE ON cte.dtype = cte2.dtype 
+FROM CTE2 LEFT JOIN CTE ON cte.dtype = cte2.dtype,
+    CAR_RENTAL_COMPANY_CAR c
+WHERE cte.car_id = c.car_id
+  AND c.car_type = '트럭'
 ORDER BY 2 DESC, 1 DESC;
-
