@@ -50,3 +50,19 @@ FROM CTE2 LEFT JOIN CTE ON cte.dtype = cte2.dtype,
 WHERE cte.car_id = c.car_id
   AND c.car_type = '트럭'
 ORDER BY 2 DESC, 1 DESC;
+
+
+
+# combine2
+# -- 차종, 차 일일대여료, 차량 별 할인타입, 할인시 곱해야할 것
+# WITH CTE AS (
+    SELECT c.car_id, c.daily_fee, 
+            (DATEDIFF(h.end_date, h.start_date) + 1) AS restdays,
+            CASE WHEN DATEDIFF(h.end_date, h.start_date) + 1 >= 90 THEN 90
+                WHEN DATEDIFF(h.end_date, h.start_date) + 1 BETWEEN 30 AND 89 THEN 30
+                WHEN DATEDIFF(h.end_date, h.start_date) + 1 BETWEEN 7 AND 29 THEN 7
+                ELSE 0 END dtype
+    FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_DISCOUNT_PLAN p, CAR_RENTAL_COMPANY_RENTAL_HISTORY h
+    WHERE c.car_type = p.car_type AND c.car_id = h.car_id
+      AND c.car_type = '트럭'
+    # ),
