@@ -53,9 +53,9 @@ ORDER BY 2 DESC, 1 DESC;
 
 
 
-# combine2
-# -- 차종, 차 일일대여료, 차량 별 할인타입, 할인시 곱해야할 것
-# WITH CTE AS (
+-- combine2
+-- 차종, 차 일일대여료, 차량 별 할인타입, 할인시 곱해야할 것
+-- WITH CTE AS (
     SELECT c.car_id, c.daily_fee, 
             (DATEDIFF(h.end_date, h.start_date) + 1) AS restdays,
             CASE WHEN DATEDIFF(h.end_date, h.start_date) + 1 >= 90 THEN 90
@@ -65,4 +65,4 @@ ORDER BY 2 DESC, 1 DESC;
     FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_DISCOUNT_PLAN p, CAR_RENTAL_COMPANY_RENTAL_HISTORY h
     WHERE c.car_type = p.car_type AND c.car_id = h.car_id
       AND c.car_type = '트럭'
-    # ),
+--     ),
