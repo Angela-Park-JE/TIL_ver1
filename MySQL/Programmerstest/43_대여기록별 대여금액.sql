@@ -30,7 +30,7 @@ WITH CTE AS
 SELECT cte.history_id, 
        CASE WHEN cte.dtype =0 THEN cte.daily_fee * cte.rentdays
             WHEN cte.dtype!=0 THEN CAST(cte.daily_fee * cte.rentdays * (1-p.discount_rate/100) AS SIGNED INTEGER) 
-		        END FEE                                                     -- CASE로 CTE의 dtype 걸러주지 않으면 p.duration_type에는 0이 없으므로 NULL 이 떠버림.
+			    END FEE                                                     -- CASE로 CTE의 dtype 걸러주지 않으면 p.duration_type에는 0이 없으므로 NULL 이 떠버림.
   FROM CTE cte LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p 
               ON cte.car_type = p.car_type                          -- join condition 1
                  AND cte.dtype = CAST( REGEXP_REPLACE(p.duration_type, '[가-힣()]', '') AS DOUBLE) -- join condition 2 "by discount rate"
