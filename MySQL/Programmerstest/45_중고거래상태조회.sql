@@ -12,7 +12,7 @@ USED_GOODS_BOARD 테이블에서 2022년 10월 5일에 등록된 중고거래 �
 SELECT board_id, writer_id, title, price, 
         CASE status WHEN 'SALE' THEN '판매중'
                     WHEN 'RESERVED' THEN '예약중'
-                    WHEN 'DONE' THEN '거래완료' END AS status
-FROM USED_GOODS_BOARD 
-WHERE created_date = '2022-10-05'
-ORDER BY 1 DESC;
+                    WHEN 'DONE' THEN '거래완료' END AS status  -- END 뒤를 줄바꿔서 쓰는게 나을까 고민이다
+  FROM USED_GOODS_BOARD 
+ WHERE created_date = '2022-10-05'
+ ORDER BY 1 DESC;
