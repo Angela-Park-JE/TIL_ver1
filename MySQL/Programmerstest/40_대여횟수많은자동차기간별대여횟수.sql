@@ -49,3 +49,24 @@ SELECT MONTH(start_date), car_id, COUNT(*) records
 테스트 데이터가 그렇다는데 뭐... 아무튼 도와주는 분들은 고맙지만 모든 말이 맞지는 않다는게 슬픔.
 그래서 SQL 같은 것은 더욱이 조건이 있으면 논리적으로 완전히 꼭같은 조건이 아니고서야 전부 적게 되는 것 같음.
 """
+
+-- 23.03.28 달은 답변
+-- https://school.programmers.co.kr/questions/46495
+/*- 왜 기간조건을 두 번 거느냐 (바깥에 걸면 다 걸러지는 것 아닌가) 하시는 질문이었다. 
+https://school.programmers.co.kr/questions/44218 <여기에 달았던 답변에 댓글로 문의주신건데 해당질문과 똑같은 궁금증이라고 하셨다.
+엄밀히 말하면 둘은 다른 문제다. 질문글을 올리신건 바깥 쿼리에 있을 때의 문제, 답변 달았던(44218)문제는 차량조회 서브쿼리 안에있을 때의 문제다.
+한번만 쓴다고 같은게 아니라 둘이 결과자체가 아예 다르다.
+답변요약: 적어주신 `WHERE`절의 조건이 적용되는 부분은 조회하려는 대상(차량)에 대한 조건(차량)이 아니라 메인쿼리의 조회(보려는 기간) 조건입니다. 
+메인쿼리는 서브쿼리로서 추출된 car_id에 대하여 테이블에 표시할 기간을 정하는 것이지 추출하려는 car_id와는 상관이 없기 때문에 써주어야 합니다.
+  -*/
+
+SELECT MONTH(START_DATE) AS 'MONTH', CAR_ID, COUNT(CAR_ID) AS 'RECORDS' FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+WHERE CAR_ID IN (SELECT CAR_ID FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+               WHERE MONTH(START_DATE) BETWEEN 8 AND 10 -- here
+               GROUP BY CAR_ID
+               HAVING COUNT(CAR_ID)>=5
+               )
+               AND MONTH(START_DATE) BETWEEN 8 AND 10 
+GROUP BY MONTH(START_DATE), CAR_ID
+HAVING RECORDS > 0
+ORDER BY MONTH(START_DATE) ASC, CAR_ID DESC;
