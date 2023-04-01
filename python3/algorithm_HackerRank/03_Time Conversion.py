@@ -22,6 +22,12 @@ import sys
 # The function accepts STRING s as parameter.
 #
 
+
+"""
+
+"""
+
+
 def timeConversion(s):
     if ('AM' in s)&(s[:2] == '12'):
         time24 = '00' + s[2:8]
