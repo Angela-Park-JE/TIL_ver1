@@ -110,7 +110,6 @@ def timeConversion(s):
     return timepart
 
 #4 다른 케이스에서 오류가 생기는 오류를 더 만든 마법의 코드... 이지만 바보가 12인지 검사에서 type을 생각을 안했었다.
-
 def timeConversion(s):
     # I teared all elements :( I'm angry!
     hh, mm, sec, daytime = s[0:2], s[3:5], s[6:8], s[8:10]
