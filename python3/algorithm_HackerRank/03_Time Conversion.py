@@ -23,11 +23,6 @@ import sys
 #
 
 
-"""
-same problem: 
-"""
-
-
 def timeConversion(s):
     if ('AM' in s)&(s[:2] == '12'):
         time24 = '00' + s[2:8]
@@ -47,6 +42,15 @@ if __name__ == '__main__':
     fptr.write(result + '\n')
 
     fptr.close()
+
+
+
+
+"""
+same problem in April 2023
+https://www.hackerrank.com/challenges/time-conversion/problem
+"""
+
 
 
 """오답노트"""
