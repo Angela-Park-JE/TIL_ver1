@@ -45,14 +45,6 @@ if __name__ == '__main__':
 
 
 
-
-"""
-same problem in April 2023
-https://www.hackerrank.com/challenges/time-conversion/problem
-"""
-
-
-
 """오답노트"""
 
 #1
@@ -124,3 +116,30 @@ def timeConversion(s):
     else:
         time24 = s[:8]
     return time24
+
+
+
+"""
+same problem in April 2023
+https://www.hackerrank.com/challenges/time-conversion/problem
+"""
+
+def timeConversion(s):
+    s = str(s)
+    h, ms = s[:2], s[2:8]
+    times = s
+    if s[:-2] == 'AM':
+        if h == '12':
+            times = '00'+ ms
+        else:
+            times = h + ms
+    elif s[:-2] == 'PM':
+        if h == '12':
+            times = h + ms
+        else:
+            if h[0] == '0':
+                h = h[1]
+            h = int(s[:2]) + 12
+            times = str(h) + ms
+
+    return times
