@@ -19,10 +19,22 @@ import sys
 # The function accepts INTEGER_ARRAY grades as parameter.
 #
 
+
+
+
+
 """다른 답안 참고"""
 def gradingStudents(grades):
     # Write your code here
-
+    # grades = list(grades)
+    # for i in grades:
+    #     if i%5>2 and i>=40:
+    #         (i+5-(i%5))
+    #     else:
+    #         i 
+    # what the..........
+    
+    
     # by.melodicdata
     r = []
     for grade in grades:
