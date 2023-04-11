@@ -38,3 +38,19 @@ def solution(name, yearning, photo):
                 pass
         answer.append(v)
     return answer
+
+  
+"""다른 풀이"""
+
+# 원리 자체는 같으나 점수를 구해올 때 name의 인덱스와 점수의 인덱스가 같다는 점을 이용한다. 와 좋은 방법.
+# by.이범원님 https://school.programmers.co.kr/questions/46880
+def solution(name, yearning, photo):
+    answer = []
+    for peoples in photo:
+        result = 0
+        for people in peoples:
+            if people in name:
+                result += yearning[name.index(people)]
+        answer.append(result)
+
+    return answer
