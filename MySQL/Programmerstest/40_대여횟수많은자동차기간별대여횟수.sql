@@ -70,3 +70,22 @@ WHERE CAR_ID IN (SELECT CAR_ID FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 GROUP BY MONTH(START_DATE), CAR_ID
 HAVING RECORDS > 0
 ORDER BY MONTH(START_DATE) ASC, CAR_ID DESC;
+
+
+-- 23.04.12 다른 방식의 풀이이다. 물론 기존에 했었던 방식이 훨씬 나은 방식인건 맞지만 이렇게 확실하게 한 번더 싸주는 방식도 있을 수 있다.
+-- id를 추출해두고, 그 id들의 렌탈 히스토리에서 월 정보만 추출해서 테이블을 만들어 둔 뒤, 그 테이블을 GROUP BY하여 count해줘버리는 것이다.
+-- https://school.programmers.co.kr/questions/46977
+SELECT to_number(month) as month, CAR_ID, COUNT(CAR_ID)  -- SELECT MONTH, CAR_ID, COUNT(CAR_ID) 에서 수정
+    FROM
+    (SELECT TO_CHAR(START_DATE, 'MM') AS MONTH, CAR_ID
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        WHERE CAR_ID IN
+                (SELECT CAR_ID
+                    FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+                    WHERE TO_CHAR(START_DATE, 'YYYY-MM') BETWEEN '2022-08' AND '2022-11'
+                    GROUP BY CAR_ID
+                    HAVING COUNT(*) >= 5)
+        AND TO_CHAR(START_DATE, 'YYYY-MM') BETWEEN '2022-08' AND '2022-11') 
+    GROUP BY MONTH, CAR_ID
+    HAVING COUNT(*) > 0
+    ORDER BY MONTH, CAR_ID DESC;
