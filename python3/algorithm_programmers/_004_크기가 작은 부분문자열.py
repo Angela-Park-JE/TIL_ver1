@@ -14,16 +14,12 @@ https://school.programmers.co.kr/learn/courses/30/lessons/147355
 def solution(t, p):
     answer = 0
     n = len(p)
-    if n == 1:
-        for i in range(len(t)):
-            if t[i] <= p:
-                answer += 1
-    else:
-        for i in range(len(t)-n+1):
-            parts = t[i:i+n]
-            if parts <= p:
-                answer += 1
+    for i in range(len(t)-n+1):
+        parts = t[i:i+n]
+        if parts <= p:
+            answer += 1
     return answer
+
 
 
 """오답노트"""
@@ -52,6 +48,22 @@ def solution(t, p):
     else:
         for i in range(len(t)-n+1):
             parts = t[i:i+2]
+            if parts <= p:
+                answer += 1
+    return answer
+
+# 3
+# 문제점을 파악하고 바꿨을 떄의 로직. `else:` 에서 실행되는 코드가 len(p)가 1일때도 잘 돌아가게 된다. 그래서 여기는 적었으나 최종에서는 바깥 if else를 지웠다.
+def solution(t, p):
+    answer = 0
+    n = len(p)
+    if n == 1:
+        for i in range(len(t)):
+            if t[i] <= p:
+                answer += 1
+    else:
+        for i in range(len(t)-n+1):
+            parts = t[i:i+n]
             if parts <= p:
                 answer += 1
     return answer
