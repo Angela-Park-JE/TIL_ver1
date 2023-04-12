@@ -10,6 +10,22 @@ https://school.programmers.co.kr/learn/courses/30/lessons/147355
   t와 p는 숫자로만 이루어진 문자열이며, 0으로 시작하지 않습니다.
 """
 
+# 난 바보였어 왜 i:i+2 해놓고 멍때리고 있었지 n을 더하려고 일부러 구해놓고...
+def solution(t, p):
+    answer = 0
+    n = len(p)
+    if n == 1:
+        for i in range(len(t)):
+            if t[i] <= p:
+                answer += 1
+    else:
+        for i in range(len(t)-n+1):
+            parts = t[i:i+n]
+            if parts <= p:
+                answer += 1
+    return answer
+
+
 """오답노트"""
 
 # 1
@@ -22,4 +38,20 @@ def solution(t, p):
         parts = t[i:i+2]
         if parts <= p:
             answer +=1
+    return answer
+
+# 2
+# if로 n ==1 일 때를 검사해서 따로 검사했는데 이것도 제대로 되지 않았다 ㅎㅎ....
+def solution(t, p):
+    answer = 0
+    n = len(p)
+    if n == 1:
+        for i in range(len(t)):
+            if t[i] <= p:
+                answer += 1
+    else:
+        for i in range(len(t)-n+1):
+            parts = t[i:i+2]
+            if parts <= p:
+                answer += 1
     return answer
