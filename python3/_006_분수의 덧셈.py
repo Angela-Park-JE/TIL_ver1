@@ -14,8 +14,8 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120808#
 """오답노트"""
 
 # 23.04.14
-# 주어진 분모들의 최대공약수를 찾은 다음, 일반적으로 분수의 덧셈을 한 후 최대공약수로 나누는 형태이다.
-# 테스트 케이스는 다 되었으나 문제는 실제 제출 했을때 제대로 되지 않았다.
+# 유클리드호제법을 이용하였다. 주어진 분모들의 최대공약수를 찾은 다음, 일반적으로 분수의 덧셈을 한 후 최대공약수로 나누는 형태이다.
+# 테스트 케이스는 다 되었으나 문제는 실제 제출 했을때 제대로 되지 않았다. 왜인지 아직 깨닿지 못했다. d1, d2, d3 전부 확인해보았는데...
 def solution(numer1, denom1, numer2, denom2):
     # Greatest Common Divisor : Euclidean algorithm
     d2, d1 = denom2, denom1
