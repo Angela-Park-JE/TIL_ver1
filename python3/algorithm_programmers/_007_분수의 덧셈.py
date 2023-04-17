@@ -13,6 +13,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120808#
 # 23.04.17
 # 그냥 분수를 구해두고, 최대공약수로 나누는 일은 나중에 하면 될 일이었다...
 # 역시 손으로 (펜잡고) 쓰면서 해야 정리가 잘되는 기분.
+# 풀이공유 https://school.programmers.co.kr/questions/47585
 def solution(numer1, denom1, numer2, denom2):
     
     ## first get the fraction
