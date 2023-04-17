@@ -10,6 +10,33 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120808#
 """
 
 
+# 23.04.17
+# 그냥 분수를 구해두고, 최대공약수로 나누는 일은 나중에 하면 될 일이었다...
+# 역시 손으로 (펜잡고) 쓰면서 해야 정리가 잘되는 기분.
+def solution(numer1, denom1, numer2, denom2):
+    
+    ## first get the fraction
+    answer = [(numer1*denom2 + numer2*denom1), (denom1*denom2)]
+
+    ## in case of Numerator and denominator has other common multiple
+    if answer[0] > answer[1]:
+        d2, d1 = answer[0], answer[1]
+    else:
+        d2, d1 = answer[1], answer[0]
+
+    ## Greatest Common Divisor : Euclidean algorithm
+    while 1==1:
+        d3 = d2 % d1
+        if d3 == 0:
+            break
+        else:
+            d2, d1 = d1, d3
+        # d1 is GCD
+    
+    answer = [answer[0]/d1, answer[1]/d1]
+    return answer
+
+
 
 """오답노트"""
 
@@ -36,7 +63,7 @@ def solution(numer1, denom1, numer2, denom2):
   # 이번에는 왜 안되는지 다양한 테스트 케이스를 넣어보았다. 
   # 일단 분자가 분모의 배수일 때를 넣었다가 점수가 33->47 로 상승했고, (case1)
   # 그리고 주어지는 분수 자체가 기약분수가 아닐 때가 있었다. 그래서 100, 10, 10, 100 을 넣어 테스트 하도록 하여 걸러졌다. (case2)
-  # case2에서 case1이 걸러지므로 주석으로 지워뒀다.
+  # case2에서 case1이 걸러지므로 주석으로 지워뒀다. 정답으로 제출한 코드는 마지막으로 해결한 형태.
   def solution(numer1, denom1, numer2, denom2):
     
     ## Greatest Common Divisor : Euclidean algorithm
