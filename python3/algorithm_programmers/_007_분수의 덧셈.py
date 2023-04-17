@@ -29,3 +29,47 @@ def solution(numer1, denom1, numer2, denom2):
     # d1 is GCD
     answer = [(numer1*denom2 + numer2*denom1)/d1, (denom1*denom2)/d1]
     return answer
+
+
+
+  # 23.04.17
+  # 이번에는 왜 안되는지 다양한 테스트 케이스를 넣어보았다. 
+  # 일단 분자가 분모의 배수일 때를 넣었다가 점수가 33->47 로 상승했고, (case1)
+  # 그리고 주어지는 분수 자체가 기약분수가 아닐 때가 있었다. 그래서 100, 10, 10, 100 을 넣어 테스트 하도록 하여 걸러졌다. (case2)
+  # case2에서 case1이 걸러지므로 주석으로 지워뒀다.
+  def solution(numer1, denom1, numer2, denom2):
+    
+    ## Greatest Common Divisor : Euclidean algorithm
+    d2, d1 = denom2, denom1
+    # reminder = d2 % d1
+    while 1==1:
+        d3 = d2 % d1
+        if d3 == 0:
+            break
+        else:
+            d2, d1 = d1, d3
+    
+    ## d1 is GCD
+    answer = [(numer1*denom2 + numer2*denom1)/d1, (denom1*denom2)/d1]
+    
+    # ## case1: Numerator is denominator's multiple.
+    # if answer[0] % answer[1] == 0:
+    #     answer = [answer[0]/answer[1], 1]
+    # else:
+    #     pass
+    
+    ## case2: Numerator and denominator has other common multiple
+    if answer[0] > answer[1]:
+        d2, d1 = answer[0], answer[1]
+    else:
+        d2, d1 = answer[1], answer[0]
+
+    # d2, d1 = denom2, denom1
+    while 1==1:
+        d3 = d2 % d1
+        if d3 == 0:
+            break
+        else:
+            d2, d1 = d1, d3
+    answer = [answer[0]/d1, answer[1]/d1]
+    return answer
