@@ -9,6 +9,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120812#
 """
 
 
+
 # 23.04.18
 # '최빈값'을 구하라니까, '최빈값'의 빈도수를 뱉고있었다. (max(cnts)) 바보였다. (처음 문제 접했을 떄 썼던 코드는 오답노트로 올릴 필요도 없다.)
 # 웃긴건 그렇게 구해놨는데 테스트 케이스가 다 통과가 되었었음... 3이 3개있고 그랬다고 함... 일부러 테스트 케이스 그렇게 둔게 아닐까 합리적 의심이 들정도로!
@@ -30,6 +31,7 @@ def solution(array):
     return answer
 
 # 살짝 있어보이게 바꾼 것 (아래 글들 보고 리턴 방식만 바꿈)
+# 이번만 올리고 올리지 말든가 해야지 sql과 다르게 다른 사람 풀이 코드 다 볼 수 있네... https://school.programmers.co.kr/questions/47630
 def solution(array):
     
     tmp = list(set(array))
@@ -37,9 +39,15 @@ def solution(array):
     
     answer = -1
     if cnts.count(max(cnts)) == 1:
-        answer = tmp[cnts.index(max(cnts))]
+        answer = tmp[cnts.index(max(cnts))]   
     
     return answer
+# 물론 여기에 answer 아예 안쓰고 return 박아두고 if 절 나가서 return 에 -1 해도 된다!
+    if cnts.count(max(cnts)) == 1:
+        return tmp[cnts.index(max(cnts))]   
+    
+    return -1
+
 
 
 """다른 풀이"""
