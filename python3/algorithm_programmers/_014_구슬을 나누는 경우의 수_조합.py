@@ -15,25 +15,29 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120840
 
 
 # 23.04.18
-# 완전히 '조합' 문제
-# 먼저 썼던것
+# 이건 전부 통과가 된다.
 def solution(balls, share):
     k = 1
     # n combination m
-    for i in range(share, balls+1):
-        k *= i
-    for j in range(1, share+1):
-        k /= j
+    for n, m in zip(range(balls-share+1, balls+1), range(1, share+1)):
+        k = k*n/m
     
     answer = k
     return answer
 
-# 위를 zip()을 사용해 보완한 것
+
+
+"""오답노트"""
+
+# 처음에 썼었고, 테스트 케이스에서 잘 돌아갔다. 그래서 줄이고자 zip()을 사용하여 보완하였다.
+# 정확히 한 문제에서 제대로 돌아가질 않는다. (34번 케이스) 결국 같은 식인데, 문제가 무엇인지 모르겠다. 그래서 질문을 올려두었다.
+# https://school.programmers.co.kr/questions/47618
 def solution(balls, share):
     k = 1
     # n combination m
-    for n, m in zip(range(share, balls+1), range(1, share+1)):
+    for n in range(balls-share+1, balls+1):
         k *= n
+    for m in range(1, share+1):
         k /= m
     
     answer = k
