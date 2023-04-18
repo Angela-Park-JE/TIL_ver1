@@ -32,6 +32,7 @@ def solution(balls, share):
 # 처음에 썼었고, 테스트 케이스에서 잘 돌아갔다. 그래서 줄이고자 zip()을 사용하여 보완하였다.
 # 정확히 한 문제에서 제대로 돌아가질 않는다. (34번 케이스) 결국 같은 식인데, 문제가 무엇인지 모르겠다. 그래서 질문을 올려두었다.
 # https://school.programmers.co.kr/questions/47618
+# 답변: 큰 수를 나눌 때 정확히 떨어지지 않고 아주아주아주작은 소수점 자리 수가 00001 로 끝나는 경우가 있다고 한다. 그래서 answer를 round(k)로 바꾸었더니 정답처리 되더라. 정말 신기하다~
 def solution(balls, share):
     k = 1
     # n combination m
