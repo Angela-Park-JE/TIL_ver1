@@ -29,6 +29,17 @@ def solution(array):
     
     return answer
 
+# 살짝 있어보이게 바꾼 것 (아래 글들 보고 리턴 방식만 바꿈)
+def solution(array):
+    
+    tmp = list(set(array))
+    cnts = [array.count(i) for i in tmp]
+    
+    answer = -1
+    if cnts.count(max(cnts)) == 1:
+        answer = tmp[cnts.index(max(cnts))]
+    
+    return answer
 
 
 """다른 풀이"""
