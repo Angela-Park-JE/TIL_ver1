@@ -30,3 +30,34 @@ def solution(dot):
             return 2
         else:
             return 3
+
+"""다른 풀이"""
+
+# https://school.programmers.co.kr/learn/courses/30/lessons/120841/solution_groups?language=python3
+
+# juu , DoubleDeltas , bhnvx , 김현성 외 9 명
+# T/F 를 이용하여 값이 0 혹은 1로 나오는 것을 이용한 답이다. 엄청 현명하다...
+def solution(dot):
+    quad = [(3,2),(4,1)]
+    return quad[dot[0] > 0][dot[1] > 0]
+
+
+# ji , ch200203 , 좌타공인 , jhighllight
+# 사분면 특성을 가지고 아예 수식을 만들었다. 
+def solution(dot):
+    a, b = 1, 0
+    if dot[0]*dot[1] > 0:
+        b = 1
+    if dot[1] < 0:
+        a = 2
+    return 2*a-b
+
+
+# 노력형범재 , 윤은지 , 황인섭 , 홍종민 외 10 명
+# 일반적인 논리를 가지고 return 을 만들었는데, if else 문을 한 줄에 적어 넣는 기술이라니... 배워야한다.
+def solution(dot):
+    x,y = dot
+    if x*y>0:
+        return 1 if x>0 else 3
+    else:
+        return 4 if x>0 else 2
