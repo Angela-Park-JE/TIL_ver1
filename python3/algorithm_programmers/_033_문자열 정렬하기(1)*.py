@@ -27,3 +27,17 @@ def solution(my_string):
     my = [int(x) for x in list(my_string) if x.isdigit()]
     my.sort()
     return my
+
+
+"""다른 풀이"""
+# https://school.programmers.co.kr/learn/courses/30/lessons/120850/solution_groups?language=python3
+
+# 김현우 , 김종도 , 노력형범재 , gusjo 외 308 명
+# 맞네 sorted() 안에 리스트를 넣어버리면 끝이었던 것이었어요.
+def solution(my_string):
+    return sorted([int(c) for c in my_string if c.isdigit()])
+
+# Sehyeon Jeong , 김동우 , 김태호 , bkang 외 8 명사용 언어: Python3
+# filter를 사용하여 my_string에서 하나씩 검사해서 True인 애들을 int로 바꾸어 map으로 반복함.
+def solution(my_string):
+    return sorted(map(int, filter(lambda s: s.isdigit(), my_string)))
