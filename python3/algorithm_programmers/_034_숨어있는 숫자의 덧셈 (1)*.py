@@ -35,3 +35,14 @@ def solution(my_string):
             pass
 
     return answer
+
+# 김종도 , honeyhyuni , 주뇽킴 , KJstudio1171 외 98 명
+# isnumeric() 함수를 사용하였다. is숫자값 표현에 해당하는지 보기 때문에 3^2 같은 것도 된다.
+# isdigit()과 유사하지만 istdigit()은 숫자로만 이루어져있다면 숫자로 친다. 만약 isnumeric은 자연로그같은 것도 숫자로보겠지만 isdigit은 아니겠지.
+# isdecimal()도 숫자인지 보지만, int형으로 변환이 가능한지 본다.
+def solution(my_string):
+    answer = 0
+    for c in my_string:
+        if c.isnumeric():
+            answer += int(c)
+    return answer
