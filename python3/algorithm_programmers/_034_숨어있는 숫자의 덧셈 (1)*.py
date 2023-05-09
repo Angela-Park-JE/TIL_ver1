@@ -16,6 +16,8 @@ def solution(my_string):
     num_list = sum([int(i) for i in list(my_string) if i.isdigit()])
     return num_list
 
+
+
 """다른 풀이"""
 # https://school.programmers.co.kr/learn/courses/30/lessons/120851/solution_groups?language=python3
 
