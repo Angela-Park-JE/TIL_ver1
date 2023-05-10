@@ -12,6 +12,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120851
 
 # 23.05.06
 # num_list를 정해주지 않아도 되긴 하지만... 왜인지 모르게 바로 return으로 돌려버리는 일은 뭔가 불안하다.
+# 자연수이기 때문에 isdigit으로도 가능하다.
 def solution(my_string):
     num_list = sum([int(i) for i in list(my_string) if i.isdigit()])
     return num_list
