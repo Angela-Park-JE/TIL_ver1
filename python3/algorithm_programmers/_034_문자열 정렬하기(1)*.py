@@ -16,7 +16,6 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120850
 """
 
 
-
 # 23.05.04
 # .isdigit() | .isalpha() : 해당 문자가 숫자인지 알파벳인지 불타입을 반환함.
 # 정렬: 
@@ -27,6 +26,7 @@ def solution(my_string):
     my = [int(x) for x in list(my_string) if x.isdigit()]
     my.sort()
     return my
+
 
 
 """다른 풀이"""
