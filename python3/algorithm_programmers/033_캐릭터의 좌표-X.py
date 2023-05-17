@@ -19,8 +19,6 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120861
 
 
 
-
-
 """오답노트"""
 # 23.05.03
 # final로 zip에 묶으나 지금 보이는 식으로 묶으나 결과는 같다.
