@@ -17,6 +17,8 @@ SELECT CONCAT('/home/grep/src/', b.board_id, '/', f.file_id, f.file_name, f.file
  WHERE b.views = (SELECT MAX(views) FROM USED_GOODS_BOARD)
  ORDER BY f.file_id DESC;
 
+-- 230519: 복습 겸 또 풀어봤는데 'AS' file_path 로 as 쓴거 빼고는 토씨 하나 다른게 없어서 스스로 놀랐다...
+
 
 
 """내가 달았던 답변"""
