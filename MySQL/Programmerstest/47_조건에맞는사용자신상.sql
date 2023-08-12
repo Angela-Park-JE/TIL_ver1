@@ -26,7 +26,8 @@ SELECT user_id, nickname,
 
 
 
--- 230812: SUBSTRING 컨닝함. 여기는 서브쿼리로 만들어서 조인 시 조건을 건 것이고, 저기는 HAVING에 조건을 걸고 가진 쿼리의 결과 리스트에서 user를 가져오는 식으로 다르게 풀었다.
+-- 230812: SUBSTRING 컨닝함. 11분 정도
+-- 여기는 서브쿼리로 만들어서 조인 시 조건을 건 것이고, 저기는 HAVING에 조건을 걸고 가진 쿼리의 결과 리스트에서 user를 가져오는 식으로 다르게 풀었다.
 -- INNER 가 아니라 RIGHT은 틀린 답이다.
 SELECT u.user_id, u.nickname, 
         CONCAT(u.city, ' ', u.street_address1, ' ', u.street_address2) AS 전체주소,
