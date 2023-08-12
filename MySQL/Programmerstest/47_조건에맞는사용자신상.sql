@@ -6,7 +6,7 @@ USED_GOODS_BOARD와 USED_GOODS_USER 테이블에서 중고 거래 게시물을 3
 결과는 회원 ID를 기준으로 내림차순 정렬해주세요.
 """
 
-
+-- 230315:
 /*- mine : 왜 안돼지 했다가 마지막 번호에서 tlno, 7, 4 를 입력해두었었다. 1부터 세는거라 8번째 라고 써주어야 하는데 순간... ㅎㅎ -*/
 
 -- MySQL
@@ -23,3 +23,19 @@ SELECT user_id, nickname,
         HAVING COUNT(board_id) >= 3
     )  
  ORDER BY 1 DESC;
+
+
+
+-- 230812: SUBSTRING 컨닝함. 여기는 서브쿼리로 만들어서 조인 시 조건을 건 것이고, 저기는 HAVING에 조건을 걸고 가진 쿼리의 결과 리스트에서 user를 가져오는 식으로 다르게 풀었다.
+-- INNER 가 아니라 RIGHT은 틀린 답이다.
+SELECT u.user_id, u.nickname, 
+        CONCAT(u.city, ' ', u.street_address1, ' ', u.street_address2) AS 전체주소,
+        CONCAT(SUBSTRING(tlno, 1, 3), '-', SUBSTRING(tlno, 4, 4), '-', SUBSTRING(tlno, 8, 4)) AS 전화번호
+  FROM USED_GOODS_USER u INNER JOIN 
+        (
+        SELECT writer_id, COUNT(board_id) cnt
+        FROM USED_GOODS_BOARD
+        GROUP BY writer_id
+        ) b 
+        ON u.user_id = b.writer_id AND b.cnt>=3
+ORDER BY 1 DESC;
