@@ -5,7 +5,7 @@ USED_GOODS_BOARD와 USED_GOODS_USER 테이블에서 완료된 중고 거래의 �
 결과는 총거래금액을 기준으로 오름차순 정렬해주세요.
 """
 
-
+-- 230314
 /*- mine : WHERE에서 조건을 걸었다. 복잡할 것 없는 문제. 
     쓰는 스타일에 대한 생각을 하고있다. 
     개인적으로 오름차순 내림차순은 ASC, DESC 써주는게 나중에 긴 쿼리에서 더 직관적으로 보기 편한 것 같고 정리되어 보여서 선호하는데, 다들 오름차순은 안쓰더라. 
@@ -20,3 +20,17 @@ SELECT b.writer_id, u.nickname, SUM(b.price) AS total_sales
  GROUP BY b.writer_id
 HAVING SUM(b.price) >= 700000   -- HAVING total_sales >= 700000 도 가능하다. 
  ORDER BY 3 ASC;
+
+
+
+-- 230812: 3분 걸렸나? 지금보니 확실히 SQL스러운 사고방식이 둔화된 것 같다. HAVING을 잘 안쓰네.
+-- 하지만 기본적으로 구조는 깔끔하게 잘 되었다고 생각...
+SELECT *
+FROM (
+    SELECT u.user_id, u.nickname, SUM(b.price) total
+      FROM USED_GOODS_USER u LEFT JOIN USED_GOODS_BOARD b ON u.user_id = b.writer_id
+     WHERE b.status = 'DONE'
+     GROUP BY u.user_id
+    ) tmp
+WHERE total>=700000
+ORDER BY 3 ASC
