@@ -19,6 +19,13 @@ SELECT CONCAT('/home/grep/src/', b.board_id, '/', f.file_id, f.file_name, f.file
 
 -- 230519: 복습 겸 또 풀어봤는데 'AS' file_path 로 as 쓴거 빼고는 토씨 하나 다른게 없어서 스스로 놀랐다...
 
+-- 230812: 복습 겸 풀었음. MAX 안 쓰고 ORDER BY, LIMIT 으로 해결(어쩌다 concat을 컨닝해버렸어...6분 정도)
+SELECT CONCAT('/home/grep/src/', f.board_id, '/', f.file_id, f.file_name, f.file_ext) FILE_PATH
+  FROM USED_GOODS_BOARD b, USED_GOODS_FILE f
+ WHERE 1=1
+   AND b.board_id = f.board_id
+   AND b.views = (SELECT views FROM USED_GOODS_BOARD ORDER BY 1 DESC LIMIT 1)
+ ORDER BY f.file_id DESC;
 
 
 """내가 달았던 답변"""
