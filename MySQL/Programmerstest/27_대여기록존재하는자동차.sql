@@ -36,3 +36,15 @@ WHERE t1.car_id = t2.car_id
   AND MONTH(t1.start_date) = 10
   AND t2.car_type = '세단'
 ORDER BY 1 DESC;
+
+
+
+-- 복습
+-- 230814: DISTINCT가 생각이 안났었음. 3분 걸렸나. 일부러 LEFT JOIN을 안쓰긴 했지만 결국 그게 그것.
+SELECT DISTINCT c.car_id
+  FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_RENTAL_HISTORY h
+ WHERE 1=1
+   AND c.car_id = h.car_id 
+   AND MONTH(h.start_date) = 10
+   AND c.car_type IN ('세단')
+ORDER BY 1 DESC;
