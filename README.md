@@ -12,7 +12,7 @@ Almost the codes and notes are in Jupyter notebook(`.ipynb`).
 | `DL00` | 딥러닝 관련 공부 폴더 | `python3` |
 | `FinanceData_Analysis` | 금융데이터로 실습한 폴더 | `python3` |
 | `ML-00` | 기계학습 관련한 공부 폴더 | `python3` |
-| `MySQL` |  MySQL 공부, HackerRank, Leetcode SQL 문제 풀이 | `MySQL, Oracle SQL` |
+| `MySQL` |  MySQL 공부, HackerRank, Leetcode, Programmers SQL 문제 풀이 | `MySQL, Oracle SQL` |
 | `ToyPJT-Ecommerce` | (내용...😎) | `python3` |
 | `ToyPJT-POE_user` | Path Of Exile 게임 데이터 분석 폴더 | `python3` |
 | `pandas` | 판다스 정복기(보물창고), 판다스 팁이나 함수 등 판다스 메모장 | `python3` |
