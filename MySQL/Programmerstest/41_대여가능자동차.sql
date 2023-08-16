@@ -27,6 +27,20 @@ ORDER BY 1 DESC;
 
 
 
+-- 복습
+-- 230816: 분명 아주 길지는 않게 풀었을 텐데 하면서 이전에 푼 풀이 참고해서 복습.
+SELECT car_id, CASE WHEN MAX(availability) = 1 THEN '대여중' ELSE '대여 가능' END AS availability
+  FROM (
+        SELECT DISTINCT car_id,
+               CASE WHEN '2022-10-16' BETWEEN start_date AND end_date THEN 1 ELSE 0
+               END AS availability
+          FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+       ) tmp
+GROUP BY car_id
+ORDER BY car_id DESC;
+
+
+
 """다른 풀이"""
 
 -- 훨씬 똑똑한 방법. CASE WHEN을 한 번만 썼다. 해당날짜가 사이에 있는 car_id는 대여중이고, 그렇지 않은 차는 대여가능이도록!
