@@ -75,6 +75,7 @@ ORDER BY MONTH(START_DATE) ASC, CAR_ID DESC;
 -- 23.04.12 다른 방식의 풀이이다. 물론 기존에 했었던 방식이 훨씬 나은 방식인건 맞지만 이렇게 확실하게 한 번더 싸주는 방식도 있을 수 있다.
 -- id를 추출해두고, 그 id들의 렌탈 히스토리에서 월 정보만 추출해서 테이블을 만들어 둔 뒤, 그 테이블을 GROUP BY하여 count해줘버리는 것이다.
 -- https://school.programmers.co.kr/questions/46977
+-- ORACLE
 SELECT to_number(month) as month, CAR_ID, COUNT(CAR_ID)  -- SELECT MONTH, CAR_ID, COUNT(CAR_ID) 에서 수정
     FROM
     (SELECT TO_CHAR(START_DATE, 'MM') AS MONTH, CAR_ID
@@ -89,3 +90,21 @@ SELECT to_number(month) as month, CAR_ID, COUNT(CAR_ID)  -- SELECT MONTH, CAR_ID
     GROUP BY MONTH, CAR_ID
     HAVING COUNT(*) > 0
     ORDER BY MONTH, CAR_ID DESC;
+
+
+
+-- 230816 복습: EXTRACT을 까먹고 YEAR_MONTH .... 홀홀홀 모드라~ 이러고 있었음
+-- 0인 조건에 대해서 안쓴게 감점이라면 감점이지만 처음 풀었던 정답과 거의 비슷하다. (0인 기록이 없기 때문에 넘어가짐.)
+SELECT MONTH(start_date), car_id, COUNT(history_id) AS records
+  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        -- 조건을 걸어두는게 좋기 때문에 월별 그룹화는 겉에서 한번 더 해주기로하고 테이블을 한 번 더 데려오는 게 조금더 낫다
+        -- 따라서 FROM 절로 데려오는 것이 아니라 조건에 맞는 차 목록만 데려와서 그룹화를 하는 것이 나음
+ WHERE car_id IN
+       (SELECT car_id
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        WHERE EXTRACT(YEAR_MONTH FROM start_date) BETWEEN '202208' AND '202210'
+        GROUP BY car_id 
+        HAVING COUNT(history_id)>=5)
+   AND EXTRACT(YEAR_MONTH FROM start_date) BETWEEN '202208' AND '202210'
+GROUP BY MONTH(start_date), car_id
+ORDER BY 1 ASC, 2 DESC;
