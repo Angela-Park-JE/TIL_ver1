@@ -100,3 +100,48 @@ WHERE c.car_id = tb1.car_id
   AND c.car_type IN ('세단', 'SUV')
   AND (EXTRACT(YEAR_MONTH FROM h.start_date) != 202211 AND EXTRACT(YEAR_MONTH FROM h.end_date) != 202211)
 ORDER BY 3 DESC, 2 ASC, 1 DESC;
+
+
+
+-- 230818 시도: 쌓아가는 식으로 풀자, 하고 복습했는데 잘 안됨. diff 연결에서 문제를 못풀었음. 게다가 다시 복습겸 보니 해당 기간에 빌릴 수 있는 차를 구하는 논리에서도 틀렸음.
+-- (1)세단과 SUV의 30일간의 대여금액, 이들의 조건은 메타 테이블에서 걸어도됨
+--  SELECT c.car_id, (c.daily_fee * 30 * (100-p.discount_rate)/100) AS fee_1
+--    FROM CAR_RENTAL_COMPANY_CAR c 
+--         LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p ON c.car_type = p.car_type
+--   WHERE c.car_type IN ('세단', 'SUV')
+--     AND LEFT(p.duration_type, 2) = '30';
+-- (2)50~200 인 자동차들에 대하여, 기간동안 대여가능한 자동차들의 기록별 대여료 (여기까진 됨)
+--  SELECT h.history_id, c.car_id, c.daily_fee, DATEDIFF(h.end_date, h.start_date) AS diff
+--    FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_RENTAL_HISTORY h,
+--      (
+--      SELECT c.car_id, (c.daily_fee * 30 * (100-p.discount_rate)/100) AS fee_1
+--        FROM CAR_RENTAL_COMPANY_CAR c 
+--             LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p ON c.car_type = p.car_type
+--       WHERE c.car_type IN ('세단', 'SUV')
+--         AND LEFT(p.duration_type, 2) = '30'
+--      ) tmp1
+--   WHERE c.car_id = h.car_id AND tmp1.car_id = c.car_id
+--     AND (EXTRACT(YEAR_MONTH FROM h.start_date) != 202211 OR EXTRACT(YEAR_MONTH FROM h.end_date) != 202211) -- 기간 조건
+--     AND (tmp1.fee_1)/10000 BETWEEN 50 AND 200 -- tmp1에서 거른 차종조건, 금액조건
+-- (3) history별 대여금액 산출 -- 멋지게 망해버림 역시 손으로 써가면서 하는게 좋은 것 같다. 
+-- SELECT DISTINCT tmp2.car_id, p.car_type, tmp2.daily_fee*p, 
+--     CASE WHEN tmp2.diffs/90>=1 THEN  -- 하 하 diff
+
+--   FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN p RIGHT JOIN -- 히스토리 별 금액 산출을 위해 join
+--        (
+--         SELECT h.history_id, c.car_id, c.car_type, c.daily_fee, 
+--                DATEDIFF(h.end_date, h.start_date) AS diffs,
+--                DATEDIFF(h.end_date, h.start_date)*c.daily_fee AS post_fee
+--           FROM CAR_RENTAL_COMPANY_CAR c, CAR_RENTAL_COMPANY_RENTAL_HISTORY h,
+--                 (
+--                 SELECT c.car_id, (c.daily_fee * 30 * (100-p.discount_rate)/100) AS fee_1
+--                   FROM CAR_RENTAL_COMPANY_CAR c 
+--                        LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p ON c.car_type = p.car_type
+--                  WHERE c.car_type IN ('세단', 'SUV')
+--                    AND LEFT(p.duration_type, 2) = '30'
+--                 ) tmp1
+--          WHERE c.car_id = h.car_id AND tmp1.car_id = c.car_id
+--            AND (EXTRACT(YEAR_MONTH FROM h.start_date) != 202211 
+--                 OR EXTRACT(YEAR_MONTH FROM h.end_date) != 202211) -- 기간 조건
+--            AND (tmp1.fee_1)/10000 BETWEEN 50 AND 200 -- tmp1에서 거른 차종조건, 금액조건
+--        ) tmp2 ON p.car_type = tmp2.car_type
