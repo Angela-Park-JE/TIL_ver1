@@ -29,7 +29,17 @@ SELECT b.author_id, a.author_name, b.category, SUM(b.price*s.sales) AS TOTAL_SAL
  WHERE EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
  GROUP BY b.author_id, b.category
  ORDER BY 1 ASC, 3 DESC;
-
+-- Oracle- 오랜만에 오라클 sql 쓰려니 헷갈렸다. 
+-- 먼저 group by에는 select 절에 올라가는 것들을 다 명시해주어야 하는 점이 다르고,
+-- EXTRACT를 사용하지만 YEAR_MONTH 는 안되기 때문에 따로 뜯어서 해주어야 한다.
+SELECT a.author_id, a.author_name, b.category, SUM(s.sales*b.price) AS total_sales
+FROM BOOK_SALES s, BOOK b, AUTHOR a
+WHERE s.book_id = b.book_id and b.author_id = a.author_id
+  -- AND EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
+  AND EXTRACT(YEAR FROM s.sales_date) = 2022  
+  AND EXTRACT(MONTH FROM s.sales_date) = 01
+GROUP BY a.author_id, a.author_name, b.category
+ORDER BY 1 ASC, 3 DESC;
 
 
 
