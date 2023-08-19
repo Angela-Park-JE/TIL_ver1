@@ -20,9 +20,22 @@ ORDER BY 1 ASC, 3 DESC;
 
 
 
+-- 복습
+-- 230819: id기준 오름차순인데 이름 기준으로 보고 적어서 뭐가 틀린건지 잠시 헤맴
+-- 복습에서 푼 것은 left join을 바로 이어가는 식으로 테이블 조인을 함, 그외에는 같음.
+SELECT b.author_id, a.author_name, b.category, SUM(b.price*s.sales) AS TOTAL_SALES
+  FROM BOOK_SALES s LEFT JOIN BOOK b ON s.book_id = b.book_id 
+                    LEFT JOIN AUTHOR a ON b.author_id = a.author_id
+ WHERE EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
+ GROUP BY b.author_id, b.category
+ ORDER BY 1 ASC, 3 DESC;
+
+
+
+
 
 """
-저자 별 카테고리 별 매출액 집계하기
+저자 별 카테고리 별 매출액 집계하기 (다른 문제임)
 https://school.programmers.co.kr/learn/courses/30/lessons/144855
 2022년 1월의 카테고리 별 도서 판매량을 합산하고, 카테고리(CATEGORY), 총 판매량(TOTAL_SALES) 리스트를 출력하는 SQL문을 작성해주세요.
 결과는 카테고리명을 기준으로 오름차순 정렬해주세요.
