@@ -44,6 +44,7 @@ ORDER BY 1 ASC, 3 DESC;
 
 
 
+
 """
 저자 별 카테고리 별 매출액 집계하기 (다른 문제임)
 https://school.programmers.co.kr/learn/courses/30/lessons/144855
@@ -58,3 +59,11 @@ SELECT b.category, SUM(s.sales) total_sales
 FROM BOOK b RIGHT JOIN BOOK_SALES s ON b.book_id = s.book_id
 WHERE EXTRACT(YEAR_MONTH FROM s.sales_date) = 202201
 GROUP BY 1 ORDER BY 1 ASC;
+
+
+-- 230820: total sales를 총 매출 합계로 보고 순간 헷갈림. 그외엔 조인을 equi조인으로 했다는 것에 차이가 있다.
+SELECT b.category, SUM(bs.sales) AS total_sales
+  FROM BOOK b, BOOK_SALES bs
+ WHERE b.book_id = bs.book_id
+   AND EXTRACT(YEAR_MONTH FROM bs.sales_date) = 202201
+ GROUP BY b.category ORDER BY 1 ASC;
