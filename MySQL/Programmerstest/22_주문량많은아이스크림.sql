@@ -35,6 +35,21 @@ LIMIT 3;
 
 
 
+-- 복습
+-- 230820: FULL OUTER JOIN이 듣지 않아 UNION을 쓰기로. 
+SELECT flavor
+  FROM 
+    (
+        SELECT * FROM JULY UNION SELECT * FROM FIRST_HALF
+    ) tmp
+ GROUP BY flavor
+ ORDER BY SUM(total_order) DESC
+ LIMIT 3;
+
+
+
+
+
 """다른 풀이"""
 -- MySQL : ORDER BY 에 SUM이 바로 써지는 구나... 했다.
 -- https://school.programmers.co.kr/questions/42791
