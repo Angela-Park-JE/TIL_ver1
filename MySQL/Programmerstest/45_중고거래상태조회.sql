@@ -16,3 +16,8 @@ SELECT board_id, writer_id, title, price,
   FROM USED_GOODS_BOARD 
  WHERE created_date = '2022-10-05'
  ORDER BY 1 DESC;
+
+
+
+
+-- 복습
