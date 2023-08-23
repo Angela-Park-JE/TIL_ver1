@@ -21,3 +21,4 @@ SELECT board_id, writer_id, title, price,
 
 
 -- 복습
+-- 
