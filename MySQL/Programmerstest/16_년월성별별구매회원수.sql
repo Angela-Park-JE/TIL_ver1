@@ -15,3 +15,14 @@ WHERE o.user_id = u.user_id
   AND u.gender IS NOT NULL
 GROUP BY YEAR(o.sales_date), MONTH(o.sales_date), u.gender
 ORDER BY 1, 2, 3;
+
+
+
+-- 복습
+-- 230824: "u.gender IS NOT NULL" 을 "u.gender != NULL" 해서 안됐다. NULL에 대해서는 IS NOT NULL을 쓰는 것 잊지 말기.
+-- 또한 count에서 DISTINCT를 사용해야 한다. 구매건수가 아니라 회원수니까.
+SELECT YEAR(os.sales_date), MONTH(os.sales_date), u.gender, COUNT(DISTINCT os.user_id)
+  FROM USER_INFO u, ONLINE_SALE os
+ WHERE u.user_id = os.user_id AND u.gender IS NOT NULL
+ GROUP BY YEAR(os.sales_date), MONTH(os.sales_date), gender
+ ORDER BY 1, 2, 3;
