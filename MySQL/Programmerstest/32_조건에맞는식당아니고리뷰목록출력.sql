@@ -30,6 +30,7 @@ WHERE c.member_id = r.member_id
 ORDER BY 3 ASC, 2 ASC;
 
 
+
 -- MySQL
 SELECT m.member_name, r.review_text, DATE_FORMAT(r.review_date, '%Y-%m-%d') review_date
 FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id,
@@ -43,6 +44,20 @@ FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id,
     ) tb2
 WHERE tb2.member_id = m.member_id
 ORDER BY 3 ASC, 2 ASC;
+
+
+
+-- 복습
+-- 230825: 크게 어려울 것은 없었고, HAVING을 사용할 까 하다가 LIMIT으로 잘라낸듯한 쿼리.
+SELECT m.member_name, r.review_text, DATE_FORMAT(r.review_date, '%Y-%m-%d')
+  FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id
+ WHERE r.member_id = 
+                    (SELECT member_id
+                       FROM REST_REVIEW
+                      GROUP BY member_id
+                      ORDER BY COUNT(review_id) DESC
+                      LIMIT 1)
+ ORDER BY 3 ASC, 2 ASC;
 
 
 
@@ -98,6 +113,7 @@ where A.ran =1
 order by review_date,review_text;
 
 
+
 -- MySQL
 -- https://school.programmers.co.kr/questions/44144
 SELECT 
@@ -126,6 +142,7 @@ ORDER BY
     REVIEW_TEXT ASC
 
 
+    
 -- MySQL
 -- https://school.programmers.co.kr/questions/43590
 -- 최다 리뷰어를 추출한 후 해당 리뷰어의 id를 기반으로 원래 테이블에 조인을 하는 방식 -> 이라고 쓰셨음. 위와 방식으로보임 근데 LIMIT 은 한 줄만 뽑게 되어있을 텐데... 왜지
