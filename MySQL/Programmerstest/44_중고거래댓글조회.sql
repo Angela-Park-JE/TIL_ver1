@@ -16,3 +16,8 @@ SELECT b.title, b.board_id, r.reply_id, r.writer_id, r.contents,
   FROM USED_GOODS_BOARD b RIGHT JOIN USED_GOODS_REPLY r ON b.board_id = r.board_id
  WHERE EXTRACT(YEAR_MONTH FROM b.created_date) = 202210 
  ORDER BY 6 ASC, 1 ASC;
+
+
+
+-- 복습
+-- 
