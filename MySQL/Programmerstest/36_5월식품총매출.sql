@@ -15,3 +15,13 @@ WHERE o.product_id = p.product_id
   AND EXTRACT(YEAR_MONTH FROM o.produce_date) = 202205
 GROUP BY p.product_id
 ORDER BY 3 DESC, 1 ASC;
+
+
+
+-- 복습
+-- 230827: 비슷한듯 하면서 다르다. SUM을 가격과 주문량 곱한 상태로 더한 것과, right join으로 명시한 점.
+SELECT p.product_id, p.product_name, SUM(p.price*o.amount)
+  FROM FOOD_PRODUCT p RIGHT JOIN FOOD_ORDER o ON p.product_id = o.product_id
+ WHERE EXTRACT(YEAR_MONTH FROM o.produce_date) = '202205'
+ GROUP BY p.product_id
+ ORDER BY 3 DESC, 1 ASC;
