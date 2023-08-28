@@ -26,3 +26,34 @@ FROM
     ) tmp1
 WHERE max_price = price
 ORDER BY 2 DESC;
+
+
+
+-- 복습
+-- 230828: product_id로 조인을 하다가 서브 쿼리에서 올바른 id가 안나왔을 수도 있겠다 생각함. 이전의 나 정말 잘 활용했구나. 과거의 내가 정답이다!
+-- 틀린 것
+SELECT p1.category, p2.mp max_price, p1.product_name
+FROM FOOD_PRODUCT p1,
+    (
+    SELECT category, MAX(price) mp, product_id
+      FROM FOOD_PRODUCT
+     WHERE category IN ('과자', '국', '김치', '식용유')
+     GROUP BY category
+    ) p2
+ WHERE p1.product_id = p2.product_id
+ GROUP BY p1.category
+ ORDER BY 2 DESC;
+
+-- 정답: 카테고리와 가격으로 조인을 시켰음. 
+SELECT p1.category, p1.price max_price, p1.product_name
+FROM FOOD_PRODUCT p1,
+    (
+    SELECT category, MAX(price) mp, product_id
+      FROM FOOD_PRODUCT
+     WHERE category IN ('과자', '국', '김치', '식용유')
+     GROUP BY category
+    ) p2
+ WHERE p1.category = p2.category
+   AND p1.price = p2.mp
+ GROUP BY p1.category
+ ORDER BY 2 DESC;
