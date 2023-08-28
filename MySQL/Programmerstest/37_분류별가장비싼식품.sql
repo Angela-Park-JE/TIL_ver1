@@ -30,7 +30,7 @@ ORDER BY 2 DESC;
 
 
 -- 복습
--- 230828: product_id로 조인을 하다가 서브 쿼리에서 올바른 id가 안나왔을 수도 있겠다 생각함. 이전의 나 정말 잘 활용했구나. 과거의 내가 정답이다!
+-- 230828: product_id로 조인을 하다가 서브 쿼리에서 올바른 id가 안나왔을 수도 있겠다 생각함. 15분 걸림. 이전의 나 윈도우 함수 정말 잘 활용했구나. 과거의 내가 정답이다!
 -- 틀린 것
 SELECT p1.category, p2.mp max_price, p1.product_name
 FROM FOOD_PRODUCT p1,
