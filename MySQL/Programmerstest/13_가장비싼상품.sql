@@ -28,5 +28,5 @@ https://school.programmers.co.kr/learn/courses/30/lessons/59415
 -- GROUP BY datetime
 -- LIMIT 1;
 
-SELECT MAX(datetime) AS '시간' FROM ANIMAL_INS;
- 
+SELECT MAX(datetime) AS '시간' 
+FROM ANIMAL_INS;
