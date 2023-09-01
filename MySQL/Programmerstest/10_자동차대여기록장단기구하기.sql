@@ -17,3 +17,14 @@ SELECT history_id, car_id,
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 WHERE EXTRACT(YEAR_MONTH FROM start_date) = '202209'
 ORDER BY history_id DESC;
+
+
+
+-- 복습
+-- 230901: 이전에 한것과 같다. 다만 여기서는 대여일 기준에 +1을 더하여 정확하게 표현을 했고 이전 것은 하루가 0으로 표현되는 것을 감안하여 29로 계산하였다.
+SELECT history_id, car_id, DATE_FORMAT(start_date, '%Y-%m-%d'), DATE_FORMAT(end_date, '%Y-%m-%d'), 
+       CASE WHEN (DATEDIFF(end_date, start_date)+1) >= 30 THEN '장기 대여' ELSE '단기 대여' END AS rent_type
+  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+ WHERE EXTRACT(YEAR_MONTH FROM start_date) = 202209
+ GROUP BY history_id
+ ORDER BY 1 DESC;
