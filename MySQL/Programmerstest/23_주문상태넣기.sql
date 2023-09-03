@@ -26,3 +26,8 @@ SELECT order_id, product_id, DATE_FORMAT(out_date, '%Y-%m-%d') out_date,
             END '출고여부'
 FROM FOOD_ORDER 
 ORDER BY 1;
+
+
+
+— 복습
+- 
