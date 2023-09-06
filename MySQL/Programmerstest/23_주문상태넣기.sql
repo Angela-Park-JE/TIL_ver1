@@ -29,5 +29,14 @@ ORDER BY 1;
 
 
 
-— 복습
--  하...
+—- 복습
+-- 230906: dateformat을 지켜주어야 한다.
+-- 이전에 훨씬 직관적으로 잘 풀었었는데, 굳이 이렇게... 아니 부등호가 자꾸 안먹었는걸 어찌해요!
+SELECT order_id, product_id, DATE_FORMAT(out_date, '%Y-%m-%d') out_date,
+    CASE WHEN out_date IS NULL THEN '출고미정'
+         WHEN (EXTRACT(YEAR_MONTH FROM out_date) < 202205) OR 
+              (DATE_FORMAT(out_date, '%Y-%m-%d') = '2022-05-01') THEN '출고완료' 
+         ELSE '출고대기'
+         END '출고여부'
+FROM FOOD_ORDER
+ORDER BY 1;
