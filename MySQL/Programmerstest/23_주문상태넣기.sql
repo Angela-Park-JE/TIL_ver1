@@ -29,7 +29,7 @@ ORDER BY 1;
 
 
 
-—- 복습
+-- 복습
 -- 230906: dateformat을 지켜주어야 한다.
 -- 이전에 훨씬 직관적으로 잘 풀었었는데, 굳이 이렇게... 아니 부등호가 자꾸 안먹었는걸 어찌해요!
 SELECT order_id, product_id, DATE_FORMAT(out_date, '%Y-%m-%d') out_date,
