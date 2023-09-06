@@ -30,3 +30,12 @@ FROM BOOK b, AUTHOR a
 WHERE b.author_id = a.author_id
   AND b.category = '경제'
 ORDER BY 3;
+
+
+
+-- 복습
+-- 230906: 데이터가 작아서 어떤 조인을 써도 문제가 없는 것으로 보였음... ㄷㄷ
+SELECT book_id, author_name, DATE_FORMAT(published_date, '%Y-%m-%d')
+FROM BOOK b JOIN AUTHOR a ON b.author_id = a.author_id
+WHERE category = '경제'
+ORDER BY published_date ASC;
