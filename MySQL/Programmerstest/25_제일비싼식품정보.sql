@@ -19,3 +19,11 @@ FOOD_PRODUCT 테이블에서 가격이 제일 비싼 식품의 식품 ID, 식품
 SELECT product_id, product_name, product_cd, category, price
 FROM FOOD_PRODUCT 
 WHERE price = (SELECT MAX(price) FROM FOOD_PRODUCT);
+
+
+
+-- 복습
+-- 230907: 이전과 완벽히 같다. 
+SELECT product_id, product_name, product_cd, category, price
+FROM FOOD_PRODUCT
+WHERE price = (SELECT MAX(price) FROM FOOD_PRODUCT);
