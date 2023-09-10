@@ -14,3 +14,13 @@ WHERE EXTRACT(YEAR_MONTH FROM apnt_ymd) = 202205
 --  AND apnt_cncl_yn = 'N'
 GROUP BY mcdp_cd 
 ORDER BY 2, 1;
+
+
+
+-- 복습
+-- 230910: 이전과 똑같이 했다. 다만 AS를 한 것, 들여쓰기를 한 것 정도가 다르다.
+SELECT mcdp_cd AS '진료과 코드', COUNT(apnt_no) AS '5월예약건수'
+  FROM APPOINTMENT
+ WHERE EXTRACT(YEAR_MONTH FROM apnt_ymd) = '202205'
+ GROUP BY mcdp_cd
+ ORDER BY 2 ASC, 1 ASC;
