@@ -17,3 +17,7 @@ SELECT car_id, car_type, daily_fee, options
 FROM CAR_RENTAL_COMPANY_CAR
 WHERE INSTR(options, '네비게이션') > 0
 ORDER BY 1 DESC;
+
+
+
+-- 복습
