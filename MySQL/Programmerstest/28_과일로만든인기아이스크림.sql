@@ -25,3 +25,8 @@ WHERE t1.flavor = t2.flavor
 GROUP BY 1
 HAVING SUM(t1.total_order) > 3000
 ORDER BY SUM(t1.total_order) DESC;
+
+
+
+-- 복습
+-- 
