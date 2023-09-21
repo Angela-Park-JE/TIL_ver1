@@ -34,3 +34,6 @@ SELECT pt_name, pt_no, gend_cd, age, IFNULL(tlno, 'NONE') tlno
 FROM PATIENT
 WHERE age <=12 AND gend_cd = 'W'
 ORDER BY age desc, pt_name asc;
+
+
+
