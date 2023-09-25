@@ -17,6 +17,14 @@ ORDER BY 4 DESC, 1 ASC;
 
 
 
+-- 복습
+-- 230925: DATE FORMAT 포맷에 대해서도 문제에서 명시해주면 좋겠다. 주의사항 말고...
+SELECT dr_name, dr_id, mcdp_cd, DATE_FORMAT(hire_ymd, '%Y-%m-%d')
+  FROM DOCTOR
+ WHERE mcdp_cd IN ('CS', 'GS')
+ ORDER BY 4 DESC, 1 ASC;
+
+
 
 """
 12세 이하인 여자 환자 목록 출력하기
@@ -37,3 +45,10 @@ ORDER BY age desc, pt_name asc;
 
 
 
+-- 복습
+-- 230925: 조건을 다 안 쓴것과 성별을 빼먹었던 점 틀렸고,
+-- IFNULL 을 쓰는게 훨씬 나았다. 생각은 했으나 맞나? 하다가 CASE WHEN을 써버린 것! 한참 공부할 때가 정말 맞다.
+SELECT pt_name, pt_no, gend_cd, age, CASE WHEN tlno IS NULL THEN 'NONE' ELSE tlno END AS TLNO
+  FROM PATIENT
+ WHERE age <= 12 AND gend_cd = 'W'
+ ORDER BY 4 DESC, 1 ASC;
