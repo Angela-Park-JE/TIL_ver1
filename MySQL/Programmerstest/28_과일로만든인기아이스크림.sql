@@ -29,4 +29,4 @@ ORDER BY SUM(t1.total_order) DESC;
 
 
 -- 복습
--- 230919: 
+-- 230930:0
