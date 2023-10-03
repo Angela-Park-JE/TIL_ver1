@@ -29,4 +29,10 @@ ORDER BY SUM(t1.total_order) DESC;
 
 
 -- 복습
--- 231002:
+-- 231003: 조인을 FROM 절에서 한 것만 다르다 그외의 전체적으로 같음.
+SELECT f.flavor
+FROM FIRST_HALF f LEFT JOIN ICECREAM_INFO info ON f.flavor = info.flavor
+WHERE info.ingredient_type = 'fruit_based'
+GROUP BY f.flavor
+HAVING SUM(f.total_order)  > 3000
+ORDER BY SUM(f.total_order) DESC;
