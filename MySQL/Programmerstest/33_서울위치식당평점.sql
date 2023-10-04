@@ -16,3 +16,8 @@ FROM REST_INFO i RIGHT JOIN REST_REVIEW r ON i.rest_id = r.rest_id
 WHERE i.address like "서울%"      -- DON'T DO LIKE -> WHERE INSTR(i.address, '서울') > 0 OR LEFT(i.tel, 2) = 02
 GROUP BY i.rest_id
 ORDER BY 6 DESC, 4 DESC;
+
+
+
+-- 복습
+-- 231004:
