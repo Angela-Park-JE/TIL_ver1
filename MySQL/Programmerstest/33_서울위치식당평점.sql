@@ -28,7 +28,7 @@ ORDER BY 6 DESC, 4 DESC;
 -- 그럼 결국 "서울(특별)시 외에 서울이 들어가는 지명이 또 존재한다"는 가설이 맞게 된다.
 SELECT info.rest_id, info.rest_name, info.food_type, 
        info.favorites, info.address, ROUND(AVG(rev.review_score), 2) scores
-FROM REST_INFO info RIGHT JOIN REST_REVIEW rev ON info.rest_id = rev.rest_id
-WHERE info.address LIKE '%서울%'
-GROUP BY info.rest_id
-ORDER BY 6 DESC, 4 DESC;
+  FROM REST_INFO info RIGHT JOIN REST_REVIEW rev ON info.rest_id = rev.rest_id
+ WHERE info.address LIKE '%서울%'
+ GROUP BY info.rest_id
+ ORDER BY 6 DESC, 4 DESC;
