@@ -38,3 +38,15 @@ SELECT a.apnt_no, p.pt_name, p.pt_no, a.mcdp_cd, d.dr_name, a.apnt_ymd
 
 
 -- 복습
+-- 230926: DATE_FORMAT을 쓰지 않아도 되는 문제였다.
+-- 이전과는 다르게 상세한 조건을 테이블에서 미리 걸어두고 가져온 다음
+-- WHERE 절에서는 조인 조건만 서술하는 방식으로 했다. 
+-- (물론 조인을 FROM 절에서 다 끝내는게 깔끔하기 때문에 완전 반대 방식으로 한 것이긴 한데,
+-- 테이블이 자주 수정되는 상황에서는 이런것이 오히려 더 편하지 않을까도 싶었다.
+SELECT apnt_tbl.apnt_no, p.pt_name, p.pt_no, apnt_tbl.mcdp_cd, d.dr_name, apnt_tbl.apnt_ymd
+  FROM PATIENT p, DOCTOR d, 
+       (SELECT * FROM APPOINTMENT WHERE apnt_cncl_yn = 'N'
+                                    AND DATE(apnt_ymd) = '2022-04-13'
+                                    AND mcdp_cd = 'CS') AS apnt_tbl
+ WHERE apnt_tbl.pt_no = p.pt_no AND apnt_tbl.mddr_id = d.dr_id
+ ORDER BY apnt_ymd ASC;
