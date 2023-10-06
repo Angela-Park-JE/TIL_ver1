@@ -14,3 +14,13 @@ FROM PRODUCT p, OFFLINE_SALE os
 WHERE p.product_id = os.product_id
 GROUP BY p.product_id
 ORDER BY 2 DESC, 1 ASC;
+
+
+
+-- 복습
+-- 231007: off.sales_amount*SUM(p.price) 가 아니라 SUM(off.sales_amount)*p.price를 해야한다
+-- 맞지. 그룹별 가격을 더하는게 아니라 수량을 더해놓고 price를 곱해야지...
+SELECT p.product_code, SUM(off.sales_amount)*p.price sales
+  FROM PRODUCT p RIGHT JOIN OFFLINE_SALE off ON p.product_id = off.product_id
+ GROUP BY p.product_code
+ ORDER BY sales DESC, product_code ASC;
