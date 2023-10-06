@@ -14,3 +14,14 @@ WHERE MONTH(date_of_birth) = 3
   AND tlno IS NOT NULL 
   AND gender = 'W'
 ORDER BY 1 ASC;
+
+
+
+-- 복습
+-- 231006:
+SELECT member_id, member_name, gender, DATE_FORMAT(date_of_birth, '%Y-%m-%d') date_of_birth
+  FROM MEMBER_PROFILE
+ WHERE MONTH(date_of_birth) = 3 
+   AND gender = 'W'
+   AND tlno IS NOT NULL
+ ORDER BY 1 ASC;
