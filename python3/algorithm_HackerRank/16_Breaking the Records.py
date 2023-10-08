@@ -1,8 +1,25 @@
+"""
+Prepare> Algorithms> Implementation> Breaking the Records
+https://www.hackerrank.com/challenges/breaking-best-and-worst-records/problem?isFullScreen=true
+Maria plays college basketball and wants to go pro. Each season she maintains a record of her play. 
+She tabulates the number of times she breaks her season record for most points and least points in a game. 
+Points scored in the first game establish her record for the season, and she begins counting from there.
+> Example
+    Scores are in the same order as the games played. She tabulates her results as follows:
+    
+                                         Count
+        Game  Score  Minimum  Maximum   Min Max
+         0      12     12       12       0   0
+         1      24     12       24       0   1
+         2      10     10       24       1   1
+         3      24     10       24       1   1
+    Given the scores for a season, determine the number of times Maria breaks her records for most and least points scored during the season.
+> Returns
+    int[2]: An array with the numbers of times she broke her records. Index  is for breaking most points records, and index  is for breaking least points records.
+"""
 
-# https://www.hackerrank.com/challenges/breaking-best-and-worst-records/problem?isFullScreen=true
 
-
-
+# 231009: 하하 리턴논타입 때문에 잠깐 패닉빠졌던 나를 반성하며... 시간날때 다시 깔끔하게 리스트 컴프리핸션으로 만들어보기
 #!/bin/python3
 
 import math
