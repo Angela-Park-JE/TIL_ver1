@@ -16,8 +16,6 @@ WHERE name IS NOT NULL
 GROUP BY name HAVING COUNT(*) >= 2
 ORDER BY 1;
 
-
-
 -- 이전에 내었던 답
 SELECT *
 FROM (SELECT name, COUNT(name) as 'count'
@@ -26,3 +24,14 @@ FROM (SELECT name, COUNT(name) as 'count'
       GROUP BY name) as dt
 WHERE count >= 2
 ORDER BY 1;
+
+
+
+-- 복습
+-- 231008: 어렵지 않은 문제!
+SELECT name, COUNT(*) 
+  FROM ANIMAL_INS
+ WHERE name IS NOT NULL
+ GROUP BY name
+HAVING COUNT(*)>=2
+ ORDER BY name;
