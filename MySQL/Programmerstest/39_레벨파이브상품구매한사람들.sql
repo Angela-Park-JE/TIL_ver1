@@ -1,6 +1,6 @@
 """
 상품을 구매한 회원 비율 구하기
-https://school.programmers.co.kr/learn/courses/30/lessons/131534
+https://school.programmers.co.kr/learn/courses/30/lesso/131534
 USER_INFO 테이블과 ONLINE_SALE 테이블에서 2021년에 가입한 전체 회원들 중, 상품을 구매한 회원수와 상품을 구매한 회원의 비율
 (=2021년에 가입한 회원 중 상품을 구매한 회원수 / 2021년에 가입한 전체 회원 수)을 년, 월 별로 출력하는 SQL문을 작성해주세요. 
 상품을 구매한 회원의 비율은 소수점 두번째자리에서 반올림하고, 전체 결과는 년을 기준으로 오름차순 정렬해주시고 년이 같다면 월을 기준으로 오름차순 정렬해주세요.
@@ -26,40 +26,40 @@ GROUP BY 1, 2;
 
 -- 복습
 -- 231012:
--- 일단, 2021가입자목록과 ons를 WHERE절 조인을 했을 때랑, ons만 FROM절에 두고 WHERE에서 user_id IN 가입자목록으로 검색한 결과가 같다.
+-- 일단, 2021가입자목록과 o를 WHERE절 조인을 했을 때랑, o만 FROM절에 두고 WHERE에서 user_id IN 가입자목록으로 검색한 결과가 같다.
 -- -- 같은것1: 전자
 -- SELECT YEAR(sales_date), MONTH(sales_date), COUNT(*)
--- FROM ONLINE_SALE ons,
---     (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) user2021
--- WHERE -- ons.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
---      ons.user_id = user2021.user_id
+-- FROM ONLINE_SALE o,
+--     (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) u
+-- WHERE -- o.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
+--      o.user_id = u.user_id
 -- GROUP BY YEAR(sales_date), MONTH(sales_date)
 -- -- 같은것2: 후자
 -- SELECT YEAR(sales_date), MONTH(sales_date), COUNT(*)
--- FROM ONLINE_SALE ons
---     -- (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) user2021
--- WHERE ons.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
---     -- ons.user_id = user2021.user_id
+-- FROM ONLINE_SALE o
+--     -- (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) u
+-- WHERE o.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
+--     -- o.user_id = u.user_id
 -- GROUP BY YEAR(sales_date), MONTH(sales_date)
 
 -- 틀린 점을 정리하자면
 -- DISTINCT 를 안했던 점 (COUNT() 사용하는 곳 모두 DISTINCT를 사용해야 한다.)
 -- 그리고 두번째 자리에서 반올림이었던 점
 SELECT YEAR(sales_date), MONTH(sales_date), 
-       COUNT(DISTINCT ons.user_id), 
-       ROUND(COUNT(DISTINCT ons.user_id)/((SELECT COUNT(user_id) FROM USER_INFO WHERE YEAR(joined) = 2021)), 1)
-  FROM ONLINE_SALE ons,
-       (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) AS user2021
- WHERE ons.user_id = user2021.user_id
+       COUNT(DISTINCT o.user_id), 
+       ROUND(COUNT(DISTINCT o.user_id)/((SELECT COUNT(user_id) FROM USER_INFO WHERE YEAR(joined) = 2021)), 1)
+  FROM ONLINE_SALE o,
+       (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) AS u
+ WHERE o.user_id = u.user_id
  GROUP BY YEAR(sales_date), MONTH(sales_date)
  ORDER BY 1, 2;
 
 -- 이전에 짰던 쿼리가 훨씬 아름답다. 이전 쿼리에 맞춰 쓴다면 이렇게 된다. (사실 거기서 거기임)
-SELECT YEAR(os.sales_date) year, MONTH(os.sales_date) month, 
-       COUNT(DISTINCT u.user_id) puchased_users,
-       ROUND( COUNT(DISTINCT u.user_id) / (SELECT COUNT(DISTINCT user_id) FROM USER_INFO u WHERE YEAR(u.joined) = 2021), 1) puchased_ratio
-FROM ONLINE_SALE os, 
-     (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) u
+SELECT YEAR(sales_date), MONTH(sales_date), 
+       COUNT(DISTINCT os.user_id),
+       ROUND(COUNT(DISTINCT os.user_id)/(SELECT COUNT(*) FROM USER_INFO WHERE YEAR(joined) = 2021), 1)
+FROM ONLINE_SALE os,
+    (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) u
 WHERE os.user_id = u.user_id
-GROUP BY 1, 2 
+GROUP BY YEAR(sales_date), MONTH(sales_date)
 ORDER BY 1, 2;
