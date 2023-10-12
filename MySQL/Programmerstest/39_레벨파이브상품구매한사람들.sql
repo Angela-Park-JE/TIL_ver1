@@ -14,10 +14,43 @@ USER_INFO 테이블과 ONLINE_SALE 테이블에서 2021년에 가입한 전체 �
     
 -- MySQL
 -- 구매한 때가 2022가 아니라 2021년에 가입한 사람들 모두와, 그들의 구매내역을 보자 이거야
--- (SELECT COUNT(DISTINCT user_id) FROM USER_INFO u WHERE YEAR(u.joined) = 2021)
+-- (SELECT COUNT(DISTINCT user_id) FROM USER_INFO u WHERE YEAR(u.joined) = 2021)로 구매자 목록 전체 수를 꾸려놔야함
 
 SELECT YEAR(os.sales_date) year, MONTH(os.sales_date), 
         COUNT(DISTINCT u.user_id) puchased_users,
         ROUND( COUNT(DISTINCT u.user_id) / (SELECT COUNT(DISTINCT user_id) FROM USER_INFO u WHERE YEAR(u.joined) = 2021), 1) puchased_ratio
 FROM ONLINE_SALE os LEFT JOIN USER_INFO u ON os.user_id = u.user_id AND YEAR(u.joined) = 2021
 GROUP BY 1, 2; 
+
+
+
+-- 복습
+-- 231012:
+-- 일단, 2021가입자목록과 ons를 WHERE절 조인을 했을 때랑, ons만 FROM절에 두고 WHERE에서 user_id IN 가입자목록으로 검색한 결과가 같다.
+-- -- 같은것1: 전자
+-- SELECT YEAR(sales_date), MONTH(sales_date), COUNT(*)
+-- FROM ONLINE_SALE ons,
+--     (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) user2021
+-- WHERE -- ons.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
+--      ons.user_id = user2021.user_id
+-- GROUP BY YEAR(sales_date), MONTH(sales_date)
+-- -- 같은것2: 후자
+-- SELECT YEAR(sales_date), MONTH(sales_date), COUNT(*)
+-- FROM ONLINE_SALE ons
+--     -- (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) user2021
+-- WHERE ons.user_id IN (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021)
+--     -- ons.user_id = user2021.user_id
+-- GROUP BY YEAR(sales_date), MONTH(sales_date)
+
+-- 틀린 점을 정리하자면
+-- DISTINCT 를 안했던 점 (COUNT() 사용하는 곳 모두 DISTINCT를 사용해야 한다.)
+-- 그리고 두번째 자리에서 반올림이었던 점
+-- 이전에 짰던 쿼리가 훨씬 아름답다.
+SELECT YEAR(sales_date), MONTH(sales_date), 
+       COUNT(DISTINCT ons.user_id), 
+       ROUND(COUNT(DISTINCT ons.user_id)/((SELECT COUNT(user_id) FROM USER_INFO WHERE YEAR(joined) = 2021)), 1)
+  FROM ONLINE_SALE ons,
+       (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) AS user2021
+ WHERE ons.user_id = user2021.user_id
+ GROUP BY YEAR(sales_date), MONTH(sales_date)
+ ORDER BY 1, 2;
