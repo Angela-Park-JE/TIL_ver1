@@ -45,7 +45,6 @@ GROUP BY 1, 2;
 -- 틀린 점을 정리하자면
 -- DISTINCT 를 안했던 점 (COUNT() 사용하는 곳 모두 DISTINCT를 사용해야 한다.)
 -- 그리고 두번째 자리에서 반올림이었던 점
--- 이전에 짰던 쿼리가 훨씬 아름답다.
 SELECT YEAR(sales_date), MONTH(sales_date), 
        COUNT(DISTINCT ons.user_id), 
        ROUND(COUNT(DISTINCT ons.user_id)/((SELECT COUNT(user_id) FROM USER_INFO WHERE YEAR(joined) = 2021)), 1)
@@ -54,3 +53,13 @@ SELECT YEAR(sales_date), MONTH(sales_date),
  WHERE ons.user_id = user2021.user_id
  GROUP BY YEAR(sales_date), MONTH(sales_date)
  ORDER BY 1, 2;
+
+-- 이전에 짰던 쿼리가 훨씬 아름답다. 이전 쿼리에 맞춰 쓴다면 이렇게 된다. (사실 거기서 거기임)
+SELECT YEAR(os.sales_date) year, MONTH(os.sales_date) month, 
+       COUNT(DISTINCT u.user_id) puchased_users,
+       ROUND( COUNT(DISTINCT u.user_id) / (SELECT COUNT(DISTINCT user_id) FROM USER_INFO u WHERE YEAR(u.joined) = 2021), 1) puchased_ratio
+FROM ONLINE_SALE os, 
+     (SELECT user_id FROM USER_INFO WHERE YEAR(joined) = 2021) u
+WHERE os.user_id = u.user_id
+GROUP BY 1, 2 
+ORDER BY 1, 2;
