@@ -19,7 +19,7 @@ Points scored in the first game establish her record for the season, and she beg
 """
 
 
-# 231009: 하하 리턴논타입 때문에 잠깐 패닉빠졌던 나를 반성하며... 시간날때 다시 깔끔하게 리스트 컴프리핸션으로 만들어보기
+# 231009: 리턴논타입 때문에 잠깐 패닉빠졌던 나를 반성하며... 시간 날때 다시 깔끔하게 리스트 컴프리핸션으로 만들어보기
 #!/bin/python3
 
 import math
