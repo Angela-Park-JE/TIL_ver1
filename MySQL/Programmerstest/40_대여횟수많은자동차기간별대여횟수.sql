@@ -93,6 +93,7 @@ SELECT to_number(month) as month, CAR_ID, COUNT(CAR_ID)  -- SELECT MONTH, CAR_ID
 
 
 
+-- 복습
 -- 230816 복습: EXTRACT을 까먹고 YEAR_MONTH .... 홀홀홀 모드라~ 이러고 있었음
 -- 0인 조건에 대해서 안쓴게 감점이라면 감점이지만 처음 풀었던 정답과 거의 비슷하다. (0인 기록이 없기 때문에 넘어가짐.)
 SELECT MONTH(start_date), car_id, COUNT(history_id) AS records
