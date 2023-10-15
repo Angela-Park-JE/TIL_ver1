@@ -108,3 +108,7 @@ SELECT MONTH(start_date), car_id, COUNT(history_id) AS records
    AND EXTRACT(YEAR_MONTH FROM start_date) BETWEEN '202208' AND '202210'
 GROUP BY MONTH(start_date), car_id
 ORDER BY 1 ASC, 2 DESC;
+
+
+
+— 231015
