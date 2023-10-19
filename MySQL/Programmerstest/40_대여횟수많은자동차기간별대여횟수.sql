@@ -112,4 +112,21 @@ ORDER BY 1 ASC, 2 DESC;
 
 
 
--- 231018
+-- 231019: 서브쿼리부터 만들고서는 그뒤로 한두번 돌리고 바로 구성 완료! 8분 걸렸나.
+-- 조인으로 풀려다가 그냥 서브쿼리로 넣음. BETWEEN을 생활화 합시다!
+SELECT MONTH(start_date), H.car_id, COUNT(*) AS RECORDS
+  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY H
+ WHERE EXTRACT(YEAR_MONTH FROM start_date) >= 202208 
+   AND EXTRACT(YEAR_MONTH FROM start_date) <= 202210
+   AND H.car_id IN 
+        (
+        SELECT car_id 
+          FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+         WHERE EXTRACT(YEAR_MONTH FROM start_date) >= 202208 
+           AND EXTRACT(YEAR_MONTH FROM start_date) <= 202210
+         GROUP BY car_id
+        HAVING count(history_id) >= 5
+        ) -- CARS ON H.car_id = CARS.car_id
+ GROUP BY MONTH(start_date), H.car_id
+HAVING COUNT(*) != 0
+ ORDER BY 1 ASC, 2 DESC;
