@@ -27,7 +27,7 @@ ORDER BY 1 DESC;
 
 
 
--- 복습
+""" 복습 """
 -- 230816: 분명 아주 길지는 않게 풀었을 텐데 하면서 이전에 푼 풀이 참고해서 복습.
 SELECT car_id, CASE WHEN MAX(availability) = 1 THEN '대여중' ELSE '대여 가능' END AS availability
   FROM (
@@ -38,6 +38,27 @@ SELECT car_id, CASE WHEN MAX(availability) = 1 THEN '대여중' ELSE '대여 가
        ) tmp
 GROUP BY car_id
 ORDER BY car_id DESC;
+
+-- 231020: 두달 사이에 완전 바보가 되셨군요. 차량별로 대여중인지 가능인지 추릴 수가 없네요.
+-- SELECT car_id, 
+--         CASE WHEN (start_date = '2022-10-16') OR (end_date = '2022-10-16') THEN '대여중'
+--              WHEN (start_date <= '2022-10-16') AND (end_date >= '2022-10-16') THEN '대여중'
+--             ELSE '대여 가능' 
+--             END AS 'AVAILABILITY'
+-- FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+-- ORDER BY 1 DESC;
+-- 이전거 보고 나서 작성
+SELECT car_id, 
+        CASE WHEN MAX(c) >= 1 THEN '대여중' ELSE '대여 가능' END AS 'AVAILABILITY'
+  FROM 
+    (
+        SELECT car_id, 
+                CASE WHEN '2022-10-16' BETWEEN start_date AND end_date THEN 1
+                     ELSE 0 END AS c
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+    ) tmp
+ GROUP BY 1
+ ORDER BY 1 DESC;
 
 
 
@@ -72,26 +93,3 @@ SELECT distinct CAR_ID,
         END AS AVAILABILITY
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 ORDER BY CAR_ID DESC;
-
-
-
--- 231020: 두달 사이에 완전 바보가 되셨군요. 차량별로 대여중인지 가능인지 추릴 수가 없네요.
--- SELECT car_id, 
---         CASE WHEN (start_date = '2022-10-16') OR (end_date = '2022-10-16') THEN '대여중'
---              WHEN (start_date <= '2022-10-16') AND (end_date >= '2022-10-16') THEN '대여중'
---             ELSE '대여 가능' 
---             END AS 'AVAILABILITY'
--- FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
--- ORDER BY 1 DESC;
--- 이전거 보고 나서 작성
-SELECT car_id, 
-        CASE WHEN MAX(c) >= 1 THEN '대여중' ELSE '대여 가능' END AS 'AVAILABILITY'
-  FROM 
-    (
-        SELECT car_id, 
-                CASE WHEN '2022-10-16' BETWEEN start_date AND end_date THEN 1
-                     ELSE 0 END AS c
-        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-    ) tmp
- GROUP BY 1
- ORDER BY 1 DESC;
