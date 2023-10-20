@@ -57,6 +57,7 @@ SELECT DISTINCT CAR_ID,
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 ORDER BY 1 DESC;
 
+-- Oracle
 -- 그래서 다른분 질문 올린것 답 달면서 수정해드린 것이 아래이다. 바로 위와 같은 방식으로(IN 사용) 해결했다. (소문자로 첨삭함)
 -- https://school.programmers.co.kr/questions/44581
 SELECT distinct CAR_ID,
@@ -71,3 +72,26 @@ SELECT distinct CAR_ID,
         END AS AVAILABILITY
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 ORDER BY CAR_ID DESC;
+
+
+
+-- 231020: 두달 사이에 완전 바보가 되셨군요. 차량별로 대여중인지 가능인지 추릴 수가 없네요.
+-- SELECT car_id, 
+--         CASE WHEN (start_date = '2022-10-16') OR (end_date = '2022-10-16') THEN '대여중'
+--              WHEN (start_date <= '2022-10-16') AND (end_date >= '2022-10-16') THEN '대여중'
+--             ELSE '대여 가능' 
+--             END AS 'AVAILABILITY'
+-- FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+-- ORDER BY 1 DESC;
+-- 이전거 보고 나서 작성
+SELECT car_id, 
+        CASE WHEN MAX(c) >= 1 THEN '대여중' ELSE '대여 가능' END AS 'AVAILABILITY'
+  FROM 
+    (
+        SELECT car_id, 
+                CASE WHEN '2022-10-16' BETWEEN start_date AND end_date THEN 1
+                     ELSE 0 END AS c
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+    ) tmp
+ GROUP BY 1
+ ORDER BY 1 DESC;
