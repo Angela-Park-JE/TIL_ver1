@@ -20,6 +20,7 @@ SELECT board_id, writer_id, title, price,
 
 
 """복습"""
+
 -- 230824: 어려울 것 없다
 SELECT board_id, writer_id, title, price, 
        CASE status 
