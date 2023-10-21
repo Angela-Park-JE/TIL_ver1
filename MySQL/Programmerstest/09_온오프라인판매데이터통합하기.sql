@@ -24,6 +24,7 @@ ORDER BY 1, 2, 3;
 
 
 """오답노트"""
+
 -- MySQL : 안되던 것
 SELECT sales_date, product_id, user_id, sales_amount
 FROM ONLINE_SALE
@@ -36,7 +37,8 @@ ORDER BY 1, 2, 3;
 
 
 
--- 복습
+"""복습"""
+
 -- 230821: date format 참조를 했음. %이게 먼저다!
 -- NULL 만 써도 되는 것으로 알고 있었는데 데이터가 안나오길래 뭔가 했는데 그냥 테스트 데이터에 데이터가 없었던 것임. (오답노트 내용이 그대로)
 SELECT DATE_FORMAT(sales_date, '%Y-%m-%d') AS sales_date, product_id, user_id, sales_amount
