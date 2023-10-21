@@ -19,7 +19,8 @@ SELECT b.title, b.board_id, r.reply_id, r.writer_id, r.contents,
 
 
 
--- 복습
+"""복습"""
+    
 -- 230609: DATE FORMAT 까먹었고, ON에서 =로 잇는 걸 잊어버렸음 ㅋㅋㅋ
 SELECT b.TITLE, b.BOARD_ID, r.REPLY_ID, r.WRITER_ID, r.CONTENTS, DATE_FORMAT(r.created_date, '%Y-%m-%d') create_date
 FROM USED_GOODS_BOARD b JOIN USED_GOODS_REPLY r ON b.BOARD_ID = r.BOARD_ID
