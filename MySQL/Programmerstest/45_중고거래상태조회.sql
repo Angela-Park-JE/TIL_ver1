@@ -19,8 +19,7 @@ SELECT board_id, writer_id, title, price,
 
 
 
-
--- 복습
+"""복습"""
 -- 230824: 어려울 것 없다
 SELECT board_id, writer_id, title, price, 
        CASE status 
@@ -31,3 +30,15 @@ SELECT board_id, writer_id, title, price,
 FROM USED_GOODS_BOARD
 WHERE created_date = '2022-10-05'
 ORDER BY 1 DESC;
+
+-- 231021: 오라클 오랜만에 해보기
+-- 1. TO_DATE로만 하고 있었는데 date 포맷으로 바꾸면 시분초 때문에 안된다는 걸 잊음
+-- 2. 날짜 포맷은 기본적으로 'YYYY-MM-DD' 이렇게 표기하는 걸 잊음
+SELECT board_id, writer_id, title, price, 
+        CASE status WHEN 'SALE' THEN '판매중' 
+                    WHEN 'RESERVED' THEN '예약중' 
+                    WHEN 'DONE' THEN '거래완료' 
+                    END AS 거래상태
+  FROM USED_GOODS_BOARD
+ WHERE TO_CHAR(created_date, 'YYYY-MM-DD') = '2022-10-05'
+ ORDER BY 1 DESC;
