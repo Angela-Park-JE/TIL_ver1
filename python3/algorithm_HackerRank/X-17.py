@@ -35,11 +35,12 @@ import sys
 
 # 231022
 def birthday(s, d, m):
-    # the choco length is month m
-    # the choco square number's sum is day d
+    # the choco length is month m : 초코나눈 길이는 m이고
+    # the choco square number's sum is day d : 초코에 그려진 숫자 합은 d인 케이스를 찾아야 한다.
     
     for i in range(len(s)-(m-1)):
         # repeate m times s[i+ ...]
+        # s[i] m부터 번만큼 하나씩 인덱스 이동해서 더한 값이 choco인데 이게 d와 같으면 count를 하나씩 올리는 식으로 하면 된다.
         choco = s[i]+s[i+]
     # Write your code here
 
