@@ -15,6 +15,7 @@ https://www.hackerrank.com/challenges/interviews/problem
 
 -- 231023: 
 -- 1. 맞게 짠듯 싶은데 정답이 아니다. 한번씩 쿼리 날리면 결과 나오는데 한참 걸려서 참 집중하기 어렵다.
+-- FULL JOIN이 된양 되어서 그런가.
 SELECT cts.contest_id, cts.hacker_id, cts.name, SUM(total_submissions), SUM(total_accepted_submissions), SUM(total_views), SUM(total_unique_views)
 FROM CONTESTS cts, COLLEGES colg, CHALLENGES chls, VIEW_STATS vs, SUBMISSION_STATS subs
 WHERE 1=1 
@@ -122,3 +123,110 @@ ORDER BY 1, 2, 3, 4, 5 LIMIT 30;
 """
 -- 결과를 보면 학교 아이디와 도전 아이디가 상당히 여러개로 되어있는 것을 볼 수 있다. 
 -- 문제에서 원하는 건 contest별, 제출자와, 그가 속한 학교내에서 제출했던 기록에 대한 SUM인데 상당히 크게 나올 수 밖에 없는 상황으로 보인다.
+-- 3. 이번엔 일부를 이너조인으로 돌린 다음 해당 테이블이 views와 subs 테이블 각각에 연결되도록 해보았다. (실행누르면 결과 나오기까지 약 90초가 걸렸다...)
+SELECT cts.contest_id, cts.hacker_id, cts.name, SUM(total_submissions), SUM(total_accepted_submissions), SUM(total_views), SUM(total_unique_views)
+FROM CONTESTS cts INNER JOIN COLLEGES colg ON cts.contest_id = colg.contest_id 
+                  INNER JOIN CHALLENGES chls ON colg.college_id = chls.college_id, 
+     VIEW_STATS vs, SUBMISSION_STATS subs
+WHERE 1=1 
+    AND chls.challenge_id = vs.challenge_id
+    AND chls.challenge_id = subs.challenge_id
+GROUP BY cts.contest_id, cts.hacker_id, cts.name
+HAVING SUM(total_submissions) +SUM(total_accepted_submissions) +SUM(total_views) +SUM(total_unique_views)!=0
+ORDER BY 1 ASC;
+-- 그러나 결과는 1.과 같다. 그렇겠지 바보야
+-- 4. 그룹별로 제대로 나오긴 하는지 확인해 보았다. chls-views 따로, chls-subs 따로 해서 구해둔 다음 이 결과를 merge시켜서 마지막에 name도 붙여야 할 것만 같았다.
+SELECT chls.challenge_id, SUM(total_submissions), SUM(total_accepted_submissions), SUM(total_views), SUM(total_unique_views)
+FROM CHALLENGES chls, VIEW_STATS vs, SUBMISSION_STATS subs
+WHERE 1=1 
+    AND chls.challenge_id = vs.challenge_id
+    AND chls.challenge_id = subs.challenge_id
+GROUP BY chls.challenge_id;
+-- 5. CTE 만들어 보았지만, CTE가 먹지를 않았다. WITH 다음부터 과감하게 오류처리 해버리시는 해커랭크 MySQL.
+WITH CTE AS 
+    (
+    SELECT chls.challenge_id, SUM(total_submissions) ts, SUM(total_accepted_submissions) tas, SUM(total_views)tv , SUM(total_unique_views) tuv
+    FROM CHALLENGES chls, VIEW_STATS vs, SUBMISSION_STATS subs
+    WHERE 1=1 
+        AND chls.challenge_id = vs.challenge_id
+        AND chls.challenge_id = subs.challenge_id
+    GROUP BY chls.challenge_id
+    )
+
+SELECT cts.contest_id, cts.hacker_id, cts.name, CTE.ts, CTE.tas, CTE.tv, CTE.tuv
+FROM CTE,
+     CONTESTS cts INNER JOIN COLLEGES colg ON cts.contest_id = colg.contest_id 
+                  INNER JOIN CHALLENGES chls ON colg.college_id = chls.college_id
+WHERE CTE.challenge_id = chls.challenge_id
+ORDER BY 1;
+-- 6. CTE를 파생 테이블로 넣어버리고 실행해보았다.
+SELECT cts.contest_id, cts.hacker_id, cts.name, tbl.ts, tbl.tas, tbl.tv, tbl.tuv
+FROM 
+    (
+    SELECT chls.challenge_id, SUM(total_submissions) ts, SUM(total_accepted_submissions) tas, SUM(total_views)tv , SUM(total_unique_views) tuv
+    FROM CHALLENGES chls, VIEW_STATS vs, SUBMISSION_STATS subs
+    WHERE 1=1 
+        AND chls.challenge_id = vs.challenge_id
+        AND chls.challenge_id = subs.challenge_id
+    GROUP BY chls.challenge_id
+    ) tbl,
+     CONTESTS cts INNER JOIN COLLEGES colg ON cts.contest_id = colg.contest_id 
+                  INNER JOIN CHALLENGES chls ON colg.college_id = chls.college_id
+WHERE tbl.challenge_id = chls.challenge_id
+ORDER BY 1;
+""" 결과
+845 579 Rose 152 68 170 52 
+845 579 Rose 27 17 91 25 
+845 579 Rose 207 55 66 66 
+845 579 Rose 68 56 135 61 
+845 579 Rose 156 21 107 37 
+845 579 Rose 114 60 144 82 
+845 579 Rose 95 29 70 34 
+845 579 Rose 484 124 372 118 
+845 579 Rose 494 134 516 132 
+845 579 Rose 360 144 602 150 
+845 579 Rose 216 88 126 82 
+845 579 Rose 193 45 48 30 
+858 1053 Angela 62 20 25 20 
+858 1053 Angela 98 12 56 43 
+858 1053 Angela 116 18 78 20 
+858 1053 Angela 640 115 502 144 
+858 1053 Angela 748 220 513 228 
+858 1053 Angela 126 24 26 18 
+858 1053 Angela 140 32 264 38 
+883 1055 Frank 676 192 510 180 
+883 1055 Frank 243 75 182 48 
+883 1055 Frank 131 58 210 75 
+883 1055 Frank 207 54 94 20 
+883 1055 Frank 522 152 344 76 
+883 1055 Frank 492 134 264 136 
+883 1055 Frank 148 24 94 19 
+883 1055 Frank 270 45 96 39 
+1793 2655 Patrick 600 176 723 228 
+1793 2655 Patrick 340 68 152 80 
+1793 2655 Patrick 228 34 156 69 
+1793 2655 Patrick 135 120 277 71 
+1793 2655 Patrick 342 93 312 118 
+"""
+-- 난리가 났다. 결국 저거 다 더한게 결과로 나오는게 맞을텐데 왜 안될까? n*m 이어서의 문제인걸까 하여서 다시 해보기로
+-- 7. view와 sub 각각을 나누어서 했다. (뭐가문제인지 찾아보느라 디스커션을 살짝 참조했는데 분위기보니 비효율적으로 보이나 이게 맞는 듯 했다.)
+SELECT cts.contest_id, cts.hacker_id, cts.name, ts, tas, tv, tuv
+FROM 
+    (
+    SELECT chls.challenge_id, SUM(total_submissions) ts, SUM(total_accepted_submissions) tas
+    FROM CHALLENGES chls, SUBMISSION_STATS subs
+    WHERE chls.challenge_id = subs.challenge_id
+    GROUP BY chls.challenge_id
+    ) tb1,
+    (
+    SELECT chls.challenge_id, SUM(total_views)tv, SUM(total_unique_views) tuv
+    FROM CHALLENGES chls, VIEW_STATS vs
+    WHERE chls.challenge_id = vs.challenge_id
+    GROUP BY chls.challenge_id
+    ) tb2,
+    CHALLENGES chls INNER JOIN COLLEGES colg ON chls.college_id = colg.college_id
+                    INNER JOIN CONTESTS cts ON colg.contest_id = cts.contest_id 
+WHERE chls.challenge_id = tb1.challenge_id AND chls.challenge_id = tb2.challenge_id 
+ORDER BY 1;
+
+00 8.
