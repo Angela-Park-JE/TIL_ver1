@@ -229,4 +229,25 @@ FROM
 WHERE chls.challenge_id = tb1.challenge_id AND chls.challenge_id = tb2.challenge_id 
 ORDER BY 1;
 
-00 8.
+-- 231025:
+-- 8. 정답을 내려던건 아니고, 확실히 이어지는게 맞나 해서 실행해봄. 그러나 한 해커당 여러 ts, tas가 뜨게 됨...
+SELECT DISTINCT cts.contest_id, cts.hacker_id, cts.name, ts, tas 
+FROM 
+    (
+    SELECT chls.challenge_id, SUM(total_submissions) ts, SUM(total_accepted_submissions) tas
+    FROM CHALLENGES chls, SUBMISSION_STATS subs
+    WHERE chls.challenge_id = subs.challenge_id
+    GROUP BY chls.challenge_id
+    ) tb1,
+    -- (
+    -- SELECT chls.challenge_id, SUM(total_views)tv, SUM(total_unique_views) tuv
+    -- FROM CHALLENGES chls, VIEW_STATS vs
+    -- WHERE chls.challenge_id = vs.challenge_id
+    -- GROUP BY chls.challenge_id
+    -- ) tb2,
+    CHALLENGES chls, COLLEGES colg, CONTESTS cts
+WHERE 1=1
+        AND chls.challenge_id = tb1.challenge_id 
+        AND chls.college_id = colg.college_id
+        AND colg.contest_id = cts.contest_id 
+ORDER BY 1;
