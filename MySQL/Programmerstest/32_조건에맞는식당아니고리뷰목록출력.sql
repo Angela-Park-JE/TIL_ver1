@@ -47,7 +47,7 @@ ORDER BY 3 ASC, 2 ASC;
 
 
 
--- 복습
+""" 복습 """
 -- 230825: 크게 어려울 것은 없었고, HAVING을 사용할 까 하다가 LIMIT으로 잘라낸듯한 쿼리.
 SELECT m.member_name, r.review_text, DATE_FORMAT(r.review_date, '%Y-%m-%d')
   FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id
@@ -59,6 +59,18 @@ SELECT m.member_name, r.review_text, DATE_FORMAT(r.review_date, '%Y-%m-%d')
                       LIMIT 1)
  ORDER BY 3 ASC, 2 ASC;
 
+-- 231024: review 갯수를 찾는 데에서는 JOIN이 필요가 없다. 잠시 헤맸었음.
+SELECT m.member_name, r.review_text, DATE_FORMAT(r.review_date, '%Y-%m-%d')
+FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id 
+WHERE m.member_id = 
+        (
+        SELECT m.member_id
+        FROM REST_REVIEW r LEFT JOIN MEMBER_PROFILE m ON r.member_id = m.member_id
+        GROUP BY m.member_id
+        ORDER BY COUNT(review_id) DESC
+        LIMIT 1
+        )
+ORDER BY r.review_date ASC, r.review_text ASC
 
 
 """다른 풀이"""
