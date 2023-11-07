@@ -30,7 +30,7 @@ WITH CTE AS
 SELECT cte.history_id, 
        CASE WHEN cte.dtype =0 THEN cte.daily_fee * cte.rentdays
             WHEN cte.dtype!=0 THEN CAST(cte.daily_fee * cte.rentdays * (1-p.discount_rate/100) AS SIGNED INTEGER) 
-			    END FEE                                                     -- CASE로 CTE의 dtype 걸러주지 않으면 p.duration_type에는 0이 없으므로 NULL 이 떠버림.
+			    END FEE                                             -- CASE로 CTE의 dtype 걸러주지 않으면 p.duration_type에는 0이 없으므로 NULL 이 떠버림.
   FROM CTE cte LEFT JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p 
               ON cte.car_type = p.car_type                          -- join condition 1
                  AND cte.dtype = CAST( REGEXP_REPLACE(p.duration_type, '[가-힣()]', '') AS DOUBLE) -- join condition 2 "by discount rate"
@@ -40,7 +40,42 @@ SELECT cte.history_id,
 
 
 """복습"""
--- 231106:
+-- 231106: 이전에 푼게 더 짧네. 이전은 dtype(여기서의 difftype)이 0인것 혹은 0이 아닌 것을 나누어서 CASE WHEN을 썼고, 
+	-- LEFT JOIN을 했기 때문에 메인쿼리에서 조인을 할 때 CAST로 걸러낸 것과 같은 것이 옆으로 붙도록 만드렁ㅆ다.
+-- 차종이 다른것을 찾게될 경우를 생각하여 미리부터 필터링하지 않는다.
+-- 1. discount plan부터 봐야한다. 숫자로 되어있지 않으므로 바꾼다.
+-- https://selfdevelope.tistory.com/616 참조 : REGEXP_REPLACE
+WITH CTE1 AS
+(
+SELECT car_type, 
+        REGEXP_REPLACE(duration_type, '[^0-9]', '') duration, 
+        (100-discount_rate)*0.01 discounted_rate
+  FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN as rdp
+ UNION 
+SELECT DISTINCT car_type, 
+        0, 1
+  FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN as tmp
+        -- plan_id는 있으나 없으나 하기 때문에 없애고 plan이 없는것을 넣어 조인이 잘 되도록 함
+),
+-- 2. 대여기록에 대해서 날짜 차이 구하기
+-- 1일 대여 2일 반납이면 이틀 대여한 것으로 취급한다. (반납일을 포함함)
+CTE2 AS 
+(
+SELECT history_id, car_id, DATEDIFF(end_date, start_date) + 1 date_diff, 
+  CASE WHEN DATEDIFF(end_date, start_date) + 1 <7 THEN 0 
+       WHEN DATEDIFF(end_date, start_date) + 1 >=7 AND DATEDIFF(end_date, start_date) + 1 <30 THEN 7
+       WHEN DATEDIFF(end_date, start_date) + 1 >=30 AND DATEDIFF(end_date, start_date) + 1 <90 THEN 30
+       WHEN DATEDIFF(end_date, start_date) + 1 >=90 THEN 90 
+       END AS difftype
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+)
+
+-- 이렇게만 했을 때에는 7일 이하가 걸러지지 않는다. 마지막 쿼리를 짧게 짜는게 제일 보기 깔끔하다고 생각하는 편.. 트럭이 아닌 차를 구하려면 WHERE절만 고치면 된다.
+SELECT history_id, ROUND(daily_fee*date_diff*discounted_rate, 0) AS FEE
+  FROM CTE2 LEFT JOIN CAR_RENTAL_COMPANY_CAR c ON CTE2.car_id = c.car_id
+          LEFT JOIN CTE1 ON c.car_type = CTE1.car_type AND CTE1.duration = CTE2.difftype -- 바로이부분때문에! 0인 플랜을 넣어주어야 한다.
+ WHERE CTE1.car_type = '트럭'
+ ORDER BY 2 DESC, 1 DESC;
 
 
 
