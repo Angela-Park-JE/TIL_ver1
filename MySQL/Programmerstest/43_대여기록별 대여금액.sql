@@ -123,7 +123,7 @@ FROM CTE2 LEFT JOIN CTE ON cte.dtype = cte2.dtype,
 WHERE cte.car_id = c.car_id
   AND c.car_type = '트럭'
 ORDER BY 2 DESC, 1 DESC;
-
+-- 이 방법의 경우 0일때 (7일 미만일 때)를 해결하지 못함.
 
 """시도2"""
 -- combine2
