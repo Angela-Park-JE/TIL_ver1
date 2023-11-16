@@ -11,6 +11,8 @@ https://school.programmers.co.kr/learn/courses/18/lessons/1876
 """
 
 
+
+# 23.11.16
 def solution(n):
     N = [int(i) for i in str(n)]
     answer = sum(N)
