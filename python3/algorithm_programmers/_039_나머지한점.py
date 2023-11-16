@@ -41,3 +41,11 @@ def solution(v):
     answer = [x, y]
 
     return answer
+
+
+
+"""다른 해답"""
+# Ihwan Shin 2020.9.22 19:16
+# 비트연산자를 사용하는데 '^'가 XOR 을 하는 연산자라는 것을 처음 알게 되었다.
+def solution(v):
+    return([v[0][0] ^ v[1][0] ^ v[2][0], v[0][1] ^ v[1][1] ^ v[2][1]])
