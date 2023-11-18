@@ -15,4 +15,10 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 4. Programmerstest : SQL coding test practice in programmers (순서는 문제의 난이도와 관계없습니다.)
 
+>  | number | 기간              | 복습1회차            | 복습2회차      |
+>  |:---    |---                |---                |---           |
+>  | 01~08  | 2022.03 ~ 2022.08 |                   |              |
+>  | 09~48  | 2023.01 ~ 2023.03 | 2023.08 ~ 2023.11 |              |
+
+
 5. [Book]SQLProgramming : TIL with reviewing the book [Let's get it SQL programming, Charlie Hong, Gilbut, 2021]
