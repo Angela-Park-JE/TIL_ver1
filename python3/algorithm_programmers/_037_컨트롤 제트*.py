@@ -19,6 +19,9 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120853
 
 
 
+# 23.11.19
+
+
 """오답노트"""
 
 # 23.05.08
