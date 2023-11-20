@@ -19,8 +19,6 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120853
 
 
 
-# 23.11.19
-
 
 """오답노트"""
 
@@ -38,3 +36,13 @@ def solution(s):
             a -= int(letters[i-1])
     
     return a
+
+
+
+
+"""다른 풀이"""
+# 언제 풀었는지 모르겠으나 내가 한 것 같지 않은 것이 내 답에 있어 여기에 넣어둠.
+def solution(s):
+    slist = s.split(' ')
+    nums = [int(slist[i-1])*(-1) if slist[i] == 'Z' else int(slist[i]) for i in range(len(slist)) ]
+    return sum(nums)
