@@ -36,6 +36,20 @@ def solution(participant, completion):
                 answer = participant[i]
                 break
     return answer
+# 같은 것이지만 리스트컴프리헨션을 쓰고자 했던 것
+def solution(participant, completion):
+    participant.sort()
+    completion.sort()
+    answer = 0
+    if len(participant) == 1:
+        answer = participant[0]
+        return answer
+    elif participant[-1] != completion[-1]:
+        answer = participant[-1]
+        return answer
+    else:
+        someone = [participant[i] for i in range(len(completion)) if participant[i]!=completion[i]]
+        return someone[0]
 
 
 
