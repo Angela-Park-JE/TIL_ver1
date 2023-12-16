@@ -19,7 +19,7 @@ def solution(n):
         if n%i == 0:
             l.append(i)
     # 초반의 작은 수로 나누어떨어지는 수들은 전부 제거
-    for j in l[1:]:
+    for j in l[1:]: # 만약 n이 2로 나누어진다면 2로 2 다음부터 전부 나누어본 상태
         if j%l[0] == 0:
             l.remove(j)
     for j in l[2:]:
@@ -30,8 +30,30 @@ def solution(n):
             l.remove(j)
     # 그럼 이걸 몇 번째 까지 해야할까?
 
-    
     if len(l) == 0:
         l.append(n)
 
     return l
+
+# 23.12.16: 우선 반복문으로 바꾸어 만들어두었다. 합계: 83.3 / 100.0 24개 예시중 4개가 틀렸다
+# 예상으로는 하나씩 지워가는 과정에서 범위를 벗어날 경우 오류가 뜬건 아닐까 생각해보고 있다.
+def solution(n):
+    # 우선 모든 약수를 찾는다
+    l = []
+    for i in range(2, int((n+1)/2)):
+        if n%i == 0:
+            l.append(i)
+    # 초반의 작은 수로 나누어떨어지는 수들은 전부 제거
+    # 그럼 이걸 몇 번째 까지 해야할까? l의 반토막 횟수 정도면 될까? -> 반복문 만들어본다
+
+    # 그전에 0일 때 내놓도록 먼저 한다.    
+    if len(l) == 0:
+        l.append(n)
+        return l
+        
+    else:
+        for j in range(int(len(l)/2)):
+            for k in l[j+1:]:
+                if k%l[j] == 0:
+                    l.remove(k)
+        return l
