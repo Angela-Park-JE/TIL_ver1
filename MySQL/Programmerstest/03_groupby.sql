@@ -105,7 +105,20 @@ SELECT @hour_count:=@hour_count+1 as hour, IFNULL(
 FROM ANIMAL_OUTS
 where @hour_count < 23
 
--- 더 나은 답이 있는지 찾아본 것 2(이 해답을 많이 사용함): https://programmers.co.kr/questions/27290
+-- 새로운 형식의 답을 보았다. 이분도 변수를 활용하셨다고 한다.: https://school.programmers.co.kr/questions/40987
+SELECT HOUR, IFNULL(COUNT, 0) AS COUNT 
+FROM
+    (SELECT @K := @K + 1 AS HOUR FROM ANIMAL_OUTS, 
+    (SELECT @K := -1 FROM ANIMAL_OUTS) DUM LIMIT 24) TT1
+LEFT OUTER JOIN
+    (SELECT HR, SUM(COUNT) AS COUNT
+    FROM
+    (SELECT HOUR(DATETIME) AS HR, 1 AS COUNT FROM ANIMAL_OUTS) T1
+    GROUP BY HR
+    ORDER BY HR ASC) TT2
+ON TT1.HOUR = TT2.HR
+
+-- 더 나은 답이 있는지 찾아본 것 2, 재귀쿼리를 사용하는 것이 적당하다는 생각이 든다. (이 해답을 많이 사용함): https://programmers.co.kr/questions/27290
 WITH RECURSIVE TEMP AS (
     SELECT 0 AS HOUR
     UNION ALL
