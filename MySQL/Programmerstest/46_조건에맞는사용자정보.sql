@@ -23,6 +23,8 @@ HAVING SUM(b.price) >= 700000   -- HAVING total_sales >= 700000 도 가능하다
 
 
 
+-- 복습
+
 -- 230812: 3분 걸렸나? 지금보니 확실히 SQL스러운 사고방식이 둔화된 것 같다. HAVING을 잘 안쓰네.
 -- 하지만 기본적으로 구조는 깔끔하게 잘 되었다고 생각...
 SELECT *
@@ -34,3 +36,14 @@ FROM (
     ) tmp
 WHERE total>=700000
 ORDER BY 3 ASC
+
+
+    
+-- 231226: 금방 했다. 처음에 풀었던 방식과 거의 흡사하다. WHERE 조인을 사용했다.
+SELECT g.writer_id, u.nickname, SUM(g.price)
+  FROM USED_GOODS_BOARD g, USED_GOODS_USER u
+ WHERE g.writer_id = u.user_id
+   AND g.status = 'DONE'
+ GROUP BY g.writer_id
+HAVING SUM(g.price) >= 700000
+ ORDER BY 3 ASC;
