@@ -1,4 +1,5 @@
 -- 고양이와 개는 몇 마리 있을까 : 동물 보호소에 들어온 동물 중 고양이와 개가 각각 몇 마리인지 조회하는 SQL문을 작성해주세요. 
+-- https://school.programmers.co.kr/learn/courses/30/lessons/59040
 -- 이때 고양이를 개보다 먼저 조회해주세요.
 SELECT animal_type, COUNT(animal_type) as 'count'
 FROM (SELECT animal_type
@@ -9,15 +10,27 @@ FROM (SELECT animal_type
 GROUP BY animal_type
 ORDER BY 1;
 
--- 더 나은 답: https://programmers.co.kr/questions/15825
-SELECT animal_type, COUNT(animal_id) AS count FROM animal_ins
-WHERE animal_type IN('Cat','Dog')
-GROUP BY animal_type
-ORDER BY animal_type ASC;
+-- 231226: 다음 문제로 넘기면서 나왔길래 풀었던건데, 이전의 방식을 봐버려서, 적혀있지 않던 IN을 사용했다. 
+-- 지금은 IN을 훨씬 더 많이 사용하는 것 같다. cat, dog인 데이터만 조회하는 방식을 세 가지로 적으면 다음과 같다.
+SELECT animal_type, COUNT(*)
+FROM ANIMAL_INS
+WHERE animal_type REGEXP 'Cat|Dog'
+GROUP BY 1 ORDER BY 1;
+
+SELECT animal_type, COUNT(*)
+FROM ANIMAL_INS
+WHERE animal_type LIKE 'Dog' OR animal_type LIKE 'Cat'
+GROUP BY 1 ORDER BY 1;
+
+SELECT animal_type, COUNT(*)
+FROM ANIMAL_INS
+WHERE animal_type IN ('Dog', 'Cat') --today!
+GROUP BY 1 ORDER BY 1;
 
 
 
 -- 동명 동물 수 찾기 : 이름 중 두 번 이상 쓰인 이름과 해당 이름이 쓰인 횟수를 조회하는 SQL문을 작성해주세요.
+-- https://school.programmers.co.kr/learn/courses/30/lessons/59041
 -- 이때 결과는 이름이 없는 동물은 집계에서 제외하며, 결과는 이름 순으로 조회해주세요.
 SELECT *
 FROM (SELECT name, COUNT(name) as 'count' -- HAVING이 제대로 기억나지 않아서 인라인뷰를 썼다.
@@ -28,13 +41,13 @@ FROM (SELECT name, COUNT(name) as 'count' -- HAVING이 제대로 기억나지 �
 WHERE count >= 2                          -- count 라고 이름을 줬기 때문에 그대로 count써야한다. 따옴표 때문에 오류가 났었다.
 ORDER BY 1;
 
--- 더 나은 답: https://programmers.co.kr/questions/25933
-SELECT NAME, COUNT(NAME) AS COUNT
-FROM ANIMAL_INS
-WHERE NAME IS NOT NULL
-GROUP BY NAME
-HAVING COUNT(NAME) > 1
-ORDER BY NAME ASC;
+-- SQL 아가였을 떄에는 서브쿼리로 구하고 바깥 테이블에서 셀 생각을 했지만, HAVING을 배운 시퀄으른은 이렇게 쓸 줄 알아야 하는 것이다.
+SELECT name, COUNT(*) 
+  FROM ANIMAL_INS
+ WHERE name IS NOT NULL
+ GROUP BY name
+HAVING COUNT(*)>=2
+ ORDER BY name;
 
 
 
