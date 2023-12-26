@@ -26,3 +26,10 @@ SELECT YEAR(os.sales_date), MONTH(os.sales_date), u.gender, COUNT(DISTINCT os.us
  WHERE u.user_id = os.user_id AND u.gender IS NOT NULL
  GROUP BY YEAR(os.sales_date), MONTH(os.sales_date), gender
  ORDER BY 1, 2, 3;
+
+-- 231226: 똑같은 실수를 했다. user_id에 DISTINCT를 써야하는 점이다.
+SELECT YEAR(ons.sales_date), MONTH(ons.sales_date), u.gender, count(DISTINCT u.user_id)
+  FROM USER_INFO u RIGHT JOIN ONLINE_SALE ons ON u.user_id = ons.user_id
+ WHERE u.gender IS NOT NULL
+ GROUP BY YEAR(ons.sales_date), MONTH(ons.sales_date), u.gender
+ ORDER BY 1, 2, 3;
