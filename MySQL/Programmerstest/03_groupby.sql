@@ -24,7 +24,7 @@ GROUP BY 1 ORDER BY 1;
 
 SELECT animal_type, COUNT(*)
 FROM ANIMAL_INS
-WHERE animal_type IN ('Dog', 'Cat') --today!
+WHERE animal_type IN ('Dog', 'Cat') --today! : 해당 문자가 포함된 로우를 검색
 GROUP BY 1 ORDER BY 1;
 
 
