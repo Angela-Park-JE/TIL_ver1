@@ -27,3 +27,6 @@ def solution(my_string, num1, num2):
     for i in answer:
         s = s+i
     return s
+
+# 다른 풀이를 참조한다고 하면 s = '' 이 부분부터 return s 까지를
+# return ''.join(s) <- 이 한 줄로 끝낼 수 있다. join이 생각이 나지 않았다...
