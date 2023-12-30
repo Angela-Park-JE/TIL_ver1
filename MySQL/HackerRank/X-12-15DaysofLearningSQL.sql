@@ -22,6 +22,27 @@ INNER JOIN (
 ORDER BY 1;
 
 
+
+/*- 다시시도: 231230 -*/
+SELECT tmp1.submission_date, tmp1.cnt, sum_amt
+FROM    
+        (
+        SELECT s.submission_date, COUNT(DISTINCT hacker_id) cnt
+        FROM Submissions s
+        GROUP BY submission_date
+        ) tmp1,
+        (
+        SELECT s.submission_date, hacker_id, -- COUNT(submission_id) subs,
+            COUNT(submission_id) OVER (PARTITION BY hacker_id) sums
+        FROM Submissions s
+        GROUP BY submission_date, hacker_id
+        ORDER BY 3 DESC, 2 ASC
+        ) tmp2
+WHERE 1=1
+  AND tmp1.submission_date = tmp2.submission_date;
+
+
+
 /*- 다시시도: 220921 -*/
 SELECT TB1.day, TB1.idnumbers, 
     CASE WHEN (TB2.day = TB3.day AND TB2.maxsubs = TB3.subs)
@@ -58,4 +79,3 @@ WHERE 1=1
     AND TB2.maxsubs = TB3.subs
     AND TB3.id = h.hacker_id
 ;
-
