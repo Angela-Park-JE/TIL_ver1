@@ -8,20 +8,9 @@ If more than one such hacker has a maximum number of submissions, print the lowe
 The query should print this information for each day of the contest, sorted by the date.
 """
 
+
+
 """오답노트"""
-
---최대 점수나 해당 날짜 제출 인원은 가능한데, 해당 최당 점수의 사람을 데려오는게 문제였다. 
---시도(이 쿼리는 돌아가지만 날짜별로 모든 점수와 사람을 가져오게 된다)
-SELECT a.submission_date, b.counts, a.hacker_id
-FROM SUBMISSIONS a
-INNER JOIN (
-    SELECT submission_date, MAX(score) score, COUNT(submission_id) counts
-    FROM SUBMISSIONS
-    GROUP BY submission_date 
-    ) b ON a.submission_date = b.submission_date AND a.score = b.score
-ORDER BY 1;
-
-
 
 /*- 다시시도: 231230 -*/
 SELECT tmp1.submission_date, tmp1.cnt, sum_amt
@@ -79,3 +68,16 @@ WHERE 1=1
     AND TB2.maxsubs = TB3.subs
     AND TB3.id = h.hacker_id
 ;
+
+
+/*- 처음에 -*/
+--최대 점수나 해당 날짜 제출 인원은 가능한데, 해당 최당 점수의 사람을 데려오는게 문제였다. 
+--시도(이 쿼리는 돌아가지만 날짜별로 모든 점수와 사람을 가져오게 된다)
+SELECT a.submission_date, b.counts, a.hacker_id
+FROM SUBMISSIONS a
+INNER JOIN (
+    SELECT submission_date, MAX(score) score, COUNT(submission_id) counts
+    FROM SUBMISSIONS
+    GROUP BY submission_date 
+    ) b ON a.submission_date = b.submission_date AND a.score = b.score
+ORDER BY 1;
