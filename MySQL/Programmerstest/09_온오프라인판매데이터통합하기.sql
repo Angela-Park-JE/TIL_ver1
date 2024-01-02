@@ -49,3 +49,13 @@ SELECT DATE_FORMAT(sales_date, '%Y-%m-%d'), product_id, NULL, sales_amount
   FROM OFFLINE_SALE
  WHERE EXTRACT(YEAR_MONTH FROM sales_date) = 202203
  ORDER BY sales_date ASC, product_id ASC, user_id ASC;
+
+-- 240102: 거의 그대로이다. 
+SELECT DATE_FORMAT(sales_date, '%Y-%m-%d') sales_date, product_id, user_id, sales_amount
+  FROM ONLINE_SALE ons
+ WHERE EXTRACT(YEAR_MONTH FROM sales_date) = 202203
+ UNION
+SELECT DATE_FORMAT(sales_date, '%Y-%m-%d') sales_date, product_id, NULL, sales_amount
+  FROM OFFLINE_SALE ofs
+ WHERE EXTRACT(YEAR_MONTH FROM sales_date) = 202203
+ ORDER BY sales_date, product_id, user_id
