@@ -6,7 +6,7 @@
 -- (위 부분이 아래 제시된 WITH 사용 쿼리의 LEFT JOIN과 같은 방식이 된다.)
 -- (3) 그리고 COUNTIF(필터를 사용했던 session_id수), COUNTIF(-필터사용해서-제품 본 session_id수)를 조건 '=1' 로 걸러낸다. 
 -- 물론 1로 적어뒀기 때문에 값이 1이냐는 조건으로 COUNTIF()를 해도 같은 결과를 얻을 수 있다.
-/*
+/*f
 SELECT
   COUNTIF(filteruse = 1),
   COUNTIF(filter_prodview = 1),
@@ -15,7 +15,7 @@ SELECT
 SELECT
   SUM(filteruse),
   SUM(filter_prodview),
-  ROUND(SUM(jdview)/SUM(filteruse), 3)    -- (3)
+  ROUND(SUM(filter_prodview)/SUM(filteruse), 3)    -- (3)
 FROM 
   (
     SELECT session_id,
