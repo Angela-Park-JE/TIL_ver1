@@ -34,7 +34,7 @@ WITH
   SELECT
     DATE(DATE_TRUNC(timestamp, week)) AS week,
     session_id
-   FROM wanted-preonboarding-challenge.data_challenge_202401.LOG_DATA
+   FROM D.LOG_DATA
   WHERE 1=1
     AND event_name !='wish_view'
     AND REGEXP_CONTAINS(event_name,'_view$') -- '_view'로 끝나는 데이터
