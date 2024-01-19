@@ -12,11 +12,16 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120860?language=python
 """
 
 
-# 240119: 처음에는 축과 평행하다는 말을 제대로 읽지않고 풀려고 하다가 조금 헤맸다. 아무튼 풀고나서 보니 max min을 사용하면 될것을 sort()치고 있었던 것이었다.
+# 240119: 처음에는 축과 평행하다는 말을 제대로 읽지않고 풀려고 하다가 조금 헤맸다. 
+# 아무튼 풀고나서 보니 max min을 사용하면 될것을 sort()치고 인덱스치고 있었던 것이다.
 def solution(dots):
     dots.sort()
     answer = (dots[-1][0]-dots[0][0])*(dots[-1][1]-dots[0][1])
     return answer
+
+# 프로그래머스에 가장 많은 사람들이 upvote한 풀이
+def solution(dots):
+    return (max(dots)[0] - min(dots)[0])*(max(dots)[1] - min(dots)[1]) # 결국 거기서 거기인 이야기
 
 # 이거는 헤맴에서 바로나오자마자 짠 것이었는데 왜 이렇게 했는지 나도 모르겠다. 부끄러움 박제!
 def solution(dots):
