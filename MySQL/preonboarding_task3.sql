@@ -1,2 +1,1 @@
--- 
-IGO, Egul an ollyeotdany...
+-- 24.01.19
