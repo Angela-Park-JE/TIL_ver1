@@ -1,17 +1,19 @@
 /* category 필터가 있을 때, 제품 페이지를 들어간 사람 중 카테고리 필터를 사용했던 사람들의 비율이 얼마나 되는지 보자 */
-
+-- 1차시에서 제공된 과제의 2번 문제.
 -- 이건 내가 한 방식으로, WITH문 없이 서브쿼리로만 만든 같은 결과물이다. 보다시피 JOIN도 없다. 다만 서브쿼리안에 서브쿼리가 또 있다.
 -- (1) tmp1라는 서브쿼리에는 각 session_id별로 CASE WHEN으로 필터를 사용했던 카테고리뷰는 1을, 아니면 0을 매긴다. (ratio계산이니 편하게 true에 1을 주었다.)
 -- (2) 다음은 위에 조건에 맞는 session_id 중, product_view인 session_id에 1을, 아니면 0을 매긴다.
 -- (위 부분이 아래 제시된 WITH 사용 쿼리의 LEFT JOIN과 같은 방식이 된다.)
 -- (3) 그리고 COUNTIF(필터를 사용했던 session_id수), COUNTIF(-필터사용해서-제품 본 session_id수)를 조건 '=1' 로 걸러낸다. 
 -- 물론 1로 적어뒀기 때문에 값이 1이냐는 조건으로 COUNTIF()를 해도 같은 결과를 얻을 수 있다.
-/*f
+
+/*
 SELECT
   COUNTIF(filteruse = 1),
   COUNTIF(filter_prodview = 1),
   ROUND(COUNTIF(filter_prodview = 1)/COUNTIF(filteruse = 1), 3)
 */
+
 SELECT
   SUM(filteruse),
   SUM(filter_prodview),
