@@ -61,3 +61,29 @@ def solution(polynomial):
             answer = '0'
             
     return answer
+
+# 3
+# 마지막 else에서의 else를 지우고 진행했더니 answer가 미리 참조한다는 오류가 떴다.
+# 그래서 아예 return을 바로 하도록 결과에 넣어두었는데 여러 테스트 케이스를 넣어도 여전히 안된다. 
+# 없으면 없었지 0은 나올 수가 없기 때문에 꾸렸는데... 같은 케이스가 통과가 안되는데 어떤 케이스인지 이해할 수 없다.
+
+def solution(polynomial):
+    constant, coefficient = 0, 0
+    composed = polynomial.split(' + ')      # 먼저 나눈다음
+    
+    for i in composed:
+        if i.isdecimal():                   # 숫자인지부터 본다: len(i)으로 하면 상수항도 걸림
+            constant += int(i)
+        elif i == 'x':                      # 변수항인가
+            coefficient += 1
+        elif i[-1] == 'x':                  # 맨 나중에 계수가 1인 x를 거르도록
+            coefficient += int(i[:-1])
+    
+    if coefficient != 0:
+        if constant != 0:
+            return f'{coefficient}x + {constant}'
+        else:
+            return f'{coefficient}x'
+    else:
+        if constant != 0:
+            return f'{constant}'
