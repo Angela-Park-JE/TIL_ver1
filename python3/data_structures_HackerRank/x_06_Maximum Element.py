@@ -1,13 +1,42 @@
 """
 Prepare> Data Structures> Stacks> Maximum Element
 https://www.hackerrank.com/challenges/maximum-element/problem?isFullScreen=true
+You have an empty sequence, and you will be given  queries. Each query is one of these three types:
+    1 x  -Push the element x into the stack.
+    2    -Delete the element present at the top of the stack.
+    3    -Print the maximum element in the stack.
+Function Description
+    Complete the getMax function in the editor below.
+    getMax has the following parameters:
+    - string operations[n]: operations as strings
+Returns
+    - int[]: the answers to each type 3 query
 """
 
+
+
 """해결중"""
+# 240205
+# 살짝 바꾸어보았는데 (주어진 문자열을 다 숫자형으로 바꾸지 않고 바로 검사) 이래도 time out이 된다...
+def getMax(operations):
+    # Write your code here
+    thelist = []
+    printit = []
+    for i in operations:
+        if i[0] == '1':
+            thelist.append(int(i[2:]))
+        elif i[0] == '2':
+            del thelist[-1]
+        elif i[0] == '3':
+            printit.append(max(thelist))
+
+    return printit
+
+
+
+# 처음(23.02.28)
 # 기본적인 예제 데이터에 대해서는 해결이되었으나, 10000개 이상의 데이터에 대해서는 느리게 작동하여 Time out이 적용되었다.
 # 코드를 조금 더 효율적으로 짜라고 하는데 어떻게 해야할지 조금 더 고민해봐야겠다.
-
-
 
 #!/bin/python3
 
