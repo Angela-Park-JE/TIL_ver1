@@ -13,6 +13,8 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120880
 
 
 
+# 24.02.09: for문 시퀀스를 set으로 바꾼다면!?
+
 # 24.02.08: 절댓값이 같은 것이 두번 들어가는 문제가 생기는데 어떻게 순번을 넘길 수 있을 까
 def solution(numlist, n):
     numkey = dict(zip(numlist, [abs(n-i) for i in numlist]))
