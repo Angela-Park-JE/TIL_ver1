@@ -32,6 +32,35 @@ def solution(array, n):
 
 
 
+"""다른 풀이"""
+#...
+# youngcheon , DoubleDeltas , okanekudasai , 도규탁 외 51 명
+solution=lambda a,n:sorted(a,key=lambda x:(abs(x-n),x))[0]
+
+# sort를 사용할때 key를 정해줄 수 있는 것을 했었는데 까먹었다. 정렬기준을 만들어줄 수 있는건데.
+#  pgstter , ccc , kti0940 , lisayang011@gmail.com 외 8 명
+def solution(array, n):
+    array.sort(key = lambda x : (abs(x-n), x-n))
+    answer = array[0]
+    return answer
+# 이것도 마찬가지다. 같은 방식 다른 코드.
+# 노력형범재
+def solution(array, n):
+    arr = {i:abs(n-i) for i in array}
+    return sorted(arr.items(),key=lambda x: [x[1],x[0]])[0][0]
+
+
+# 처음에 생각했던(그러나 쓰지 못한)방
+# 봉글봉글 , 정승현 , purpleong1104@gmail.com , 강예빈 외 35 명
+def solution(array, n):
+    array.sort()
+    temp = []
+
+    for i in array :
+        temp.append( abs(n-i) )
+
+    return array[temp.index(min(temp))]
+
 """오답노트"""
 
 def solution(array, n):
