@@ -49,7 +49,6 @@ def solution(array, n):
     arr = {i:abs(n-i) for i in array}
     return sorted(arr.items(),key=lambda x: [x[1],x[0]])[0][0]
 
-
 # 처음에 생각했던(그러나 쓰지 못한)방
 # 봉글봉글 , 정승현 , purpleong1104@gmail.com , 강예빈 외 35 명
 def solution(array, n):
@@ -61,8 +60,9 @@ def solution(array, n):
 
     return array[temp.index(min(temp))]
 
-"""오답노트"""
 
+
+"""오답노트"""
 def solution(array, n):
     # 절댓값으로 차이 걸러서 찾으려고 한것... 위의 시간을 줄인다고 생각했지만 이걸로 주변 값 비교 후 반환하는게 나을지도 모른다.
     array.sort()
