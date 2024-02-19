@@ -49,7 +49,7 @@ def solution(array, n):
     arr = {i:abs(n-i) for i in array}
     return sorted(arr.items(),key=lambda x: [x[1],x[0]])[0][0]
 
-# 처음에 생각했던(그러나 쓰지 못한)방
+# 처음에 생각했던(그러나 구현?하지 못해서 쓰지 못한)방법!
 # 봉글봉글 , 정승현 , purpleong1104@gmail.com , 강예빈 외 35 명
 def solution(array, n):
     array.sort()
