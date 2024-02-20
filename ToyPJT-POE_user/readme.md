@@ -23,12 +23,12 @@ Pre-processing:
 
 Analyzing: 
   - poe_stats_3_EDA_ver2_1.ipynb
-  - poe_stats_3_EDA_ver2_2.ipynb
+  - poe_stats_3_EDA_ver2_2_.ipynb
   - poe_stats_4_EDA_byclass.ipynb
   - poe_stats_5_EDA_user.ipynb
 
-Analyzing following by Kaggle: 
-  - POE_rankers_analysis.ipynb (Upper letters POE is the analysis file following Kaggle questions.)
+~~Analyzing following by Kaggle:~~
+  - ~~POE_rankers_analysis.ipynb (Upper letters POE is the analysis file following Kaggle questions.)~~
 
 ### POE 프로젝트를 진행하면서 배운점
   - **목적 없이 데이터를 들여다보지 말자.**  
