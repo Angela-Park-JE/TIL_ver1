@@ -24,6 +24,35 @@ https://school.programmers.co.kr/learn/courses/30/lessons/120863
 
 
 
+# 24.02.24: 풀긴 풀었는데, 코드 자체가 길어진 것과는 별개로 검사하는 과정 자체를 줄이는 방법을 고민 중이다.
+# 오답노트에서 마지막으로 풀었던 것의 문제점은 바로, x가 하나밖에 존재하지 않을 때에는 coefficient = 1인데 해당 1이 들어가서 '1x + 3' 식으로 된 것이다.
+def solution(polynomial):
+    constant, coefficient = 0, 0
+    composed = polynomial.split(' + ')      # 먼저 나눈다음
+    
+    for i in composed:
+        if i.isdecimal():                   # 숫자인지부터 본다: len(i)으로 하면 상수항도 걸림
+            constant += int(i)
+        elif i == 'x':                      # 변수항인가
+            coefficient += 1
+        elif (i[-1] == 'x')&(i[:-1].isdecimal()):   # 맨 나중에 계수가 1인 x를 거르도록
+            coefficient += int(i[:-1])
+
+    if coefficient >1:   # 계수가 1 초과
+        if constant != 0:
+            return f'{coefficient}x + {constant}'
+        else:
+            return f'{coefficient}x'
+    elif coefficient ==1: # 계수가 1 일때 (생략해야함)
+        if constant != 0:
+            return f'x + {constant}'
+        else:
+            return 'x'
+    elif coefficient ==0:
+        return f'{constant}'
+
+
+
 """오답노트"""
 
 # 1
