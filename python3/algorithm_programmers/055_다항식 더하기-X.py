@@ -53,6 +53,29 @@ def solution(polynomial):
 
 
 
+"""다른 풀이"""
+# 결국 하나씩 해결하는 것외에 다른 방식이 있을까 해서 다른 문제 해결방식을을 보았다.
+# 이 풀이 말고 다른 풀이에서 x계수가 0인 경우 coefficient == ''로 만든 것을 보았는데 이 방법도 좋은 것 같다.
+# 다른점(1) polynomial.split(' + ') 을 for문에 바로 넣은 점 (2) for문 안 else에서 내가 elif두번으로 나눈 것을 바로 해결
+# (3) if문에서 양의 정수만 있끼 떄문에 계수가 0인 경우 바로 상수만 출력 (4) 1인 경우와 1초과일 경우 상수항 유무에 따라 가른 것을 한 문장에 해결
+# 노력형범재 , eridanus93@gmail.com , gsosun@hanyang.ac.kr , 정우진 외 110 명
+def solution(polynomial):
+    xnum = 0
+    const = 0
+    for c in polynomial.split(' + '):
+        if c.isdigit():
+            const+=int(c)
+        else:
+            xnum = xnum+1 if c=='x' else xnum+int(c[:-1])
+    if xnum == 0:
+        return str(const)
+    elif xnum==1:
+        return 'x + '+str(const) if const!=0 else 'x'
+    else:
+        return f'{xnum}x + {const}' if const!=0 else f'{xnum}x'
+
+
+
 """오답노트"""
 
 # 1
