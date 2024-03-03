@@ -13,6 +13,21 @@ https://school.programmers.co.kr/learn/courses/30/lessons/181862
 
 
 
+# 24.03.03: 드디어 되었다. abc를 모두 한 가지 구분자로 바꾼다음 한번에 자른 뒤 빈문자열 버리고 빈건지 아닌지 고르기!
+def solution(myStr):
+    for i in range(len(myStr)):
+        if myStr[i] in ['a', 'b', 'c']:
+            myStr = myStr.replace(myStr[i], '.')
+    strlist = myStr.split('.')
+  
+    strlist[:] = [v for v in strlist if v != ""] # "" 가 아닌 것들만 남기도록 [:] 슬라이싱으로 inplace함
+    if len(strlist) != 0:
+        return strlist
+    else:
+        return ['EMPTY']
+
+
+
 """오답노트"""
 # 24.02.14 : 시간초과가 나온다. a한 것을 또 b를 돌리고 또 c를 돌리는데 당연히 비효율적이라는 것은 예상했지만...
 # 어떻게 푸는 게 좋을까
