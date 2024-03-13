@@ -11,7 +11,7 @@
 > ### kaggle questions
 > 본 캐글 프로젝트에서 제시하는 문항을 해결하는 파일: 
 > - POE_rankers_analysis.ipynb : 처음 시작 했을 때 과정들
-> - POE_rankers_analysis-reboot-pt1, 2.ipynb 
+> - POE_rankers_analysis-reboot-pt1, 2, 3.ipynb 
 
 
 ### files info  
