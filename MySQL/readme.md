@@ -3,7 +3,7 @@
 
 Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습하는 곳입니다.)_
 
-대부분 MySQL을 기준으로 연습할 것이기 때문에 MySQL이지만 MSSQL이나 Oracle SQL 일 경우 따로 표기할 예정입니다.
+대부분 MySQL을 기준이며 MSSQL이나 OracleSQL, SQLite 일 경우 따로 표기할 예정입니다.
 
 ---
 
@@ -13,7 +13,7 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
   
 ~3. Traffic Data :~
 
-4. Programmerstest : SQL coding test practice in programmers (순서는 문제의 난이도와 관계없습니다.)
+4. Programmerstest : SQL test practice in programmers (순서는 문제의 난이도와 관계없습니다.)
 
 >  | number | 기간              | 복습1회차            | 복습2회차      |
 >  |:---    |---                |---                |---           |
@@ -22,3 +22,7 @@ Here is practice notes for good query sentences! _(이곳은 쿼리문을 연습
 
 
 5. [Book]SQLProgramming : TIL with reviewing the book [Let's get it SQL programming, Charlie Hong, Gilbut, 2021]
+
+6. Leetcode : SQL practice (MySQL)
+
+7. SolveSQL : SQL practice 2024~ (SQLite)
