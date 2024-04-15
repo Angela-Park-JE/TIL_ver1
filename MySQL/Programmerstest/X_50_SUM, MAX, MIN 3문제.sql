@@ -50,3 +50,27 @@ https://school.programmers.co.kr/learn/courses/30/lessons/299310
 """
 
 
+
+"""오답노트"""
+-- 240414: 서브쿼리는 잘 되지만 YEAR로 묶는 지점에서 오류가 난다.
+-- (1370, "execute command denied to user 'test'@'%' for routine 'e.YEAR'")
+SELECT  YEAR(differentiation_date) AS YEAR
+      , maxsize - size_of_colony AS YEAR_DEV
+      , id
+  FROM  ECOLI_DATA e
+        LEFT JOIN 
+                (
+                SELECT  YEAR(differentiation_date) AS YEAR
+                      , MAX(size_of_colony) AS maxsize
+                  FROM  ECOLI_DATA
+                 GROUP  BY 1
+                ) tmp ON e.YEAR(differentiation_date) = tmp.YEAR
+
+-- 240415: 윈도우함수로 구했는데 답이 잘 나오는 것으로 보이는데 정답이 아니라고 한다.
+SELECT  YEAR(differentiation_date) AS YEAR
+      , MAX(size_of_colony) OVER (PARTITION BY YEAR(differentiation_date)) - size_of_colony AS maxsize
+      , id
+  FROM  ECOLI_DATA
+ ORDER  BY 1, 2;
+
+
