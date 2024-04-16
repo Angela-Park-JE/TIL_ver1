@@ -49,11 +49,34 @@ https://school.programmers.co.kr/learn/courses/30/lessons/299310
   같은 연도에 대해서는 대장균 크기의 편차에 대해 오름차순으로 정렬해주세요.
 """
 
+-- 240416: 첫번째 LEFT JOIN으로 MAX 값을 조인하면 이렇게 할 수 있다.
+SELECT  YEAR(differentiation_date) AS YEAR
+      , maxsize - size_of_colony AS YEAR_DEV
+      , id
+  FROM  ECOLI_DATA e
+        LEFT JOIN 
+                (
+                SELECT  YEAR(differentiation_date) AS YEAR
+                      , MAX(size_of_colony) AS maxsize
+                  FROM  ECOLI_DATA
+                 GROUP  BY 1
+                ) tmp ON YEAR(e.differentiation_date) = tmp.YEAR
+ ORDER  BY 1, 2;
+
+-- 240416: 마찬가지로 윈도우함수를 이용하면 다음과 같다.
+SELECT  YEAR(differentiation_date) AS YEAR
+      , MAX(size_of_colony) OVER (PARTITION BY YEAR(differentiation_date)) 
+            - size_of_colony AS YEAR_DEV
+      , id
+  FROM  ECOLI_DATA
+ ORDER  BY 1, 2;
+
 
 
 """오답노트"""
 -- 240414: 서브쿼리는 잘 되지만 YEAR로 묶는 지점에서 오류가 난다.
 -- (1370, "execute command denied to user 'test'@'%' for routine 'e.YEAR'")
+  -- 240416: 짜잔~ 저는 바보였습니다~ e.YEAR()가 뭐에요~ 농담도 참 -> YEAR(e.differentiation_date)
 SELECT  YEAR(differentiation_date) AS YEAR
       , maxsize - size_of_colony AS YEAR_DEV
       , id
@@ -72,5 +95,3 @@ SELECT  YEAR(differentiation_date) AS YEAR
       , id
   FROM  ECOLI_DATA
  ORDER  BY 1, 2;
-
-
