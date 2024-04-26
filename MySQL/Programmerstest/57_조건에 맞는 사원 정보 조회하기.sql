@@ -41,8 +41,8 @@ SELECT  tmp.totalscore AS score
     ) tmp
         LEFT JOIN HR_EMPLOYEES e ON tmp.emp_no = e.emp_no;
 
--- 방법3. 윈도우함수를 쓰되 LIMIT 없이 RANK를 매겨 써보기
-SELECT  totalscore AS score
+-- 방법3. 윈도우함수를 쓰되 LIMIT 없이 RANK를 매겨 써보기 (바로 다음에 더 나은 답이 있다)
+SELECT  totalscore AS score 
       , e.emp_no
       , e.emp_name
       , e.position
@@ -63,3 +63,37 @@ SELECT  totalscore AS score
         LEFT JOIN HR_EMPLOYEES e
             ON tmp2.emp_no = e.emp_no
  WHERE  rnk = 1;                 -- 원하는 등수 자르기
+
+-- 세 번째 방법의 더 나은 답을 찾았다. RANK 하나 때문에 서브쿼리를 두번 쓸 필요는 없다.
+SELECT  tmp.totalscore AS score
+      , e.emp_no
+      , e.emp_name
+      , e.position
+      , e.email
+  FROM  (
+        
+            SELECT  emp_no
+                  , SUM(score) AS totalscore
+                  , RANK() OVER (ORDER BY SUM(score) DESC) AS rnk
+              FROM  HR_GRADE
+             GROUP  BY emp_no
+        ) tmp
+            LEFT JOIN HR_EMPLOYEES e ON tmp.emp_no = e.emp_no
+ WHERE tmp.rnk = 1;
+
+
+
+"""다른 풀이"""
+-- 먼저 내가 썼던 답들에서 굳이 저렇게 복잡하게 하지 않아도 됐던 점이 있다.
+-- GROUP BY 의 대상이 항상 첫 줄에 나와야한다는 생각이 있었는데 
+-- FROM 절에서 하나로 묶어놓고 계산을 해도 되는 것이었다.
+SELECT  SUM(score) AS score
+      , e.emp_no
+      , e.emp_name
+      , e.position
+      , e.email
+  FROM  HR_GRADE g 
+        LEFT JOIN HR_EMPLOYEES e ON g.emp_no = e.emp_no
+ GROUP  BY 2
+ ORDER  BY 1 DESC
+ LIMIT  1;
