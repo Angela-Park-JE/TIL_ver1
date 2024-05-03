@@ -8,7 +8,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/299308
 
 
 
--- 240501
+-- 240501: 부끄럽게도 qua'r'ter의 r을 빼먹어서 안되고 잠시 헤맸다. 분명 맞는데..! 하면서...
 -- CONCAT(EXTRACT(QUARTER FROM differentiation_date), 'Q') 도 됨
 SELECT  CONCAT(QUARTER(differentiation_date), 'Q') AS quarter 
       , COUNT(id) AS ecoli_count
