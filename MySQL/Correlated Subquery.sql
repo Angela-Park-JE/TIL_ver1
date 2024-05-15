@@ -37,10 +37,10 @@ SELECT  datetime
  ORDER  BY t1.order_date ASC;
 
 
--- 만약 이 방문자수보다 높은 날짜를 찾고 싶다면
+-- 만약 해당 날보다 작은 값을 기록한 날들이 10개 미만인 날들을 세보고 싶다면
 SELECT  datetime
       , unique_user_cnt
   FROM  web_cnt_byday t1
- WHERE  10 > (SELECT  COUNT(*)        -- 기록값 상위 10위를 제외하고 반환
+ WHERE  10 > (SELECT  COUNT(*)
                 FROM  web_cnt_byday t2
-               WHERE  t1.unique_user_cnt > t2.unique_user_cnt) -- 해당 날짜보다 높은 수를 기록한 날들
+               WHERE  t1.unique_user_cnt > t2.unique_user_cnt) -- 해당 날짜보다 작은 날들을 세어서
