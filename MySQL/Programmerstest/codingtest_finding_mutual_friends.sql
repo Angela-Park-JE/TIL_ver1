@@ -1,4 +1,5 @@
 """
+  유사한 문제 풀이(유튜브 techTFQ) : https://www.youtube.com/watch?v=ka9kDqkITX4
 특정 유저와 친구인 사람이 한 명씩 등록되어 있다고 해보자.
 일반적인 친구 목록과는 달리 한 유저에 한 유저씩 등록되어 있었다.
 A와 B가 친구고 B가 C와 친구면 B는 A와 C의 mutual friend라고 할 수 있다.
