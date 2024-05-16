@@ -1,5 +1,6 @@
 """
   유사한 문제 풀이(유튜브 techTFQ) : https://www.youtube.com/watch?v=ka9kDqkITX4
+  블로그 정리 : 
 특정 유저와 친구인 사람이 한 명씩 등록되어 있다고 해보자.
 일반적인 친구 목록과는 달리 한 유저에 한 유저씩 등록되어 있었다.
 A와 B가 친구고 B가 C와 친구면 B는 A와 C의 mutual friend라고 할 수 있다.
@@ -17,3 +18,29 @@ A라는 사람의
   
 셀프조인으로 풀려고 했는데 맞는지 어려웠던 것으로 기억한다.
 """
+
+
+-- 240516:
+WITH all_friends AS 
+	(
+    SELECT  friend1, friend2
+	  FROM  MUTUAL_FRIENDS2
+	 UNION  ALL
+	SELECT  friend2, friend1
+	  FROM  MUTUAL_FRIENDS2
+    )
+
+SELECT  f.*
+	  , af.friend2 AS mutual_friends
+      -- (2) WINDOW 함수로 세기 : 다중컬럼 비교시 "f.friend1, f.friend2" 처럼 나열하기!
+      , COUNT(af.friend2) OVER (PARTITION BY f.friend1, f.friend2 ORDER BY f.friend1, f.friend2
+                        	RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING ) AS cnt 
+  FROM  MUTUAL_FRIENDS2 f
+		LEFT JOIN all_friends af  -- (1) LEFT JOIN으로 바꿈 
+        ON f.friend1 = af.friend1
+            AND af.friend2 IN (
+                        SELECT  af2.friend2 
+                          FROM  all_friends af2
+                         WHERE  af2.friend1 = f.friend2)
+ ORDER  BY 1
+ ;
