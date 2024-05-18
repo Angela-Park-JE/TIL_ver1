@@ -20,7 +20,7 @@ A라는 사람의
 """
 
 
--- 240516:
+-- 240516: 만약 특정 인물을 기준으로 센다면 아우터 쿼리에서 WHERE f.friend1 = 'Jeremy' 식으로 검색한 뒤 cnt가 가장 높은 사람을 꼽으면 된다.
 WITH all_friends AS 
 	(
     SELECT  friend1, friend2
