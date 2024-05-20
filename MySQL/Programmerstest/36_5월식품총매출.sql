@@ -25,3 +25,15 @@ SELECT p.product_id, p.product_name, SUM(p.price*o.amount)
  WHERE EXTRACT(YEAR_MONTH FROM o.produce_date) = '202205'
  GROUP BY p.product_id
  ORDER BY 3 DESC, 1 ASC;
+
+-- 240520: 이전과 달리 특별히 가독성이 높아진건 아닌 것 같지만 지금 쓰는 방식이 쿼리가 길어졌을 때 더 편할 것 같다. 피어 피드백 받을때도 부분별로 주석 달기 더 편해보이고
+-- 재미있는 건 세 번 풀때 전부 다른 형식의 조인을 사용한게 인상적이다.
+-- 아무튼 'produce_date' 컬럼명 오타 한 번 났던것 외에는 쓰면서 문제읽고 풀었다. 어려운 문제들 많이 만나고 싶다.
+SELECT  fo.product_id
+      , fp.product_name
+      , SUM(fo.amount * fp.price) AS total_sales
+  FROM  FOOD_ORDER fo 
+        LEFT JOIN FOOD_PRODUCT fp ON fo.product_id = fp.product_id
+ WHERE  EXTRACT(YEAR_MONTH FROM fo.produce_date) = '202205'
+ GROUP  BY 1  -- 아물론 fo.product_id 해도되는데 코테문제에서는 괜히 빨리 풀고 싶어서 ㅋㅋㅋ
+ ORDER  BY 3 DESC, 1 ASC;
