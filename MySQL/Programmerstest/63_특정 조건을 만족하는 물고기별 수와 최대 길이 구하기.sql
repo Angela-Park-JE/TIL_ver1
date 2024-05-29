@@ -7,16 +7,11 @@ https://school.programmers.co.kr/learn/courses/30/lessons/298519
   컬럼명은 물고기의 종류 'FISH_TYPE', 잡은 수 'FISH_COUNT', 최대 길이 'MAX_LENGTH'로 해주세요.
 """
 
-
-
--- 오답노트 --
-
-
--- 240528: 테스트 케이스는 통과를 하는데... 안되는데 문제가 무엇인지 해결하지 못했다.
+-- 240529: 두둔 바보등장 ORDER 컬럼을 잘못 입력했다.
 SELECT  COUNT(*) AS FISH_COUNT
       , MAX(length) AS MAX_LENGTH
       , fish_type
   FROM  FISH_INFO
  GROUP  BY fish_type
 HAVING  AVG(IFNULL(length, 10))>=33
- ORDER  BY 1;
+ ORDER  BY 3;
