@@ -15,3 +15,17 @@ SELECT  COUNT(*) AS FISH_COUNT
  GROUP  BY fish_type
 HAVING  AVG(IFNULL(length, 10))>=33
  ORDER  BY 3;
+
+-- 논리를 조금 풀어쓰면 이렇게 된다. (사실 왜 틀렸는지 발견 못하고 다시 써놓고 마지막 ORDER BY 치면서 못푼 이유 발견한건 미래의 나에게 안 비밀)
+SELECT  COUNT(*) AS FISH_COUNT
+      , MAX(length) AS MAX_LENGTH
+      , fish_type
+  FROM  FISH_INFO  
+ WHERE fish_type IN (
+        SELECT  fish_type
+          FROM  FISH_INFO
+         GROUP  BY fish_type
+        HAVING  AVG(IFNULL(length, 10))>=33
+        )
+ GROUP  BY fish_type
+ ORDER  BY 3;
