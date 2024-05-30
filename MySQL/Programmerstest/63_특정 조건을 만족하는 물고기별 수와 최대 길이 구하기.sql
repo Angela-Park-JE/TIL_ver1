@@ -8,6 +8,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/298519
 """
 
 -- 240529: 두둔 바보등장 ORDER 컬럼을 잘못 입력했다.
+-- COUNT(*)는 되지만 COUNT(length)는 안된다. 왜냐하면 HAVING은 바꾸는게 아니라 조건일 뿐인 것이다.
 SELECT  COUNT(*) AS FISH_COUNT
       , MAX(length) AS MAX_LENGTH
       , fish_type
