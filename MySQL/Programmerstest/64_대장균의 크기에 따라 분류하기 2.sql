@@ -8,6 +8,11 @@ https://school.programmers.co.kr/learn/courses/30/lessons/301649
 """
 
 /* 방법1 : WINDOW 함수 중 RATIO_TO_REPORT 사용하여 직접적인 % 값 반환하여 넣기 */
+SELECT  
+  FROM  
+ WHERE  
+ GROUP  BY
+ ORDER  BY;
 
 
 /* 방법2 : 조회용도의 서브쿼리를 작성 */
