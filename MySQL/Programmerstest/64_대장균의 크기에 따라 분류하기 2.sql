@@ -8,12 +8,18 @@ https://school.programmers.co.kr/learn/courses/30/lessons/301649
 """
 
 /* 방법1 : WINDOW 함수 중 RATIO_TO_REPORT 사용하여 직접적인 % 값 반환하여 넣기 */
-SELECT  
-  FROM  
- WHERE  
- GROUP  BY
- ORDER  BY;
+-- 240616: 이 문제는 MySQL밖에 되지 않습니다^^
 
+SELECT  id
+      -- , size_of_colony
+      , CASE WHEN RATIO_TO_REPORT(size_of_colony) OVER (ORDER BY size_of_colony DESC) <=0.25 THEN 'CRITICAL'
+             WHEN RATIO_TO_REPORT(size_of_colony) OVER (ORDER BY size_of_colony DESC) BETWEEN 0.26 AND 0.5 THEN 'HIGH'
+             WHEN RATIO_TO_REPORT(size_of_colony) OVER (ORDER BY size_of_colony DESC) BETWEEN 0.51 AND 0.75 THEN 'MEDIUM'
+             ELSE 'LOW' 
+         END AS 'COLONY_NAME'
+  
+  FROM  ECOLI_DATA
+ ORDER  BY 1;
 
 /* 방법2 : 조회용도의 서브쿼리를 작성 */
 
