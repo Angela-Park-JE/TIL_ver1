@@ -5,7 +5,7 @@ https://school.programmers.co.kr/learn/courses/30/lessons/301650
 -*/
 
 
--- 240705: 11분 정도 걸린 듯. 1세대가 부모인 2세대를 부모로 가진 id를 찾는다
+-- 240705: 11분 정도 걸린 듯. 1세대가 부모인 2세대를 부모로 가진 id를 찾는다. lv4인데 생각보다 어렵지 않다.
 SELECT  e3.id AS id
   FROM  ECOLI_DATA e3
  WHERE  e3.parent_id IN
