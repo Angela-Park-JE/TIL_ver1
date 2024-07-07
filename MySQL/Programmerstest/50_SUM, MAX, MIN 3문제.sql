@@ -1,9 +1,9 @@
-"""
+/*-
 코딩테스트 연습> SUM, MAX, MIN> 조건에 맞는 아이템들의 가격의 총합 구하기
 https://school.programmers.co.kr/learn/courses/30/lessons/273709
-문제
   ITEM_INFO 테이블에서 희귀도가 'LEGEND'인 아이템들의 가격의 총합을 구하는 SQL문을 작성해 주세요. 이때 컬럼명은 'TOTAL_PRICE'로 지정해 주세요.
-"""
+-*/
+
 
 -- 240414: 쉽지만 새로 
 SELECT  SUM(price) AS TOTAL_PRICE
@@ -13,15 +13,14 @@ SELECT  SUM(price) AS TOTAL_PRICE
 
 
 
-"""
+/*- ------- ------- ------- ------- 
 코딩테스트 연습> SUM, MAX, MIN> 물고기 종류 별 대어 찾기
 https://school.programmers.co.kr/learn/courses/30/lessons/293261
-문제
   물고기 종류 별로 가장 큰 물고기의 ID, 물고기 이름, 길이를 출력하는 SQL 문을 작성해주세요.
   물고기의 ID 컬럼명은 ID, 이름 컬럼명은 FISH_NAME, 길이 컬럼명은 LENGTH로 해주세요.
   결과는 물고기의 ID에 대해 오름차순 정렬해주세요.
   단, 물고기 종류별 가장 큰 물고기는 1마리만 있으며 10cm 이하의 물고기가 가장 큰 경우는 없습니다.
-"""
+-*/
 
 -- 240414: MySQL에서는 rank라는 단어는 예약어로 사용할 수 없다.
 SELECT  id
@@ -40,14 +39,14 @@ SELECT  id
 
 
 
-"""
+/*- ------- ------- ------- ------- 
 코딩테스트 연습> SUM, MAX, MIN> 연도별 대장균 크기의 편차 구하기 
 https://school.programmers.co.kr/learn/courses/30/lessons/299310
-문제
   분화된 연도(YEAR), 분화된 연도별 대장균 크기의 편차(YEAR_DEV), 대장균 개체의 ID(ID) 를 출력하는 SQL 문을 작성해주세요. 
   분화된 연도별 대장균 크기의 편차는 분화된 연도별 가장 큰 대장균의 크기 - 각 대장균의 크기로 구하며 결과는 연도에 대해 오름차순으로 정렬하고 
   같은 연도에 대해서는 대장균 크기의 편차에 대해 오름차순으로 정렬해주세요.
-"""
+-*/
+
 
 -- 240416: 첫번째 LEFT JOIN으로 MAX 값을 조인하면 이렇게 할 수 있다.
 SELECT  YEAR(differentiation_date) AS YEAR
@@ -63,6 +62,7 @@ SELECT  YEAR(differentiation_date) AS YEAR
                 ) tmp ON YEAR(e.differentiation_date) = tmp.YEAR
  ORDER  BY 1, 2;
 
+
 -- 240416: 마찬가지로 윈도우함수를 이용하면 다음과 같다.
 SELECT  YEAR(differentiation_date) AS YEAR
       , MAX(size_of_colony) OVER (PARTITION BY YEAR(differentiation_date)) 
@@ -73,7 +73,7 @@ SELECT  YEAR(differentiation_date) AS YEAR
 
 
 
-"""오답노트"""
+/*- 오답노트- */
 -- 240414: 서브쿼리는 잘 되지만 YEAR로 묶는 지점에서 오류가 난다.
 -- (1370, "execute command denied to user 'test'@'%' for routine 'e.YEAR'")
   -- 240416: 짜잔~ 저는 바보였습니다~ e.YEAR()가 뭐에요~ 농담도 참 -> YEAR(e.differentiation_date)
