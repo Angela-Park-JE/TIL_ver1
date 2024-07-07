@@ -20,6 +20,14 @@ SELECT  e1.id AS id
 
 
 
+/*- 다른 풀이 -*/
+-- 대부분의 풀이에서 이 연산을 사용했다. (child.parent_id = parent.id 로 조인한 뒤)
+  WHERE child.GENOTYPE & parent.GENOTYPE = parent.GENOTYPE
+-- 부모의 형질을 모두 가져야하기 때문에 비트연산했을 때 부모의 형질과 값이 동일해야합니다.(https://school.programmers.co.kr/questions/77179)
+-- &은 비트 연산자로, 대응되는 비트가 모두 1인 경우 1인 것인데 그것과 = 은 어떻게 이어져서 나올 수 있는건지 잘 모르겠는 것이다. 
+
+
+  
 /*- 오답노트 -*/
 -- 240624: 처음에는 이진수라는 문제를 제대로 읽지 않고 썼다. 그럼 그렇지! 예시 데이터만 봤을 때도 아님을 느꼈는데!
 SELECT  e1.id 
