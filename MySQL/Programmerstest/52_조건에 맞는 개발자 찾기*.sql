@@ -1,11 +1,10 @@
-"""
+/*-
 코딩테스트 연습> SELECT> 조건에 맞는 개발자 찾기
 https://school.programmers.co.kr/learn/courses/30/lessons/276034
   DEVELOPERS 테이블에서 Python이나 C# 스킬을 가진 개발자의 정보를 조회하려 합니다. 조건에 맞는 개발자의 ID, 이메일, 이름, 성을 조회하는 SQL 문을 작성해 주세요.
   결과는 ID를 기준으로 오름차순 정렬해 주세요.
   * CODE가 10진법으로 되어있는 2의 n승수이다.
-"""
-
+-*/
 
 
 -- 240417: 이전에 하고 있던 것은 C#과 Python을 둘다 가진 사람만 찾는 코드였기 때문에 틀렸다.
@@ -25,7 +24,8 @@ SELECT  DISTINCT id
  ORDER  BY 1;
 
 
-"""다른 해답"""
+
+/*-다른 해답-*/
 -- 비트 연산을 사용한 해당 문제 풀이 (https://velog.io/@sobit/비트-연산자bitwise-operator-프로그래머스-문제로-이해해-보자)
 select ID, EMAIL, FIRST_NAME, LAST_NAME
 from DEVELOPERS
@@ -63,10 +63,9 @@ ORDER BY D.ID;
 
 
 
-"""오답노트"""
+/*-오답노트-*/
 -- 240415: CONV(값, 원래진법, 바꿀진법)
--- skillcode를 2진법으로 바꾼것을 더해서 만들어 둔뒤 그것으로 검색
--- 해당 자리수만 검색하고 싶은데 어렵다
+-- skillcode를 2진법으로 바꾼것을 더해서 만들어 둔뒤 그것으로 검색. 해당 자리수만 검색하고 싶은데 어렵다
 SELECT  id
       , email
       , first_name
@@ -80,8 +79,7 @@ SELECT  id
  WHERE  RIGHT(CONV(skill_code, 10, 2), LENGTH(tmp.bin)) = tmp.bin
  ORDER  BY 1;
 
--- 일단 파이썬 하나로는 검색이되는 상황
--- 만약 LENGTH안에 SELECT 절로 넣게되면 오류가된다
+-- 일단 파이썬 하나로는 검색이되는 상황. 만약 LENGTH안에 SELECT 절로 넣게되면 오류가된다
 SELECT  id
       , email
       , first_name
@@ -141,6 +139,8 @@ SELECT  id
              WHERE  name IN ('Python', 'C#')
         ) 
  ORDER  BY 1;
+
+
 
 /* --- 메모 ---
  SELECT  REPLACE(CONV(code, 10, 2), 0, '.') AS bin, code, name    -- 각 코드가 변환 및 대체가 잘 되는가?
