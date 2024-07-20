@@ -3,7 +3,7 @@
 # https://school.programmers.co.kr/learn/courses/30/lessons/120913
 
 
-# 240715:
+# 24.07.15:
 def solution(my_str, n):
     answer = []
     while 1 <= len(my_str)//n:  # 몫이 1보다 작게되면(n이 남은 길이보다 길 경우) 종료한다.
