@@ -47,3 +47,27 @@ def solution(num, k):
         while -1 in l:    # -1뿐이 아니라면 -1을 다 지우고 min(가장 처음 나타나는 자리 return)
             l.remove(-1)
         return min(l)
+
+
+
+# 다른 풀이 #
+# 출처 : https://school.programmers.co.kr/learn/courses/30/lessons/120904/solution_groups?language=python3 
+
+# 최다 likes 받은 코드. 정말 깔끔하다. 기본적으로 k가 num에 없으면 -1을 반환하고, 있다면 find로 index를 찾아 +1 한다.
+# find를 썼을 때 가장 처음 나온 자리를 반환하기 때문인 것 같다.
+def solution(num, k):
+    return -1 if str(k) not in str(num) else str(num).find(str(k)) + 1
+  
+# 그 다음으로 likes가 높은 코드. i는 index, n은 해당 value로 깔끔하게 비교하면서 지나갈 수 있다.
+def solution(num, k):
+    for i, n in enumerate(str(num)):
+        if str(k) == n:
+            return i + 1
+    return -1
+
+# 이런 코드도 있다. k의 index를 추출하도록 시도하되, k가 없어서 ValueError가 뜨는 경우에 대해 -1을 출력하도록 한다.
+def solution(num, k):
+    try:
+        return str(num).index(str(k)) + 1
+    except ValueError:
+        return -1
