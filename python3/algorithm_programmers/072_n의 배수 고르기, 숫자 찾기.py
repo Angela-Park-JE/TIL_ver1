@@ -37,8 +37,7 @@ def solution(num, k):
     else:
         return min(answer)
 
-# 24.07.25:
-# 한 줄로 줄이는것 재미들려서 썼지만 결국 다 순회하는 방식이라 효용성은 없다. (다양하게 풀어보고 싶었을 뿐)
+# 24.07.25: (한 줄로 줄이는것 재미들려서 썼지만) 이전과 마찬가지로 전부 순회하는 방식이고 -1 검사가 복잡해서 효용성은 없다. (다양하게 풀어보고 싶었을 뿐)
 def solution(num, k):
     l = [i+1 if str(num)[i] == str(k) else -1 for i in range(len(str(num)))]
     if len(set(l)) == 1:  # -1뿐이라면 -1
