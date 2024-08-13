@@ -20,3 +20,5 @@ SELECT  w2.id -- 오늘
         LEFT JOIN WEATHER w2    -- RIGHT 조인도 되지 않음
         ON w1.recordDate + 1 = w2.recordDate 
  WHERE  w1.temperature < w2.temperature;
+
+
