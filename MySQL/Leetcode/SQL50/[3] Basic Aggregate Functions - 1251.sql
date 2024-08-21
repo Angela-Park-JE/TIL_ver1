@@ -23,10 +23,11 @@ https://leetcode.com/problems/average-selling-price/description/?envType=study-p
 -*/
 
 
--- 240821: (2) 오답노트를 기반으로 해결 및 IFNULL로 NULL 처리!
+-- 240821: 오답노트(2)를 기반으로 해결 및 IFNULL로 NULL 처리!
 -- sales든 unit이든 unit에 null이 있을 때 문제가 생기는 것일 거다.
 -- 미리 tmp 서브쿼리에서 처리를 해놓으면 0으로 div하는 문제가 생기기 때문에
--- 다 계산이 끝난 바깥 쿼리에서 처리해주도록 썼다.
+-- 다 계산이 끝난 바깥 쿼리에서 처리해주도록 썼다. 기분이 찜찜했다. 이런 문제를 냈을리 없는데.
+-- 하지만 MSSQL로 다시 풀어보면서 나의 답이 좋은 답이 아님을 확신하게되는데...
 SELECT  product_id
       , IFNULL(ROUND(SUM(sales)/SUM(units), 2), 0) AS average_price
   FROM  (
@@ -50,9 +51,50 @@ SELECT  product_id
          ) tmp
  GROUP  BY product_id;
 
--- 추가로 MySQL이 아니라 MSSQL일 때의 쿼리도 짜보았다.
+
+-- [MSSQL 시도] 240821: MSSQL은 IFNULL이 아니라 ISNULL을 사용함
+-- 또한 소수점 자리를 표시하려면 미리 숫자를 실수형표기로 바꿔놓아야 한다.
+-- FULL OUTER JOIN을 하니 product_id가 null이 뜨는게 생기는데 문제를 알게되었다.
+-- 서브 쿼리 안에서 product_id를 PRICE가 UNITSSOLD 테이블에서 가져왔기 때문이었다. 92.66띄우고 패스했다.
+SELECT  product_id
+      , ISNULL( ROUND( CONVERT(float, SUM(sales))/SUM(units), 2), 0) AS average_price
+  FROM  (
+        SELECT  p.product_id  -- s.product_id라고 하니 안됨
+              , s.units
+              , p.price
+              , s.units*p.price AS sales
+          FROM  UNITSSOLD s FULL OUTER JOIN PRICES p
+                ON s.product_id = p.product_id
+                AND s.purchase_date BETWEEN p.start_date AND p.end_date
+         ) tmp
+ GROUP  BY product_id;
 
 
+
+/*- 다른 풀이 -*/
+-- 채찍피티를 채찍질하여 얻어낸 MSSQL 오답노트
+-- 이것은 내가 복잡하게 서브쿼리 써가면서 할 문제가 아니었다는 것을 보여준다.
+-- MSSQL
+SELECT  p.product_id
+      , ISNULL( ROUND( CONVERT(float, SUM(p.price*s.units))/SUM(s.units), 2), 0) AS average_price
+  FROM  UNITSSOLD s RIGHT JOIN PRICES p
+        ON s.product_id = p.product_id
+        AND s.purchase_date BETWEEN p.start_date AND p.end_date
+ GROUP  BY p.product_id;
+
+-- 나는 계산에 문제를 가지고 있는 사람입니다^^...
+-- https://leetcode.com/problems/average-selling-price/solutions/3872311/beats-82-easy-mysql-solution-round-sum-between/?envType=study-plan-v2&envId=top-sql-50
+-- MySQL
+SELECT p.product_id, IFNULL(ROUND(SUM(units*price)/SUM(units),2),0) AS average_price
+FROM Prices p LEFT JOIN UnitsSold u
+ON p.product_id = u.product_id AND
+u.purchase_date BETWEEN start_date AND end_date
+group by product_id
+
+
+
+
+  
 /*- 오답노트 -*/
 -- 240817: 생각보다 복잡했다 머리로 이해가 안가는게 아닌데 ㅠㅠ피곤해서인가
 -- 기간은 BETWEEN을 써도 된다. end와 start간에 overlapping이 없다.
