@@ -31,10 +31,16 @@ SELECT  p.project_id
         ON p.employee_id = e.employee_id
  GROUP  BY p.project_id;
 
+-- [MSSQL] 240822: experience_years를 처음부터 10진수 2자리로 바꾸어서 했더니 통과했다...?
+-- https://leetcode.com/problems/project-employees-i/description/comments/1883631
+SELECT  p.project_id 
+      , ROUND(AVG(CONVERT(decimal(10, 2), experience_years)), 2) AS average_years
+  FROM  PROJECT p LEFT JOIN EMPLOYEE e
+        ON p.employee_id = e.employee_id
+ GROUP  BY p.project_id
+ ORDER  BY 1;
 
-
-/*- MSSQL로 풀어보는 문제 -*/
-
+/*- MSSQL로 풀면서 생각했던 부분 -*/
 -- 240822: MySQL류와 다른 점은 experience_years 즉 소수점표기를 해야하는 컬럼에 대해서 실수화 작업이 먼저 필요하다는 점이다.
 -- 한 가지 더, AVG 한 후 ROUND 했을때 테스트케이스7번의 id=12번 프로젝트의 평균값이 소수점 두 번째 자리에서 달랐다. 더 작은 것이다. 15.475라는 값을 ROUND 했을 떄 15.47로 표기한 것이다. 세 번째 자리가 5일때인 다른 값들에 대해서는 정상적으로 작동하는데 왜일까?
 SELECT  p.project_id 
