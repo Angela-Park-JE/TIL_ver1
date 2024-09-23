@@ -36,3 +36,5 @@ SELECT  employee_id
           FROM  EMPLOYEE
         ) tmp
  WHERE  department_id != 0;
+
+-- 240923: 더 좋은 방법 찾기
