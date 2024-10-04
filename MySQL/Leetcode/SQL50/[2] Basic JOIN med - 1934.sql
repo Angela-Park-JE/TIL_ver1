@@ -26,6 +26,7 @@ Return the result table in any order.
 
 -- 241002: 복잡한 문제는 아닌데 어떻게 구현을 할 것인가 생각이 필요한 문제였다. 
 -- 먼저 confirmed를 유저별로 1, 0을 해놓고 rate를 구한 다음, IFNULL로 CONFIRMATIONS에 없는 유저를 처리했다. 
+-- WINDOW 함수를 이용하는 방법은 없을까 잠깐 고민했었다.
 -- 다음은 수정한 후
 SELECT  s.user_id
       , IFNULL(tmp.con_rate,0) AS confirmation_rate
