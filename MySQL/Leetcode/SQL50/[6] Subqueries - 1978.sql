@@ -16,6 +16,7 @@ The result format is in the following example.
 */
 
 -- 241001: 어려울 것 없는 쿼리! IN 을 쓰는 면에서 서브쿼리 문제로 분류되나보다.
+-- FROM에서 먼저 거르는 방법도 있을 수 있을 것 같다.
 SELECT  employee_id 
   FROM  EMPLOYEES 
  WHERE  salary < 30000
