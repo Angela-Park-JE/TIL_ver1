@@ -16,6 +16,25 @@ https://leetcode.com/problems/immediate-food-delivery-ii/?envType=study-plan-v2&
 */
 
 
+-- 241019: 먼저 아이디별 최초 오더를 구한 다음, JOIN으로 알맞은 customer_pref_delivery_date 을 찾아 붙여주면서 그 아이디별로 immediate order면 1, 아니면 0을 준다.
+-- 그리고 그 결과를 바탕으로 AVG와 ROUND로 정답 구하기. join이랑 서브쿼리 안쓰고 싶었다...
+SELECT  ROUND(AVG(immediates)*100, 2) AS immediate_percentage  
+  FROM  (
+            SELECT  tmp.customer_id
+                  , SUM(IF(first_order = customer_pref_delivery_date, 1, 0)) /COUNT(delivery_id) AS immediates
+              FROM  DELIVERY d
+                    RIGHT JOIN ( 
+                            SELECT  customer_id
+                                  , MIN(order_date) AS first_order
+                              FROM  DELIVERY
+                             GROUP  BY customer_id
+                            ) tmp ON d.customer_id = tmp.customer_id AND d.order_date = tmp.first_order
+             GROUP  BY d.customer_id
+         ) tmp2
+--  GROUP  BY customer_id
+ ;
+
+
 
 /*오답노트*/
 
