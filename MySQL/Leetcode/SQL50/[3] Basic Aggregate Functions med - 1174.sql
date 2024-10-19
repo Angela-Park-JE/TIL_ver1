@@ -16,6 +16,19 @@ https://leetcode.com/problems/immediate-food-delivery-ii/?envType=study-plan-v2&
 */
 
 
--- 241017:
-SELECT  
-  FROM  DELIVERY
+
+/*오답노트*/
+
+-- 241017: 오답이다. 처음에는 HAVING에서 MIN = order_date를 했었는데 그렇게 하면 첫 주문이 immediate가 아닌 사람은 아예 집계 대상이 제외된다.
+-- 이것은 그 부분을 해결한 쿼리이다. 그러나 test case2에선가 안 된다.
+SELECT  ROUND(AVG(immediates)*100, 2) AS immediate_percentage 
+  FROM  (
+        SELECT  customer_id
+              , SUM(IF(first_order = customer_pref_delivery_date, 1, 0)) /COUNT(delivery_id) AS immediates
+          FROM  (
+                SELECT  customer_id, MIN(order_date) AS first_order, customer_pref_delivery_date, delivery_id
+                  FROM  DELIVERY
+                 GROUP  BY customer_id
+                ) tmp
+         GROUP  BY customer_id
+        ) tmp2;
