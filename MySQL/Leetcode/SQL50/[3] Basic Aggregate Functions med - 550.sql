@@ -31,7 +31,7 @@ SELECT  player_id
 --    AND  ( event_date = LAG(event_date, 1) OR event_date = LEAD(event_date, 1) )
    AND  event_date IN (LAG(event_date, 1)|LEAD(event_date, 1));
 
--- 241023: 
+-- 241023: 시도 그리고 해석오류 발견!
 -- " logged in again on the day after the day they first logged in " so MIN(event_date)
 -- 첫 로그인 다음 날에도 로그인을 한 사람의 비율을 구하는 것이 문제이다.
 -- group by를 처음부터 붙이면 LEAD(event_date, 1)의 의미가 없어진다.
