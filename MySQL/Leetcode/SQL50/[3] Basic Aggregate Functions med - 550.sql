@@ -16,6 +16,8 @@ In other words, you need to count the number of players that logged in for at le
 */
 
 
+-- 241031: 
+
 
 /*오답노트*/
 -- 241022: WHERE 절에서 event_date가 연달아 있는지를 검사하고 싶었다. 하지만 완전히 틀린 쿼리ㅠㅠ
