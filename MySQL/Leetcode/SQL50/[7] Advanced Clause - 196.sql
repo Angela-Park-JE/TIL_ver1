@@ -16,7 +16,7 @@ https://leetcode.com/problems/delete-duplicate-emails/?envType=study-plan-v2&env
 
 
 -- 241112: 오랫만에 써보는 DML!! 
--- Oracle
+-- Oracle, MSSQL
 DELETE PERSON WHERE id NOT IN
     (
         SELECT  MIN(id)
@@ -26,7 +26,6 @@ DELETE PERSON WHERE id NOT IN
 
 -- MySQL에서는 다음과 같은 오류가 뜨면서 되지 않았다...
 -- You can't specify target table 'PERSON' for update in FROM clause
-
 DELETE FROM PERSON WHERE id NOT IN
     (
         SELECT  MIN(id)
