@@ -15,6 +15,21 @@ https://leetcode.com/problems/group-sold-products-by-the-date/description/?envTy
 */
 
 
+-- 241115: 두번째 제출 눌렀을 때 78%로 오름. 크게 문제는 없겠지만 distinct를 사용할 수도 있지만... WITH + GROUP BY로 중복 데이터 걸러냄
+WITH ACTIVITIES AS 
+(
+    SELECT  sell_date, product
+      FROM  ACTIVITIES
+     GROUP  BY sell_date, product
+)   -- delete duplicates 
+
+SELECT  a1.sell_date AS sell_date
+      , COUNT(a1.product) AS num_sold
+      , (SELECT GROUP_CONCAT(product ORDER BY product SEPARATOR ',') FROM ACTIVITIES a2 WHERE a1.sell_date = a2.sell_date) AS products
+  FROM  ACTIVITIES a1
+ GROUP  BY 1
+ ORDER  BY 1
+;
 
 
 
