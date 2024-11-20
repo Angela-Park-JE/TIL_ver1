@@ -46,5 +46,11 @@ SELECT  player_id
       , event_date
       , CASE WHEN event_date = LEAD(event_date, 1) OVER (PARTITION BY player_id ORDER BY event_date) -1 THEN 1 ELSE 0 END AS next_date
   FROM  ACTIVITY
+--  WHERE  player_id IN (
+--                         SELECT  player_id
+--                         FROM  ACTIVITY
+--                         GROUP  BY player_id
+--                         HAVING  COUNT(event_date) > 1
+--                      )
  GROUP  BY player_id
 HAVING  MIN(event_date) = event_date;
