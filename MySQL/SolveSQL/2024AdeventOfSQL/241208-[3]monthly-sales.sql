@@ -4,7 +4,7 @@ https://solvesql.com/problems/shoppingmall-monthly-summary/
 */
 
 
--- 241208: 
+-- 241208: 이게 3단계라닝...
 SELECT  order_month
       , SUM(ordered_amount) AS ordered_amount
       , SUM(canceled_amount) AS canceled_amount
