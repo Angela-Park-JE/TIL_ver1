@@ -4,6 +4,25 @@ https://solvesql.com/problems/moving-average-of-power-consumption/
 */
 
 
+-- 241220: 부끄러울 정도의 실수...! window 함수를 사용한다는 사실 자체에 빠져서 PARTITION BY를 자각을 못하고...
+-- refreshed brain으로 다음날 보니 바로 보여서 스스로 부끄러웠다.
+SELECT  DATE_ADD(measured_at, INTERVAL +10 MINUTE) AS end_at
+      , ROUND(AVG(zone_quads) OVER 
+              (ORDER BY measured_at
+              ROWS BETWEEN 5 PRECEDING AND CURRENT ROW), 2) AS zone_quads
+      , ROUND(AVG(zone_smir) OVER 
+              (ORDER BY measured_at
+              ROWS BETWEEN 5 PRECEDING AND CURRENT ROW), 2) AS zone_smir
+      , ROUND(AVG(zone_boussafou) OVER 
+              (ORDER BY measured_at
+              ROWS BETWEEN 5 PRECEDING AND CURRENT ROW), 2) AS zone_boussafou
+  FROM  power_consumptions
+ WHERE  measured_at >= '2017-01-01 00:00:00' 
+   AND  measured_at < '2017-02-01 00:00:00'
+ ORDER  BY 1
+;
+
+
 /*오답노트*/
 -- 241219: 먼저 10분 단위의 평균을 내기 위해 해당 시간의 LAG LEAD를 구..하는 것보다
 -- 윈도우 함수가 최적일 것 같다.
@@ -42,8 +61,7 @@ SELECT  DATE_ADD(measured_at, INTERVAL +10 MINUTE) AS end_at
 ;
 
 -- 241219: 고쳤는데도 어떤 부분이 문제인지 찾지 못했다.
-SELECT  
-        DATE_ADD(measured_at, INTERVAL +10 MINUTE) AS end_at
+SELECT  DATE_ADD(measured_at, INTERVAL +10 MINUTE) AS end_at
       , ROUND(AVG(zone_quads) OVER 
               (PARTITION BY measured_at ORDER BY measured_at
               ROWS BETWEEN 5 PRECEDING AND CURRENT ROW), 2) AS zone_quads
