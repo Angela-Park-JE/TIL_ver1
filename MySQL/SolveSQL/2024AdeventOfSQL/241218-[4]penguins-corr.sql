@@ -61,3 +61,41 @@ SELECT  species
         ) AS corr
   FROM  species_table
 ;
+
+
+/* 참고로 (해답을) SQL 포맷팅을 적용했더니 다음과 같다. 다른 줄은 괜찮지만 메인 쿼리의 ROUND() 부분은 읽기 편한건지 아닌지 모르겠다. 매일같이 쓰다보면 느껴질까 */
+WITH
+  base_temp_table AS (
+    SELECT
+      species,
+      flipper_length_mm AS x,
+      body_mass_g AS y
+    FROM
+      penguins
+    WHERE
+      flipper_length_mm IS NOT NULL
+      AND body_mass_g IS NOT NULL 
+  ), 
+  species_table AS (
+    SELECT DISTINCT
+      species AS species
+    FROM
+      penguins
+  )
+SELECT
+  species,
+  (
+    SELECT
+      ROUND(
+        (count(*) * sum(x * y) - sum(x) * sum(y)) / (
+          sqrt(count(*) * sum(x * x) - sum(x) * sum(x)) * sqrt(count(*) * sum(y * y) - sum(y) * sum(y))
+        ),
+        3
+      ) AS corr
+    FROM
+      base_temp_table
+    WHERE
+      base_temp_table.species = species_table.species
+  ) AS corr
+FROM
+  species_table;
