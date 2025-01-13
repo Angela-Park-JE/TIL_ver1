@@ -115,3 +115,24 @@ SELECT  p.station_id
   FROM  station_usage_pct p LEFT JOIN station s ON p.station_id = s.station_id
  WHERE  p.usage_pct <= 50
   ;
+
+
+-- 250113: SELECT 절을 자주 쓰는것 자체가 부하를 많이 가져오는 걸까..? 한눈에 들어오는 모양은 아니지만 FROM절 서브쿼리로 옮기고 했는데도 무한로딩이다.
+SELECT  station_usage_pct.station_id
+      , station.name
+      , station.local
+      , ROUND( cnt19 / cnt18 * 100, 2) AS usage_pct
+  FROM  
+     (
+    SELECT  s.station_id
+          , (SELECT COUNT(*) FROM rental_history r WHERE s.station_id = r.rent_station_id AND EXTRACT(YEAR_MONTH FROM rent_at) = 201810)
+          + (SELECT COUNT(*) FROM rental_history r WHERE s.station_id = r.return_station_id AND EXTRACT(YEAR_MONTH FROM return_at) = 201810) AS cnt18
+          , (SELECT COUNT(*) FROM rental_history r WHERE s.station_id = r.rent_station_id AND EXTRACT(YEAR_MONTH FROM rent_at) = 201910)
+          + (SELECT COUNT(*) FROM rental_history r WHERE s.station_id = r.return_station_id AND EXTRACT(YEAR_MONTH FROM return_at) = 201910) AS cnt19
+      FROM  station s
+      ) AS station_usage_pct 
+      LEFT JOIN station 
+             ON station_usage_pct.station_id = station.station_id
+ WHERE  ROUND( cnt19 / cnt18 * 100, 2) <= 50
+   AND  cnt19*cnt18 != 0 
+  ;
