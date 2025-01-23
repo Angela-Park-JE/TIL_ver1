@@ -6,6 +6,10 @@ https://solvesql.com/problems/ratio-of-gifts/
 */
 
 
+
+
+/*오답노트*/
+
 -- 241207: 처음에 했던 답. 8% 대가 나오는데 알고보니 부분 기증품을 포함한다고 한다. 
 -- 데이터를 뜯어보니 부분 기증품이 상당히 여러개 겹치기 때문에 숫자가 많이 차이날 수 밖에 없다.
 -- object number 로 바꾸어서 해도 같은 답이 나온다. 
@@ -25,3 +29,10 @@ SELECT  ROUND(COUNT(DISTINCT title, object_number)/ (SELECT COUNT(DISTINCT title
   FROM  artworks
  WHERE  credit LIKE '%gift%'
 ;
+
+
+-- 250120: 부분작품을 포함한 작품 별로 먼저 테이블을 만들어 세는 방식은 어떨까...
+SELECT  object_number
+      , credit
+  FROM  artworks
+ GROUP  BY object_number
