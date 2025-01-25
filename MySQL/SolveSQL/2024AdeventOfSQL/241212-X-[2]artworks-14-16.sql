@@ -4,6 +4,9 @@ https://solvesql.com/problems/summary-of-artworks-in-3-years/
 */
 
 
+
+/*오답노트*/
+
 -- 241212: 우선 이렇게 먼저 요약 집계를 해줬다.
 SELECT  IFNULL(classification, '(not assigned)') AS classification
       , CASE WHEN YEAR(acquisition_date) = 2014 THEN 1 ELSE 0 END AS '2014'
@@ -67,3 +70,13 @@ SELECT  DISTINCT class_list.classification
 
  ORDER  BY 1
 ;
+
+-- 250125: 일단 다른 artworks문제를 풀면서 artwork_id로만 집계를 해도 된다는 것을 알게되었다. 
+-- 텍스트가 많아 데이터가 크기 때문에 간단하게 쓸 정보만 추려서 테이블을 하나 만드는게 날지 않을까 생각했다.
+SELECT  artwork_id
+      , YEAR(acquisition_date)
+      , classification
+  FROM  artworks 
+ WHERE  YEAR(acquisition_date) IN (2014, 2015, 2016)
+
+
