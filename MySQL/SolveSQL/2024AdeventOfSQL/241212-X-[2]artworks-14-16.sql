@@ -4,6 +4,28 @@ https://solvesql.com/problems/summary-of-artworks-in-3-years/
 */
 
 
+-- 250129: 메인쿼리에서 cnt를 SUM으로 합계 내주는 쿼리
+SELECT  classification
+      , SUM(cnt14) AS '2014'
+      , SUM(cnt15) AS '2015'
+      , SUM(cnt16) AS '2016'
+  FROM  
+      (
+        SELECT  IFNULL(classification, '(not assigned)') AS classification
+              , CASE WHEN YEAR(acquisition_date) = 2014 THEN 1 ELSE 0 END AS cnt14
+              , CASE WHEN YEAR(acquisition_date) = 2015 THEN 1 ELSE 0 END AS cnt15
+              , CASE WHEN YEAR(acquisition_date) = 2016 THEN 1 ELSE 0 END AS cnt16
+          FROM  artworks
+      ) cnt_table
+ GROUP  BY 1
+ ORDER  BY 1
+;
+-- 뭐한거야 다시 새롭게 시작하니 잘되는데 물론 완전히 전과 달랐던 것은 아니다. WITH문을 만들려고 했었고 
+-- `DISTINCT IFNULL(classification, '(not assigned)') AS classification` 이라는 컬럼을 가진 WITH테이블 하나를 메인에 두고 SELECT 문에서 classification으로 조인시키면서 연도정보를 가진 문장으로 데려오려했음.
+-- 문제는 `(SELECT COUNT() FROM artworks a1 WHERE c.classifications = a1.classification AND YEAR(acquisition_date) = 2014) AS '2014'` 
+-- 이와같이 classification이 (not assigned)라고 처리되어있지 않은 artworks 원래 테이블에서 가져온다는 것임. 
+
+
 
 /*오답노트*/
 
