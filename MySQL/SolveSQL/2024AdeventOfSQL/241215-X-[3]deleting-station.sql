@@ -136,3 +136,43 @@ SELECT  station_usage_pct.station_id
  WHERE  ROUND( cnt19 / cnt18 * 100, 2) <= 50
    AND  cnt19*cnt18 != 0 
   ;
+
+
+-- 250130
+-- -- 대여/반남 건수를 간단하게 생각해보자. 그냥 rental_history 건수로 생각해보는 것이다. 근데 쿼리가 무한 로딩에 걸린다.
+-- SELECT  rent_station_id
+--       , ROUND(
+--         (SELECT COUNT(*) FROM rental_history r1 WHERE r1.rent_station_id = r.rent_station_id AND EXTRACT(YEAR_MONTH FROM r1.rent_at) = '201810') 
+--         / (SELECT COUNT(*) FROM rental_history r1 WHERE r1.rent_station_id = r.rent_station_id AND EXTRACT(YEAR_MONTH FROM r1.rent_at) = '201910') * 100 , 2 ) AS rent1819
+--   FROM  rental_history r
+--  WHERE  EXTRACT(YEAR_MONTH FROM rent_at) = '201810'
+--  GROUP  BY 1;
+
+-- 일단 확인차 뽑아보려는데 전체 쿼리가 작동을 안한다.
+SELECT  s.station_id
+      , rent18
+      , rent19
+  FROM  station s 
+        LEFT JOIN 
+                  (
+                    SELECT rent_station_id, COUNT(*) AS rent18
+                      FROM rental_history  
+                     WHERE EXTRACT(YEAR_MONTH FROM rent_at) = '201810'
+                     GROUP BY rent_station_id
+                    -- HAVING COUNT(*) != 0
+                  ) r18  -- 서브쿼리는 정상 작동
+                  ON s.station_id = r18.rent_station_id
+        LEFT JOIN 
+                  (
+                    SELECT rent_station_id, COUNT(*) AS rent19
+                      FROM rental_history 
+                     WHERE EXTRACT(YEAR_MONTH FROM rent_at) = '201910'
+                     GROUP BY rent_station_id
+                    -- HAVING COUNT(*) != 0
+                  ) r19
+                  ON s.station_id = r19.rent_station_id
+;
+
+
+
+
