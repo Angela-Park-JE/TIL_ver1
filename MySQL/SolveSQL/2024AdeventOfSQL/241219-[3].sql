@@ -3,3 +3,10 @@
 https://solvesql.com/problems/refine-cafe-address/
 */
 
+
+
+/* 풀이과정 */
+-- 먼저 시, 도 정보로 나누기에 문제 없는지 데이터 확인
+SELECT  DISTINCT SUBSTRING_INDEX(address, ' ', 1 )
+  FROM  cafes
+;
