@@ -48,4 +48,26 @@ SELECT  order_date, order_id, category
  WHERE  order_date = '2020-11-19'
  ORDER  BY order_date, order_id, category
 -- 아니나 다를까, 처음에 접근한 방식이 맞았던 것이다. furniture가 포함이 되면 주문한 것으로 간주하는 것이다. 
--- 다시 수정하여 정답!
+
+-- 250209: 그래서 바꾸어보았다. 먼저 order_id가 10개 이상인 날들에 대해 GROUP_CONCAT(category)에 가구가 있는지 없는지 확인하여 1, 0을 부여하여 집계
+-- (서브쿼리는 문제 없으나) "check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS c ON r.order_id = c.order_id GROUP BY 1' at line 18" 
+      -- 문법 오류가 생긴다.
+SELECT  r.order_date
+      , SUM(c.furnitures) AS furniture
+      , SUM(c.funitures)/COUNT(c.order_id) AS furniture_pct
+  FROM  records r
+      RIGHT JOIN 
+      (
+        SELECT  order_id
+              , CASE WHEN GROUP_CONCAT(category) LIKE '%Furniture%' THEN 1 ELSE 0 END AS furnitures      
+          FROM  records
+         WHERE  order_date IN 
+                            (
+                            SELECT  order_date
+                              FROM  records
+                             GROUP  BY 1
+                            HAVING  COUNT(order_id) >= 10
+                            )
+         GROUP  BY 1
+      ) countbyorderid c ON r.order_id = c.order_id
+ GROUP  BY 1;
