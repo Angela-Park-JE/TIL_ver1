@@ -75,7 +75,7 @@ SELECT  r.order_date
 -- 250212: 자꾸 c 부터 문제가 생겨서 c로 임시테이블 이름을 바꾸고 오타가 나있던 메인쿼리 3번째 줄을 고쳤더니 정상 작동!
 SELECT  r.order_date
       , SUM(c.furnitures) AS furniture
-      , SUM(c.furnitures)/COUNT(c.order_id) AS furniture_pct
+      , SUM(c.furnitures)/COUNT(c.furnitures) AS furniture_pct
   FROM  records r,
       (
         SELECT  order_id
@@ -92,4 +92,27 @@ SELECT  r.order_date
       )  c 
  WHERE  r.order_id = c.order_id
  GROUP  BY 1
+ ;
+-- 그래서 완성한 쿼리였는데, 정답은 12개나 제출은 84개인 쿼리가 되어버렸다.
+SELECT  r.order_date
+      , SUM(c.furnitures) AS furniture
+      , ROUND(SUM(c.furnitures)/COUNT(c.furnitures)*100, 2) AS furniture_pct
+  FROM  records r,
+      (
+        SELECT  order_id
+              , CASE WHEN GROUP_CONCAT(category) LIKE '%Furniture%' THEN 1 ELSE 0 END AS furnitures      
+          FROM  records
+         WHERE  order_date IN 
+                            (
+                            SELECT  order_date
+                              FROM  records
+                             GROUP  BY 1
+                            HAVING  COUNT(order_id) >= 10
+                            )
+         GROUP  BY 1
+      )  c 
+ WHERE  r.order_id = c.order_id
+ GROUP  BY 1
+HAVING  SUM(c.furnitures)/COUNT(c.furnitures) >= 0.40
+ ORDER  BY 3 DESC, 1
  ;
