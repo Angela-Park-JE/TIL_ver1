@@ -16,7 +16,7 @@ In other words, you need to count the number of players that logged in for at le
 */
 
 
--- 241031: 
+
 
 
 /*오답노트*/
@@ -54,3 +54,18 @@ SELECT  player_id
 --                      )
  GROUP  BY player_id
 HAVING  MIN(event_date) = event_date;
+
+-- 250218: 테스트 케이스는 통과했으나 본 케이스에서 통과가 안되었던 쿼리.
+-- event_date에서 하루 더 한 날이 a2.event_date와 같은 조건으로 엮도록 한 다음 a2.event_date가 NULL이 아닌 행을 가진 유저들을 대상으로 COUNT하는 방식.
+SELECT  ROUND(COUNT(DISTINCT player_id) 
+        / (SELECT COUNT(DISTINCT player_id) FROM Activity) , 2) AS fraction
+  FROM  
+        (
+        SELECT  a1.player_id
+              , a1.event_date
+          FROM  Activity a1 
+                LEFT JOIN Activity a2 
+                ON DATE_ADD(a1.event_date, INTERVAL 1 DAY) = a2.event_date
+         WHERE  a2.event_date IS NOT NULL     
+        ) consecutive_logined_users
+ ;
