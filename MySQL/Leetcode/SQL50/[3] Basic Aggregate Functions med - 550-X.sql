@@ -16,7 +16,7 @@ In other words, you need to count the number of players that logged in for at le
 */
 
 
--- 250218: 해답은 되지만 TIME LIMIT EXCEEDED 걸린 ... 쿼리
+-- 250218: 해답은 되지만 TIME LIMIT EXCEEDED 걸린 ..
 SELECT  ROUND(COUNT(DISTINCT player_id) 
         / (SELECT COUNT(DISTINCT player_id) FROM Activity) , 2) AS fraction
   FROM  
