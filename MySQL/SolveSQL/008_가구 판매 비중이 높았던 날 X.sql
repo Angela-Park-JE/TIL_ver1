@@ -116,3 +116,41 @@ SELECT  r.order_date
 HAVING  SUM(c.furnitures)/COUNT(c.furnitures) >= 0.40
  ORDER  BY 3 DESC, 1
  ;
+
+
+-- 250314: 다시, 새로 시작했다. (무식하게..?) WITH 문 쓰면서 해봤는데, 생각보다 금방금방 결과가 나왔다. 문제는 레코드 개수 부터 달랐다. (제출: 43개, 정답: 12개)
+-- 그니까, 주문건수가 가구를 같이 시키면 주문한 걸로 해당 주문 통째로 가구 주문인건지, 아니면 주문 하나하나 물건단위로 세야하는지 애매모호 하다. 생각하는 사람마다 다를 것 같고.
+WITH  daily_furniture_orders AS    -- 데일리 가구 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(order_id) AS fur_cnt
+        FROM  records
+       WHERE  category = 'Furniture'
+       GROUP  BY 1
+      )
+    , daily_tot_orders AS    -- 데일리 총 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(order_id) AS tot_cnt
+        FROM  records
+       GROUP  BY 1
+      )
+    , daily_orders_info AS
+      (
+      SELECT  dfo.order_date    -- 데일리 가구 주문건수 비율
+            -- , fur_cnt
+            -- , tot_cnt
+            , ROUND(fur_cnt/tot_cnt*100, 2) AS fur_pct
+        FROM  daily_furniture_orders AS dfo
+              LEFT JOIN daily_tot_orders AS dto ON dfo.order_date = dto.order_date
+      )
+
+SELECT  doi.order_date
+      , fur_cnt
+      , fur_pct
+  FROM  daily_orders_info AS doi
+        LEFT JOIN daily_furniture_orders AS dfo ON doi.order_date = dfo.order_date
+ WHERE  fur_pct>=40
+ ORDER  BY 3 DESC, 1
+ ;
+
