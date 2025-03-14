@@ -4,6 +4,65 @@ https://solvesql.com/problems/day-of-furniture/
 */
 
 
+-- 250314: 완! 근데 daily_furniture_orders와 daily_tot_orders를 한 번에 출력 어떻게 못하나
+WITH  daily_furniture_orders AS    -- 데일리 가구 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(DISTINCT order_id) AS fur_cnt
+        FROM  records
+       WHERE  category = 'Furniture'
+       GROUP  BY 1
+      )
+    , daily_tot_orders AS    -- 데일리 총 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(DISTINCT order_id) AS tot_cnt
+        FROM  records
+       GROUP  BY 1
+      HAVING  COUNT(DISTINCT order_id)>=10
+      )
+    , daily_orders_info AS
+      (
+      SELECT  dfo.order_date    -- 데일리 가구 주문건수 비율
+            , ROUND(fur_cnt/tot_cnt*100, 2) AS fur_pct
+        FROM  daily_tot_orders AS dto
+              LEFT JOIN daily_furniture_orders AS dfo ON dto.order_date = dfo.order_date
+      )
+
+SELECT  doi.order_date
+      , fur_cnt AS furniture
+      , fur_pct AS furniture_pct
+  FROM  daily_orders_info AS doi
+        LEFT JOIN daily_furniture_orders AS dfo ON doi.order_date = dfo.order_date
+ WHERE  fur_pct>=40
+ ORDER  BY 3 DESC, 1
+ ;
+
+-- 코파일럿으로 optimize 한 쿼리이다. 서브쿼리 하나를 줄일 수 있다.
+WITH daily_orders AS (
+    SELECT DATE(order_date) AS order_date,
+           COUNT(DISTINCT CASE WHEN category = 'Furniture' THEN order_id END) AS fur_cnt,  --> 이렇게 줄여쓸 수 있다!
+           COUNT(DISTINCT order_id) AS tot_cnt
+    FROM records
+    GROUP BY DATE(order_date)
+    HAVING COUNT(DISTINCT order_id) >= 10  --> 마찬가지로 넣는 부분
+),
+daily_orders_info AS (
+    SELECT order_date,
+           fur_cnt,
+           ROUND(fur_cnt / tot_cnt * 100, 2) AS fur_pct
+    FROM daily_orders
+)
+
+SELECT order_date,
+       fur_cnt AS furniture,
+       fur_pct AS furniture_pct
+FROM daily_orders_info
+WHERE fur_pct >= 40
+ORDER BY furniture_pct DESC, order_date;
+
+
+
 /* 오답노트 */
 -- 250207: 우선 "일별 주문 수"의 기준을 order_date로 하지 않고 order_id로 하였다. 
 -- order_id 자체가 한 번의 주문 건으로 집계가 될 텐데, order_id는 고유하지 않기 때문
@@ -153,4 +212,36 @@ SELECT  doi.order_date
  WHERE  fur_pct>=40
  ORDER  BY 3 DESC, 1
  ;
+-- ㅋㅋ 아이런~ 주문 건수가 10건 이상인 날 조건을 안걸었잖아~ 완료!
+WITH  daily_furniture_orders AS    -- 데일리 가구 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(DISTINCT order_id) AS fur_cnt
+        FROM  records
+       WHERE  category = 'Furniture'
+       GROUP  BY 1
+      )
+    , daily_tot_orders AS    -- 데일리 총 주문건수
+      (
+      SELECT  DATE(order_date) AS order_date
+            , COUNT(DISTINCT order_id) AS tot_cnt
+        FROM  records
+       GROUP  BY 1
+      HAVING  COUNT(DISTINCT order_id)>=10
+      )
+    , daily_orders_info AS
+      (
+      SELECT  dfo.order_date    -- 데일리 가구 주문건수 비율
+            , ROUND(fur_cnt/tot_cnt*100, 2) AS fur_pct
+        FROM  daily_tot_orders AS dto  -->  조건 걸면서 조인 시키는 역할 바꿈
+              LEFT JOIN daily_furniture_orders AS dfo ON dto.order_date = dfo.order_date
+      )
 
+SELECT  doi.order_date
+      , fur_cnt AS furniture
+      , fur_pct AS furniture_pct
+  FROM  daily_orders_info AS doi
+        LEFT JOIN daily_furniture_orders AS dfo ON doi.order_date = dfo.order_date
+ WHERE  fur_pct>=40
+ ORDER  BY 3 DESC, 1
+ ;
