@@ -4,8 +4,7 @@ https://solvesql.com/problems/weekday-stats-airpollution/
 */
 
 
--- 241212: CASE WHEN 쓰는 게 매우 귀찮지만 어쩔 수 없군요.
--- ORDER BY 를 위해 서브쿼리를 활용하는 것이 나아보인다.
+-- 241212: CASE WHEN 쓰는 게 매우 귀찮지만 어쩔 수 없군요. ORDER BY 를 위해 서브쿼리를 활용하는 것이 나아보인다.
 SELECT  CASE measured_at WHEN 0 THEN '월요일' 
                          WHEN 1 THEN '화요일'
                          WHEN 2 THEN '수요일'
