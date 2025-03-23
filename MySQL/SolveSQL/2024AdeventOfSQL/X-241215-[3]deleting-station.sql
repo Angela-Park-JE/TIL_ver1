@@ -174,5 +174,29 @@ SELECT  s.station_id
 ;
 
 
+-- 250323: 뻑난다. 대여/반납 건수라는게 대여+반납 건수인지 대여만 확인해도 되는건지 참 어렵다. 대여만 해보자 하고 한건데...
+WITH  rent19 AS
+(
+SELECT  rent_station_id
+      , COUNT(*) AS cnt19
+  FROM  rental_history 
+ WHERE  EXTRACT(YEAR_MONTH FROM rent_at) = '201910'
+ GROUP  BY rent_station_id
+HAVING  COUNT(*) != 0
+),
+rent18 AS
+(
+SELECT  rent_station_id
+      , COUNT(*) AS cnt18
+  FROM  rental_history 
+ WHERE  EXTRACT(YEAR_MONTH FROM rent_at) = '201810'
+ GROUP  BY rent_station_id
+HAVING  COUNT(*) != 0
+)
 
-
+SELECT  s.station_id
+      , ROUND(cnt19/cnt18*100, 2)
+  FROM  station s LEFT JOIN rent19 ON s.station_id = rent19.rent_station_id
+                  LEFT JOIN rent18 ON s.station_id = rent18.rent_station_id
+ WHERE  ROUND(cnt19/cnt18*100, 2) <= 50
+ ;
