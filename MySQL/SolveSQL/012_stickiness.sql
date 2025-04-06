@@ -1,5 +1,5 @@
 /*
-dau, wau, 그리고 stickiness = dau/wau 일별 구하기.
+DAU, WAU, 그리고 stickiness(사용자 고착도) = DAU/WAU 일별 구하기.
 https://solvesql.com/problems/stickiness-of-shoppingmall/
 */
 
