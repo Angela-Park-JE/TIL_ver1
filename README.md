@@ -35,7 +35,3 @@ Almost the codes and notes are in Jupyter notebook(`.ipynb`).
 | 머신러닝기초수학 | [머신 러닝 딥 러닝에 필요한 기초 수학 with 파이썬(프로그래밍인사이트)](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788966262854&orderClick=LEa&Kc=) (조준우, 인사이트, 2020) | `python3` |
 | 딥러닝 | [밑바닥부터 시작하는 딥러닝](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788968484636&orderClick=LEA&Kc=) (사이토 고키 저, 개앞맵시 역, 한빛미디어, 2017) | `python3` |
 
-
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAngela-Park-JE%2FTIL_ver1&count_bg=%232A7849&title_bg=%231D1C1C&icon=ulule.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-
-
