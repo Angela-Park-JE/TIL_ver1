@@ -4,7 +4,7 @@ Python3 Libraries(pandas, numpy, sklearn, scipy, keras... )
 SQL and Data structures
 
 etc... what I learned(practiced) today....!  
-Almost the codes and notes are in Jupyter notebook(`.ipynb`).
+Almost the codes and notes are in Jupyter notebook(`.ipynb`) except sql query practices.
 
 ### List table
 | folder | contents | languages |
