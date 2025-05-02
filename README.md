@@ -34,4 +34,4 @@ Almost the codes and notes are in Jupyter notebook(`.ipynb`) except sql query pr
 | 판다스 | [Learning Pandas $2/e$](https://product.kyobobook.co.kr/detail/S000035189527) (Michael Heydt 저, 이태상 역, acornpub, 2018) | `python3` |
 | 머신러닝기초수학 | [머신 러닝 딥 러닝에 필요한 기초 수학 with 파이썬(프로그래밍인사이트)](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788966262854&orderClick=LEa&Kc=) (조준우, 인사이트, 2020) | `python3` |
 | 딥러닝 | [밑바닥부터 시작하는 딥러닝](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788968484636&orderClick=LEA&Kc=) (사이토 고키 저, 개앞맵시 역, 한빛미디어, 2017) | `python3` |
-
+|        | [딥러닝을 이용한 정형 데이터 분석](https://product.kyobobook.co.kr/detail/S000061353647) () | `python3` |
