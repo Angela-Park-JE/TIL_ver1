@@ -1,6 +1,42 @@
 /*
+특정 페이지 본 세션과 아닌 세션 개수. 
 https://solvesql.com/problems/session-pv/
 */
+
+
+-- 250508: 그냥 무식하게 서브쿼리 만들어서 집계하고 묶어 계산한게 다이다.
+-- 사용자-세션id묶어서 하나의 세션으로 보기 때문에 group by를 사용해서 내놓은 것을 COUNT로 각각의 총 세션 수를 집계한다.
+-- 본거 아닌거 1, 0 나눠가면서 할 필요가 없었다. total이 아니라 안본뷰가 509가 나옴.
+WITH  
+total_table AS -- 전체 세션 수
+  (
+    SELECT  COUNT(*) AS total 
+      FROM  
+            (
+              SELECT  user_pseudo_id, ga_session_id
+                FROM  ga  
+               GROUP  BY  1, 2
+            ) total_views
+  ),
+beginner_table AS -- 입문반 페이지뷰 O
+(
+    SELECT  COUNT(*) AS pv_yes 
+      FROM  
+          (
+            SELECT  user_pseudo_id, ga_session_id
+              FROM  ga
+             WHERE  1=1
+               AND  page_title = '백문이불여일타 SQL 캠프 입문반'
+               AND  event_name = 'page_view'
+             GROUP  BY  1, 2
+          ) beginer_views
+  )
+-- 계산
+SELECT  total
+      , total-pv_yes AS pv_no
+      , pv_yes
+  FROM  total_table, beginner_table
+;
 
 
 
@@ -82,5 +118,4 @@ SELECT  COUNT(*) AS total
             FROM  ga
            GROUP  BY 1, 2, 3 
           ) pv_table
-
 ;
