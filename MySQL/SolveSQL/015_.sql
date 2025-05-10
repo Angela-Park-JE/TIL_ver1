@@ -1,4 +1,5 @@
 /*
+조건에 맞는 셀러들 찾기
 https://solvesql.com/problems/settled-sellers-2/
 */
 
