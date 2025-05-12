@@ -200,3 +200,6 @@ SELECT  s.station_id
                   LEFT JOIN rent18 ON s.station_id = rent18.rent_station_id
  WHERE  ROUND(cnt19/cnt18*100, 2) <= 50
  ;
+
+
+-- 250512: 아 다시써야해ㅠㅠ
