@@ -4,7 +4,6 @@ https://solvesql.com/problems/settled-sellers-2/
 */
 
 
-
 -- 250509:
 SELECT  seller_id
       , COUNT(DISTINCT order_id) AS orders  
