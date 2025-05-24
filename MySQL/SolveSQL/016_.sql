@@ -1,5 +1,6 @@
 /*
 https://solvesql.com/problems/characteristics-of-orders/
+지역별 카테고리별 주문수
 */
 
 
