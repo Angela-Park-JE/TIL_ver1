@@ -42,3 +42,11 @@ for i in range(len(str(number))//2):
 while number > 0:
 
 # //= 는 나누고 소수점은 버리고 저장.
+
+# 앞에서부터 ㅋㅋ 자르기로 한다면 
+str_num = str(number)
+for i in range(0, len(str_num), 2):
+    if i + 1 < len(str_num):
+        answer += int(str_num[i:i+2])
+    else:
+        answer += int(str_num[i])
