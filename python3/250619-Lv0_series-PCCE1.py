@@ -21,6 +21,7 @@ print(sum_angle)
 
 # ---
 # PCCE 3번 수 나누기: range(1)에 디버깅
+# https://school.programmers.co.kr/learn/courses/30/lessons/340205
 # 주어진 것
 number = int(input())
 
@@ -34,3 +35,10 @@ print(answer)
 # 고친 것: 자리를 계속 잘라가며 해야한다.
 # 근데 앞에서부터인지 뒤에서부터인지 다를텐데 그냥 뒤에서 부터로 자연스레 통일인가봄(?)
 for i in range(len(str(number))+1):
+# 틀린 점: 두 자리씩 끊기 때문에 끝나고서도 0을 더하는 일이 발생.
+# 다음을 하거나
+for i in range(len(str(number))//2):
+# 다음을 하는게 더 맞음
+while number > 0:
+
+# //= 는 나누고 소수점은 버리고 저장.
