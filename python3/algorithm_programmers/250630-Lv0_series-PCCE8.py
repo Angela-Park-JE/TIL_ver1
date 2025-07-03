@@ -1,4 +1,4 @@
-# PCCE 8번 디버깅: 한 줄만 수정하기
+## PCCE 8번 디버깅: 한 줄만 수정하기
 # if 대신 while을, 3대신 4를 넣어야 맞다.
 
 def solution(nickname):
