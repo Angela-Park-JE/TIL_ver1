@@ -19,7 +19,7 @@ print(month)
 
 
 ## ---
-# 250707
+# 250705
 ## PCCE5 : 빈칸채우기
 # https://school.programmers.co.kr/learn/courses/30/lessons/250129
 
