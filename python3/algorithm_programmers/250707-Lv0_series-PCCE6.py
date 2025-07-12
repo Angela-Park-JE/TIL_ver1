@@ -1,6 +1,6 @@
-## PCCE6 가채점 : 디버깅
+## PCCE6 : 디버깅
 # https://school.programmers.co.kr/learn/courses/30/lessons/250128
-# 인덱스를 제대로 활용할 줄 아시나요?
+# 가채점. 인덱스를 제대로 활용할 줄 아시나요?
 
 def solution(numbers, our_score, score_list):
     answer = []
