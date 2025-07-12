@@ -1,6 +1,6 @@
-## PCCE4 : 빈칸 채우기
+## PCCE4 저축관련 : 빈칸 채우기
 # https://school.programmers.co.kr/learn/courses/30/lessons/250130
-# 저축관련. 변수를 어떻게 넣는가 정도.
+# 변수를 어떻게 넣는가 정도.
 
 start = int(input())
 before = int(input())
@@ -20,7 +20,7 @@ print(month)
 
 ## ---
 # 250705
-## PCCE5 : 빈칸채우기
+## PCCE5 동서남북 움직임 : 빈칸채우기
 # https://school.programmers.co.kr/learn/courses/30/lessons/250129
 
 def solution(route):
