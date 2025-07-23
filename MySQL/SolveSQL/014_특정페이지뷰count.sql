@@ -1,5 +1,5 @@
 /*
-특정 페이지 본 세션과 아닌 세션 개수. 
+특정 페이지 본 세션과 아닌 세션 개수
 https://solvesql.com/problems/session-pv/
 */
 
@@ -36,6 +36,37 @@ SELECT  total
       , total-pv_yes AS pv_no
       , pv_yes
   FROM  total_table, beginner_table
+;
+
+
+
+-- 250723: 또 다르게 푼 오늘. 저번보다 더 복잡하게 풀었다.
+-- 미리 전체에서 원하는 조건 '해당페이지를 view했는지' 확인하여 1과 0을 매겨놓고
+-- 본 데이터에 대해서 SUM을 매겨서 따로 저장해둔뒤 이게 0이 아니면 본 것으로 간주.
+WITH  
+  cond_table AS -- 우선적인 조건을 포함한 테이블. 특정 페이지에 대해 조회하고 싶으면 page title만 고치면 됨.
+  (
+    SELECT  user_pseudo_id
+          , ga_session_id
+          , CASE WHEN (event_name = 'page_view' AND page_title = '백문이불여일타 SQL 캠프 입문반') 
+                THEN 1
+                ELSE 0 
+            END AS view_the_page
+      FROM  ga
+  ),
+  viewed_table AS
+  (
+    SELECT  user_pseudo_id
+          , ga_session_id
+          , SUM(view_the_page) AS viewed_or_not 
+      FROM  cond_table
+     GROUP  BY user_pseudo_id, ga_session_id
+  )
+
+SELECT  COUNT(*) AS total
+      , (SELECT  COUNT(*) FROM viewed_table WHERE viewed_or_not = 0) AS pv_no 
+      , COUNT(*) - (SELECT  COUNT(*) FROM viewed_table WHERE viewed_or_not = 0) AS pv_yes 
+  FROM  viewed_table
 ;
 
 
