@@ -4,7 +4,8 @@ https://solvesql.com/problems/top-3-bill/
 */
 
 
--- 250725: 엥 이게왜 4단
+-- 250725: 윈도우만 알면 어렵지 않게 해결할 수 있는 것
+-- 그런데 이 ROW_NUMBER 정렬이 효율적인 방법은 아니다보니 다른 방법도 있지 않을까 고민된다.
 SELECT  day
       , time
       , sex
