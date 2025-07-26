@@ -15,6 +15,6 @@ SELECT  day
             SELECT  *
                   , ROW_NUMBER() OVER (PARTITION BY day ORDER BY total_bill DESC) AS rownum
               FROM  tips
-        ) rowtable  -- total_bill 등수를 먹여놓고 출력하도록 전체 테이블을 포
+        ) rowtable  -- total_bill 등수를 먹여놓고 바로 출력이 가능하도록 전체 테이블 포함
  WHERE  rownum <= 3
 ;
