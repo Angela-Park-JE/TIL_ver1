@@ -24,6 +24,7 @@ Almost the codes and notes are in Jupyter notebook(`.ipynb`) except sql query pr
 | `선형대수` | 선형대수 공부, 실습 주피터노트북: 장철원 선생님의 수업 실습파일, 교재 학습/복습 포함 | `python3` |
 
 
+<!--
 ### 학습에 참고한 교재 리스트
 | subject | books | languages |
 |---|:---|---|
@@ -35,3 +36,4 @@ Almost the codes and notes are in Jupyter notebook(`.ipynb`) except sql query pr
 | 머신러닝기초수학 | [머신 러닝 딥 러닝에 필요한 기초 수학 with 파이썬(프로그래밍인사이트)](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788966262854&orderClick=LEa&Kc=) (조준우, 인사이트, 2020) | `python3` |
 | 딥러닝 | [밑바닥부터 시작하는 딥러닝](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788968484636&orderClick=LEA&Kc=) (사이토 고키 저, 개앞맵시 역, 한빛미디어, 2017) | `python3` |
 |        | [딥러닝을 이용한 정형 데이터 분석](https://product.kyobobook.co.kr/detail/S000061353647) (Mark Ryan , 박찬성 역, 책만, 2022) | `python3` |
+-->
