@@ -80,6 +80,7 @@ SELECT  user_a_id AS user_id
  GROUP  BY  user_a_id
  ORDER  BY 2 DESC
 ;
+
 -- users라는 테이블에 user가 전부 있을 거라는 생각을 했으나, 그런건 아니었다. 그도 그럴게 문제에서 edges 테이블만 설명하긴 했다. 
 -- 이전 시도에서 id가 1 늘었다. users 테이블에 user가 전부 있었다면 레코드수가 맞지 않진 않았을 테고.
 -- 이전에 UNION ALL 로 포함된 user를 전부 모아왔다고 생각했는데, 
@@ -106,6 +107,7 @@ SELECT  user_a_id AS user_id
  GROUP  BY  user_a_id
  ORDER  BY 2 DESC
 ;
+
 -- 바보!!! SELECT 절에 user_a_id를 적었으니 전체 user가 안나오지...
 -- 일단 이것으로 전체 user는 출력하게 되었으나, 출력값이 다른 데이터포인트가 있다.
 WITH unioned_table AS
@@ -131,4 +133,3 @@ SELECT  user_id
  GROUP  BY 1
  ORDER  BY 2 DESC, 1
 ;
--- 
