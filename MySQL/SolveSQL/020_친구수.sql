@@ -1,5 +1,5 @@
 /*
-전체 유저의 친구 수 집계하기
+Advent of SQL 2024> 전체 유저의 친구 수 집계하기
 https://solvesql.com/problems/number-of-friends/
 */
 
