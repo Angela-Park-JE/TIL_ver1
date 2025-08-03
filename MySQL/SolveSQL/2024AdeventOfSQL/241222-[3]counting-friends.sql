@@ -28,7 +28,7 @@ WITH
 
 SELECT  user_id
       , COUNT(user_b_id) AS num_friends
-  FROM  all_users u 
+  FROM  all_users u           -- 방식은 같게, 데이터베이스에서 모든 유저 데리고 와서 여기에 친구 정보 붙임
         LEFT JOIN all_edges e 
         ON u.user_id = e.user_a_id
  GROUP  BY 1
