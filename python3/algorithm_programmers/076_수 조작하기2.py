@@ -25,3 +25,10 @@ def solution(numLog):
             answer += 'a'
     
     return answer
+
+
+
+"""다른풀이"""
+# https://school.programmers.co.kr/questions/88683
+# 한줄이 가능한 것이었다... ㅎㅎ...
+solution = lambda l:''.join({'1':'w','-1':'s','10':'d','-10':'a'}[str(l[i]-l[i-1])]for i in range(1,len(l)))
