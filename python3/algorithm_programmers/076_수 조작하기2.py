@@ -32,3 +32,4 @@ def solution(numLog):
 # https://school.programmers.co.kr/questions/88683
 # 한줄이 가능한 것이었다... ㅎㅎ...
 solution = lambda l:''.join({'1':'w','-1':'s','10':'d','-10':'a'}[str(l[i]-l[i-1])]for i in range(1,len(l)))
+# range를 활용하여 인덱스를 만들고, 하나씩 뺀 인덱스를 기준으로 계산 후 차이를 딕셔너리로 맵핑한다
