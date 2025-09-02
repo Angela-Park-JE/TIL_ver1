@@ -5,7 +5,6 @@ https://solvesql.com/problems/olist-daily-revenue/
 
 
 -- 250902: Olist 데이터셋으로 하는 SQL 문제! 반갑다.
-
 /*풀이*/
 -- olist_order_payments_dataset 매출의 결제 수단과 금액이 기록된 데이터 셋인데, order_id별로 COUNT(*)가 1보다 큰 경우도 있다.
 -- 즉 복합 결제가 가능한 방식이다.
@@ -46,3 +45,15 @@ SELECT  *
 -- 전체적인 기본 가정은 이것이다.
 -- - order_purchase_timestamp 이 매출 날짜로 정해진다(order_approved_at 가 아니라)
 -- - 복합결제가 가능하다.
+
+/*해답*/
+-- 1. 1:N으로 묶은뒤 날짜 별로 payment_value를 단순히 합계 낸다.  -- 이게 답이었다...
+SELECT  DATE_FORMAT(order_purchase_timestamp, '%Y-%m-%d') AS dt
+      , ROUND(SUM(payment_value), 2) AS revenue_daily 
+  FROM  olist_orders_dataset o  
+        RIGHT JOIN  olist_order_payments_dataset op
+        ON o.order_id = op.order_id
+ WHERE  DATE_FORMAT(order_purchase_timestamp, '%Y-%m-%d') >= '2018-01-01'
+ GROUP  BY DATE_FORMAT(order_purchase_timestamp, '%Y-%m-%d')
+ ORDER  BY  1
+;
