@@ -203,3 +203,34 @@ SELECT  s.station_id
 
 
 -- 250512: 아 다시써야해ㅠㅠ
+
+--//--
+-- 250906: 다시 하는 과정
+
+-- 먼저 테이블을 확실히 해보기로 한다.
+-- station 테이블에 모든 station_id가 있는가?
+SELECT  COUNT(DISTINCT station_id)  
+  FROM  station
+UNION  ALL
+SELECT  COUNT(DISTINCT rent_station_id)  
+  FROM  rental_history
+UNION  ALL
+SELECT  COUNT(DISTINCT return_station_id)  
+  FROM  rental_history
+UNION  ALL
+SELECT  COUNT(DISTINCT station_id)
+  FROM
+      (
+        SELECT  station_id
+          FROM  station
+        UNION ALL
+        SELECT  DISTINCT rent_station_id
+          FROM  rental_history
+        UNION ALL 
+        SELECT  DISTINCT return_station_id
+          FROM  rental_history
+      ) tmp
+-- 숫자는 station이 2153, 그다음 2149, 2150, 2153 이다.
+-- 다 포함된 것으로 보이나 혹시나 아닐 수도 있어서 뒤에 다 합친 테이블에서 체크하도록 했다.
+-- 이로써 station테이블에 모든 station_id 정보가 있는 것을 확인했다.
+
