@@ -233,4 +233,37 @@ SELECT  COUNT(DISTINCT station_id)
 -- 숫자는 station이 2153, 그다음 2149, 2150, 2153 이다.
 -- 다 포함된 것으로 보이나 혹시나 아닐 수도 있어서 뒤에 다 합친 테이블에서 체크하도록 했다.
 -- 이로써 station테이블에 모든 station_id 정보가 있는 것을 확인했다.
+-- 그래서 이어서 써본 것인데 뻑난다... 결과가 안나온다.
+-- 간단하게 생각해보자. 정류장 별로 대여된 횟수를 세는 쿼리와 반납된 횟수를 세는 쿼리를 만든다.
+WITH 
+  rent_case AS
+  (
+  SELECT  rent_station_id
+        , SUM(CASE WHEN YEAR(rent_at) = 2018 THEN 1 ELSE 0 END) rented18
+        , SUM(CASE WHEN YEAR(rent_at) = 2019 THEN 1 ELSE 0 END) rented19
+    FROM  rental_history
+  WHERE  EXTRACT(YEAR_MONTH FROM rent_at) IN ('201810', '201910')
+  GROUP  BY 1
+  )
+  , 
+  return_case AS
+  (
+  SELECT  return_station_id
+        , SUM(CASE WHEN YEAR(return_at) = 2018 THEN 1 ELSE 0 END) returned18
+        , SUM(CASE WHEN YEAR(return_at) = 2019 THEN 1 ELSE 0 END) returned19
+    FROM  rental_history
+  WHERE  EXTRACT(YEAR_MONTH FROM rent_at) IN ('201810', '201910')
+  GROUP  BY 1
+  )
 
+
+SELECT  s.station_id
+      , rented18
+      , rented19
+      , returned18
+      , returned19
+  FROM  station s
+        LEFT JOIN  rent_case rnt ON s.station_id = rnt.rent_station_id
+        LEFT JOIN  return_case rtn ON s.station_id = rtn.return_station_id
+
+;   
