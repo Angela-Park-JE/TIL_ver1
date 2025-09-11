@@ -5,7 +5,7 @@ with로 각 퍼널별 id개수를 세 놓은 다음, 메인 쿼리에서 COUNTIF
 해당 페이지를 본 session_id가 product 페이지까지 보았을 떄, 그리고 into_cart까지 했을 때를 의미한다.
 개별 event_name로 각 view별 전환율을 확인하고자 한다면 prepage를 한 가지로 한정하여 확인한다.-*/
 
- WITH prepage AS -- 물건 정보를 보기 위해 거쳐야 하는 페이지
+ WITH prepage AS -- 물건 정보를 보기 위해 거쳐야 하는 페이지
       (
       SELECT DATE(DATE_TRUNC(time, WEEK(MONDAY))) AS week, ses_id
       FROM db2024.LOG_DATA
