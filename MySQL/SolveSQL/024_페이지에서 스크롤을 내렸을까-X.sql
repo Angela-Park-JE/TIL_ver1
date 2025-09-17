@@ -1,4 +1,6 @@
-
+/*
+https://solvesql.com/problems/session-scroll/
+*/
 
 -- 250911: 먼저 입문반 페이지를 봤는가?
 -- user_pseudo_id+ga_session_id 를 합쳐서 보아야 한다
