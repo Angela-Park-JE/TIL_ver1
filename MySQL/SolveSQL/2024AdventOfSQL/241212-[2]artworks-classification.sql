@@ -20,8 +20,10 @@ SELECT  classification
  GROUP  BY 1
  ORDER  BY 1
 ;
--- 뭐한거야 다시 새롭게 시작하니 잘되는데 물론 완전히 전과 달랐던 것은 아니다. WITH문을 만들려고 했었고 
--- `DISTINCT IFNULL(classification, '(not assigned)') AS classification` 이라는 컬럼을 가진 WITH테이블 하나를 메인에 두고 SELECT 문에서 classification으로 조인시키면서 연도정보를 가진 문장으로 데려오려했음.
+-- 뭐한거야 다시 새롭게 시작하니 잘되는데... 
+-- 물론 완전히 전과 달랐던 것은 아니다. WITH문을 만들려고 했었고 
+-- `DISTINCT IFNULL(classification, '(not assigned)') AS classification` 이라는 컬럼을 가진 WITH테이블 하나를 메인에 두고 
+-- SELECT 문에서 classification으로 조인시키면서 연도정보를 가진 문장으로 데려오려했음.
 -- 문제는 `(SELECT COUNT() FROM artworks a1 WHERE c.classifications = a1.classification AND YEAR(acquisition_date) = 2014) AS '2014'` 
 -- 이와같이 classification이 (not assigned)라고 처리되어있지 않은 artworks 원래 테이블에서 가져온다는 것임. 
 
@@ -93,6 +95,7 @@ SELECT  DISTINCT class_list.classification
  ORDER  BY 1
 ;
 
+
 -- 250125: 일단 다른 artworks문제를 풀면서 artwork_id로만 집계를 해도 된다는 것을 알게되었다. 
 -- 텍스트가 많아 데이터가 크기 때문에 간단하게 쓸 정보만 추려서 테이블을 하나 만드는게 날지 않을까 생각했다.
 SELECT  artwork_id
@@ -100,5 +103,4 @@ SELECT  artwork_id
       , classification
   FROM  artworks 
  WHERE  YEAR(acquisition_date) IN (2014, 2015, 2016)
-
-
+;
