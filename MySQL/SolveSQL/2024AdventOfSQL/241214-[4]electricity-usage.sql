@@ -23,6 +23,7 @@ SELECT  DATE_ADD(measured_at, INTERVAL +10 MINUTE) AS end_at
 ;
 
 
+
 /*오답노트*/
 -- 241219: 먼저 10분 단위의 평균을 내기 위해 해당 시간의 LAG LEAD를 구..하는 것보다
 -- 윈도우 함수가 최적일 것 같다.
