@@ -22,4 +22,4 @@ SELECT  DISTINCT SUBSTRING_INDEX(address, ' ', 1 )
   FROM  cafes
 ;
 -- 다음은 SUBSTRING_INDEX로 자르되, 필요한 부분은 앞의 두 부분이므로 그 부분까지 잘라온 상태로 사용한다.
--- 그리고 사용된 두 sido와 sigungu로 GROUP BY하면 끝! 왜 3단계일까...?!
+-- 그리고 사용된 두 sido와 sigungu로 GROUP BY하면 끝! 이런 문제가 왜 3단계일까...?!
