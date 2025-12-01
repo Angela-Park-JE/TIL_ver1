@@ -8,7 +8,8 @@ https://solvesql.com/problems/find-unnecessary-station-2/
 
 
 
-/*풀이 과정*/
+/*오답노트*/
+-- 풀이과정1
 -- 250108: 각각에 대해 구해야 하기 때문에 각각을 다 구하려고 WITH 문을 쓰긴 했다. 근데 메인 쿼리를 작성하다보니 비효율적이라는 생각이 들었다.
 -- 원래의 station에 각각에 대해 SELECT 문으로 붙이는게 오히려 낫지 않았을까? 라는 생각이 들었다.
 WITH 
@@ -60,6 +61,7 @@ WITH
 --   FROM  station_id s LEFT JOIN  rent_201810 r18 ON s.station_id = r18.station_id
 -- ;
 
+-- 풀이과정2
 -- 250110: 다 만들었는데, logic은 맞는 것 같은데 오랫동안 실행 돌려도 SQL 오류도 안나고 결과는 안나오는 현상... 메모리 usage 문제인건가..?
 WITH  
   station_usage_cnt AS 
@@ -116,7 +118,7 @@ SELECT  p.station_id
  WHERE  p.usage_pct <= 50
   ;
 
-
+-- 풀이과정3
 -- 250113: SELECT 절을 자주 쓰는것 자체가 부하를 많이 가져오는 걸까..? 한눈에 들어오는 모양은 아니지만 FROM절 서브쿼리로 옮기고 했는데도 무한로딩이다.
 SELECT  station_usage_pct.station_id
       , station.name
@@ -137,7 +139,7 @@ SELECT  station_usage_pct.station_id
    AND  cnt19*cnt18 != 0 
   ;
 
-
+-- 풀이과정4
 -- 250130
 -- -- 대여/반남 건수를 간단하게 생각해보자. 그냥 rental_history 건수로 생각해보는 것이다. 근데 쿼리가 무한 로딩에 걸린다.
 -- SELECT  rent_station_id
@@ -173,7 +175,7 @@ SELECT  s.station_id
                   ON s.station_id = r19.rent_station_id
 ;
 
-
+-- 풀이과정5
 -- 250323: 뻑난다. 대여/반납 건수라는게 대여+반납 건수인지 대여만 확인해도 되는건지 참 어렵다. 대여만 해보자 하고 한건데...
 WITH  rent19 AS
 (
@@ -204,9 +206,8 @@ SELECT  s.station_id
 
 -- 250512: 아 다시써야해ㅠㅠ
 
---//--
--- 250906: 다시 하는 과정
-
+-- 풀이과정6
+-- 250906: 아예 다시 하는 과정
 -- 먼저 테이블을 확실히 해보기로 한다.
 -- station 테이블에 모든 station_id가 있는가?
 SELECT  COUNT(DISTINCT station_id)  
