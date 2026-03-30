@@ -4,7 +4,6 @@ https://solvesql.com/problems/find-movies-by-korean-artists/
 */
 
 
-
 -- 251215: 260330 쉽게 풀어버린
 -- -- 먼저 한국은 어떤식으로 표기되어있나 확인 후 
 -- SELECT  DISTINCT nationality
