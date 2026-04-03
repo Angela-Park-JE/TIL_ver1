@@ -1,4 +1,5 @@
 /*
+그래서 도시별 VIP 찾기인데... 이게 도시별로 찾는게 맞나 싶음
 https://solvesql.com/problems/vip-of-cities/
 */
 
