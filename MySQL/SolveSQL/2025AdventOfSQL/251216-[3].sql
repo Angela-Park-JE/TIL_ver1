@@ -4,7 +4,7 @@ https://solvesql.com/problems/friendship-between-early-users/
 */
 
 
-/*풀이 과정*/
+/*정답 및 풀이 과정*/
 -- 우선 SELECT * FROM users를 보니 feature_ids 컬럼에 친구 아이디가 콤마로 구분되어있음. 몇 명 있는지 다 다르고 계산이 까다로워지는 부분이다.
 -- >>> 라고 생각했으나!!!!!! edges 라는 엄청나게 고마운 테이블이 있네요^^ 문제가 확 쉬워짐~ (풀은 다음 users 테이블로 결과를 내보기도 하고 싶음) 문제를 끝까지 잘 읽읍시다...
 
@@ -27,3 +27,9 @@ SELECT  user_a_id
       ) AS sum_tbl
  WHERE  sum_pctrank <= 0.1
 ;
+
+
+/*-참조-*/
+-- RANK() : each row's ranks
+-- DENSE_RANK() : accumulated ranks (누적 순위)
+-- PERCENT_RANK() : ranks by ratio (비율 순위)
