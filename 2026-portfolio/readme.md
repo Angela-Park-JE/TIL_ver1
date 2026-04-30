@@ -7,7 +7,6 @@
 
 - Database Manipulate (ETL)
 - WINDOW
-- RECURSIVER QUERY
-
+- RECURSIVE QUERY
 
 #### 2. Data Analytics and Visualizaion by Python   
