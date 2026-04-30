@@ -1,4 +1,13 @@
  
 
 
-### 새로운 가상환경을 설정하여 시작하는 2026년 스터디!
+## 포트폴리오 구성
+
+#### 1. SQL  
+
+- Database Manipulate (ETL)
+- WINDOW
+- RECURSIVER QUERY
+
+
+#### 2. Data Analytics and Visualizaion by Python   
